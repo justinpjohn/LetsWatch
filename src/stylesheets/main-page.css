@@ -6,15 +6,19 @@ html, body {
     height: 100%;
 }
 
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
 .main-button {
     display: inline-block;
     text-align: center;
     vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
     background-color: transparent;
     border: 1px solid transparent;
     width: 30%;
@@ -27,6 +31,7 @@ html, body {
     letter-spacing: 3px;
     line-height: 1.5;
     border-radius: .25rem;
+    text-decoration: none;
     /*transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;*/
     /*transition-property: color, background-color, border-color, box-shadow;*/
     /*transition-duration: 0.15s, 0.15s, 0.15s, 0.15s;*/
