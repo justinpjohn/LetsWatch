@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Form from './Form';
 import Modal from './Modal';
 import useModal from './hooks/useModal';
 
@@ -22,7 +23,7 @@ const Home = () => {
                     <button className='main-button' onClick={ toggle } style={{backgroundColor: 'white', borderColor: 'white'}}> JOIN GROUP </button>
                 </div>
                 
-                <Modal isVisible={ isVisible } hide={ toggle } content={{ header: 'Group Form', body: 'Form goes here' }}/>
+                <Modal isVisible={ isVisible } hide={ toggle } content={{ header: 'Group Form', body: <Form /> }}/>
             </div>
         </div>
     );

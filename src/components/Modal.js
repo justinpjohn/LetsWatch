@@ -19,7 +19,7 @@ const Modal = ({
                 <p>{content.body}</p>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-primary">Continue</button>
+                <button type="submit" className="btn btn-primary">Continue</button>
                 <button type="button" className="btn btn-secondary" onClick={ hide }>Close</button>
               </div>
             </div>
