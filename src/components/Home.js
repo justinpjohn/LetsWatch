@@ -17,10 +17,7 @@ const Home = () => {
                 </div>
                 
                 <div className='row justify-content-center mt-3'>
-                    <button className='main-button' onClick={ toggle } style={{backgroundColor: '#E53A3A', borderColor: '#E53A3A', color: 'white'}}> CREATE GROUP </button>
-                </div>
-                <div className='row justify-content-center mt-4'>
-                    <button className='main-button' onClick={ toggle } style={{backgroundColor: 'white', borderColor: 'white'}}> JOIN GROUP </button>
+                    <button className='main-button' onClick={ toggle } style={{backgroundColor: '#E53A3A', borderColor: '#E53A3A', color: 'white'}}> GET STARTED </button>
                 </div>
                 
                 <Modal isVisible={ isVisible } hide={ toggle } content={{ header: 'Group Form', body: <Form /> }}/>

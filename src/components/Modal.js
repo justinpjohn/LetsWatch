@@ -16,10 +16,10 @@ const Modal = ({
                 </button>
               </div>
               <div className="modal-body">
-                <p>{content.body}</p>
+                {content.body}
               </div>
               <div className="modal-footer">
-                <button type="submit" className="btn btn-primary">Continue</button>
+                <button type="submit" className="btn btn-primary" form='group-form'>Continue</button>
                 <button type="button" className="btn btn-secondary" onClick={ hide }>Close</button>
               </div>
             </div>
