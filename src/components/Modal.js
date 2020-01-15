@@ -1,18 +1,22 @@
 import React from 'react';
 
-const Modal = ({ isVisible, hide }) => isVisible ? 
+const Modal = ({ 
+  isVisible, 
+  hide,
+  content,
+  }) => isVisible ? 
     (
         <div className="modal" style={{display: 'block'}}>
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Modal title</h5>
+                <h5 className="modal-title">{content.header}</h5>
                 <button type="button" className="close" onClick={ hide }>
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div className="modal-body">
-                <p>Modal body text goes here.</p>
+                <p>{content.body}</p>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-primary">Continue</button>

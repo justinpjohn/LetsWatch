@@ -22,7 +22,7 @@ const Home = () => {
                     <button className='main-button' onClick={ toggle } style={{backgroundColor: 'white', borderColor: 'white'}}> JOIN GROUP </button>
                 </div>
                 
-                <Modal isVisible={ isVisible } hide={ toggle }/>
+                <Modal isVisible={ isVisible } hide={ toggle } content={{ header: 'Group Form', body: 'Form goes here' }}/>
             </div>
         </div>
     );
