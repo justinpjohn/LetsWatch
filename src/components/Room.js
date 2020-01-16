@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
 import Chat from './Chat';
@@ -9,30 +9,43 @@ const SERVER_URL = 'https://58aab3c90017465bbb8c7cbf0b87d6b3.vfs.cloud9.us-east-
 const SERVER_PORT = '8081';
 const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
+let socket;
+
 const Room = (props) => {
-    const user = props.location.state.user;
-    const socket = io(SERVER_ENDPOINT);
-    
+    const newUserInfo = props.location.state.user;
+
+    const [roomName, setRoomName] = useState(newUserInfo.groupID);
+    const [user, setUser] = useState(newUserInfo.username); 
     const { messages, addMessage } = useMessages();
     
     const emitMessage = (msg) => {
-        console.log('Submitted: ' + msg)
         socket.emit('chat message', msg);
     }
     
     useEffect(() => {
+        setRoomName(newUserInfo.groupID);
+        setUser(newUserInfo.username);
+    }, [props]);
+    
+    useEffect(() => {
+        socket = io(SERVER_ENDPOINT);
+        
         socket.on('chat message', (msg) => {
-            console.log('Received: ' + msg);
             addMessage(msg);
         });
-    }, [user]);
+        
+        // return () => {
+        //     socket.emit('disconnect', user);
+        //     // socket.disconnect();
+        // }
+    }, []);
 
     return (
         <div className="container-fluid m-auto h-100" style={{color: 'white'}}>
             <div className='row'>
                 <nav className="navbar navbar-dark bg-dark w-100">
                     <a className="navbar-brand" href="/">Lets<span style={{color: '#E53A3A'}}>Watch</span></a>
-                    <span>{user.username}</span>
+                    <span>{user}</span>
                 </nav>
             </div>
             
@@ -42,7 +55,7 @@ const Room = (props) => {
                 </div>
                 
                 <div className='col pr-0'>
-                    <Chat group={user.groupID} messages={messages} emitMessage={emitMessage}/>
+                    <Chat group={roomName} messages={messages} emitMessage={emitMessage}/>
                 </div>
             </div>
         </div> 

@@ -22,9 +22,9 @@ const Form = () => {
     }
     
     return redirect ? <Redirect to={{
-            pathname: '/room',
-            state: { user }
-        }} /> :
+                        pathname: '/room',
+                        state: { user }
+                    }} /> :
         (
             <div>
                 <form id='group-form' onSubmit={handleSubmit} onChange={handleChange}>
