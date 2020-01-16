@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const Chat = ({group, messages, emitMessage}) => {
     
@@ -18,9 +18,9 @@ const Chat = ({group, messages, emitMessage}) => {
             
             <div id='chat-area' className='' style={{height: '90%'}}>
                 <ul>
-                  {messages.map((value, index) => {
-                    return <li key={index}>{value}</li>
-                  })}
+                    {messages.map((value, index) => {
+                        return <li key={index}>{value}</li>
+                    })}
                 </ul>
             </div>
             <div id='chat-input-container' className='d-flex flex-column'>

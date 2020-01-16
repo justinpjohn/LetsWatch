@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import io from 'socket.io-client';
 
 import Chat from './Chat';
@@ -20,10 +20,12 @@ const Room = (props) => {
         socket.emit('chat message', msg);
     }
     
-    socket.on('chat message', (msg) => {
-        console.log('Received: ' + msg);
-        addMessage(msg);
-    });
+    useEffect(() => {
+        socket.on('chat message', (msg) => {
+            console.log('Received: ' + msg);
+            addMessage(msg);
+        });
+    }, [user]);
 
     return (
         <div className="container-fluid m-auto h-100" style={{color: 'white'}}>
