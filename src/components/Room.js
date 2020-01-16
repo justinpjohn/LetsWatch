@@ -3,6 +3,8 @@ import io from 'socket.io-client';
 
 import Chat from './Chat';
 
+import useMessages from './hooks/useMessages';
+
 const SERVER_URL = 'https://58aab3c90017465bbb8c7cbf0b87d6b3.vfs.cloud9.us-east-2.amazonaws.com';
 const SERVER_PORT = '8081';
 const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
@@ -11,8 +13,18 @@ const Room = (props) => {
     const user = props.location.state.user;
     const socket = io(SERVER_ENDPOINT);
     
-    console.log(socket);
+    const { messages, addMessage } = useMessages();
     
+    const emitMessage = (msg) => {
+        console.log('Submitted: ' + msg)
+        socket.emit('chat message', msg);
+    }
+    
+    socket.on('chat message', (msg) => {
+        console.log('Received: ' + msg);
+        addMessage(msg);
+    });
+
     return (
         <div className="container-fluid m-auto h-100" style={{color: 'white'}}>
             <div className='row'>
@@ -28,7 +40,7 @@ const Room = (props) => {
                 </div>
                 
                 <div className='col pr-0'>
-                    <Chat group={user.groupID}/>
+                    <Chat group={user.groupID} messages={messages} emitMessage={emitMessage}/>
                 </div>
             </div>
         </div> 
