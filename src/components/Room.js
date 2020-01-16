@@ -7,14 +7,19 @@ const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
 const Room = (props) => {
     const user = props.location.state.user;
-    console.log(SERVER_ENDPOINT);
-    
     const socket = io(SERVER_ENDPOINT);
     
     console.log(socket);
     
     return (
-        <h1 style={{color: 'white'}}>Hello '{user.username}'! You are in the '{user.groupID}' group.</h1>
+        <div style={{color: 'white'}}>
+            <nav class="navbar navbar-dark bg-dark">
+                <a class="navbar-brand" href="/">Lets<span style={{color: '#E53A3A'}}>Watch</span></a>
+                <span>{user.username}</span>
+            </nav>
+        </div> 
+          
+        // <h1 style={{color: 'white'}}>Hello '{user.username}'! You are in the '{user.groupID}' group.</h1>
     );
 }
 
