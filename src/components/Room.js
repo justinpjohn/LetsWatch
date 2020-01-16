@@ -22,7 +22,7 @@ const Room = (props) => {
                 </nav>
             </div>
             
-            <div className='row h-50 p-3'>
+            <div className='row h-75 p-3'>
                 <div className='col-8' style={{backgroundColor: '#E53A3A'}}>
                     Video goes here
                 </div>

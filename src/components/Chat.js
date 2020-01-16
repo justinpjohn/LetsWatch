@@ -5,7 +5,7 @@ const Chat = (props) => {
     
     return (
         <div id='chat-container' className='d-flex flex-column h-100' style={{backgroundColor: '#252526'}}>
-            <div className='text-center' style={{borderBottom: 'solid 1px #E53A3A'}}>
+            <div className='text-center py-2' style={{backgroundColor: '#343a40', borderBottom: 'solid 1px #E53A3A'}}>
                 <b>{group}</b> Chatroom
             </div>
             
