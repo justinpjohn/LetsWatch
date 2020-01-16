@@ -22,7 +22,7 @@ const Form = () => {
     }
     
     return redirect ? <Redirect to={{
-            pathname: '/chat',
+            pathname: '/room',
             state: { user }
         }} /> :
         (

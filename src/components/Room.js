@@ -5,7 +5,7 @@ const SERVER_URL = 'https://58aab3c90017465bbb8c7cbf0b87d6b3.vfs.cloud9.us-east-
 const SERVER_PORT = '8081';
 const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
-const Chat = (props) => {
+const Room = (props) => {
     const user = props.location.state.user;
     console.log(SERVER_ENDPOINT);
     
@@ -18,4 +18,4 @@ const Chat = (props) => {
     );
 }
 
-export default Chat;
+export default Room;
