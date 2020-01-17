@@ -25,19 +25,16 @@ const Room = (props) => {
     useEffect(() => {
         setRoomName(newUserInfo.groupID);
         setUser(newUserInfo.username);
-    }, [props]);
-    
-    useEffect(() => {
         socket = io(SERVER_ENDPOINT);
         
         socket.on('chat message', (msg) => {
             addMessage(msg);
         });
         
-        // return () => {
-        //     socket.emit('disconnect', user);
-        //     // socket.disconnect();
-        // }
+        return () => {
+            socket.emit('disconnect');
+            socket.disconnect();
+        }
     }, []);
 
     return (
