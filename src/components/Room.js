@@ -19,13 +19,15 @@ const Room = (props) => {
     const { messages, addMessage } = useMessages();
     
     const emitMessage = (msg) => {
-        socket.emit('chat message', msg);
+        socket.emit('chat message', {roomName, msg});
     }
     
     useEffect(() => {
         setRoomName(newUserInfo.groupID);
         setUser(newUserInfo.username);
         socket = io(SERVER_ENDPOINT);
+        
+        socket.emit('room connection', roomName);
         
         socket.on('chat message', (msg) => {
             addMessage(msg);

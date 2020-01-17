@@ -15,8 +15,15 @@ const io = socketio(server);
 io.on('connection', (socket) => {
     console.log('A user has connected.');
     
-    socket.on('chat message', (msg) => {
-       io.emit('chat message', msg); 
+    socket.on('room connection', (roomName) => {
+        console.log(`A user has joined ${roomName}`);
+        socket.join(roomName);
+    });
+    
+    
+    socket.on('chat message', ({roomName, msg}) => {
+        console.log(`received: ${msg} from ${roomName}`);
+        io.to(roomName).emit('chat message', msg); 
     });
     
     socket.on('disconnect', () => {
