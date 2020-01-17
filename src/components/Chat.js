@@ -9,6 +9,12 @@ const Chat = ({group, messages, emitMessage}) => {
         emitMessage(currMessage);
         setCurrMessage('');
     }
+    
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter'){
+            handleMessageSubmit(e);
+        }
+    }
 
     return (
         <div id='chat-container' className='d-flex flex-column h-100' style={{backgroundColor: '#252526'}}>
@@ -30,7 +36,7 @@ const Chat = ({group, messages, emitMessage}) => {
                 
                 <div className='d-flex align-items-center mt-2'>
                     <div id='chat-input' className='flex-grow-1 ml-2'>
-                        <input type="text" placeholder="Say something..." value={currMessage} onChange={e => setCurrMessage(e.target.value)} style={{width: '95%'}}/>
+                        <input type="text" placeholder="Say something..." value={currMessage} onKeyPress={handleKeyPress} onChange={e => setCurrMessage(e.target.value)} style={{width: '95%'}}/>
                     </div>
                     <div className='mr-2 mb-2'>
                         <button id='chat-send' className='btn btn-primary' onClick={handleMessageSubmit}>Send</button>
