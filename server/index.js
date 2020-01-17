@@ -15,9 +15,10 @@ const io = socketio(server);
 io.on('connection', (socket) => {
     console.log('A user has connected.');
     
-    socket.on('room connection', (roomName) => {
-        console.log(`A user has joined ${roomName}`);
+    socket.on('room connection', ({roomName, user}) => {
+        console.log(`${user} has joined ${roomName}`);
         socket.join(roomName);
+        socket.to(roomName).emit('room connection', `${user} has joined the party! Say hi!`);
     });
     
     

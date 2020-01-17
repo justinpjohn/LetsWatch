@@ -26,8 +26,12 @@ const Room = (props) => {
         setRoomName(newUserInfo.groupID);
         setUser(newUserInfo.username);
         socket = io(SERVER_ENDPOINT);
+        socket.emit('room connection', {roomName, user});
         
-        socket.emit('room connection', roomName);
+        socket.on('room connection', (msg) => {
+            console.log('received room connection' + msg);
+            addMessage(msg);
+        })
         
         socket.on('chat message', (msg) => {
             addMessage(msg);
