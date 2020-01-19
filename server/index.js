@@ -21,6 +21,11 @@ io.on('connection', (socket) => {
         socket.to(roomName).emit('room connection', `${user} has joined the party! Say hi!`);
     });
     
+    socket.on('sync', ({roomName, posUser, pos}) => {
+        console.log('Server received sync');
+        io.to(roomName).emit('sync', {posUser, pos});
+    });
+    
     socket.on('chat message', ({roomName, msg}) => {
         console.log(`received: ${msg} from ${roomName}`);
         io.to(roomName).emit('chat message', msg); 

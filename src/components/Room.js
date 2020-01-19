@@ -11,31 +11,44 @@ const SERVER_PORT = '8081';
 const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
 let socket;
+let player;
 
 const Room = (props) => {
     const newUserInfo = props.location.state.user;
 
     const [roomName, setRoomName] = useState(newUserInfo.groupID);
-    const [user, setUser] = useState(newUserInfo.username); 
+    const [user, setUser] = useState(newUserInfo.username);
+    const [sync, setSync] = useState(false);
     const [videoOptions, setVideoOptions] = useState( 
         {
           height: '390',
           width: '640',
           playerVars: { // https://developers.google.com/youtube/player_parameters
             autoplay: 1,
-            start: 5,
+            loop: 1,
+            start: 0,
           }
         }
     );
     const { messages, addMessage } = useMessages();
     
     const emitMessage = (msg) => {
-        socket.emit('chat message', {roomName, msg});
+        socket.emit('chat message', {roomName, user, msg});
     }
     
     const _onReady = (event) => {
         // access to player in all event handlers via event.target
-        // event.target.pauseVideo();
+        player = event.target;
+    }
+    
+    const _onPlay = (event) => {
+        if (sync) {
+            console.log('current time: ' + player.getCurrentTime());
+            setSync(false);
+        } else {
+            console.log('Emiting sync to: ' + player.getCurrentTime());
+            socket.emit('sync', {roomName, posUser: user, pos: player.getCurrentTime()});
+        }
     }
 
     useEffect(() => {
@@ -47,6 +60,12 @@ const Room = (props) => {
         socket.on('room connection', (msg) => {
             console.log('received room connection' + msg);
             addMessage(msg);
+        });
+        
+        socket.on('sync', ({posUser, pos}) => {
+            console.log('Received Position: ' + pos);
+            setSync(true);
+            player.seekTo(pos);
         });
         
         socket.on('chat message', (msg) => {
@@ -75,6 +94,7 @@ const Room = (props) => {
                             videoId="V2hlQkVJZhE"
                             opts={videoOptions}
                             onReady={_onReady}
+                            onPlay={_onPlay}
                         />
                     </div>
                 </div>
