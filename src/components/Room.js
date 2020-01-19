@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import YouTube from 'react-youtube';
 
 import Chat from './Chat';
 
@@ -21,6 +22,19 @@ const Room = (props) => {
     const emitMessage = (msg) => {
         socket.emit('chat message', {roomName, msg});
     }
+    
+    const _onReady = (event) => {
+        // access to player in all event handlers via event.target
+        // event.target.pauseVideo();
+    }
+    
+    const opts = {
+      height: '390',
+      width: '640',
+      playerVars: { // https://developers.google.com/youtube/player_parameters
+        autoplay: 1
+      }
+    };
     
     useEffect(() => {
         setRoomName(newUserInfo.groupID);
@@ -53,8 +67,14 @@ const Room = (props) => {
             </div>
             
             <div className='row h-75 p-3'>
-                <div className='col-8' style={{backgroundColor: '#E53A3A'}}>
-                    Video goes here
+                <div className='col-8' style={{backgroundColor: 'black'}}>
+                    <div id="player" className='video-wrapper w-100 h-100' style={{backgroundColor: '#E53A3A'}}>
+                        <YouTube
+                            videoId="V2hlQkVJZhE"
+                            opts={opts}
+                            onReady={_onReady}
+                        />
+                    </div>
                 </div>
                 
                 <div className='col pr-0'>
