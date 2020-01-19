@@ -17,6 +17,16 @@ const Room = (props) => {
 
     const [roomName, setRoomName] = useState(newUserInfo.groupID);
     const [user, setUser] = useState(newUserInfo.username); 
+    const [videoOptions, setVideoOptions] = useState( 
+        {
+          height: '390',
+          width: '640',
+          playerVars: { // https://developers.google.com/youtube/player_parameters
+            autoplay: 1,
+            start: 5,
+          }
+        }
+    );
     const { messages, addMessage } = useMessages();
     
     const emitMessage = (msg) => {
@@ -27,15 +37,7 @@ const Room = (props) => {
         // access to player in all event handlers via event.target
         // event.target.pauseVideo();
     }
-    
-    const opts = {
-      height: '390',
-      width: '640',
-      playerVars: { // https://developers.google.com/youtube/player_parameters
-        autoplay: 1
-      }
-    };
-    
+
     useEffect(() => {
         setRoomName(newUserInfo.groupID);
         setUser(newUserInfo.username);
@@ -45,7 +47,7 @@ const Room = (props) => {
         socket.on('room connection', (msg) => {
             console.log('received room connection' + msg);
             addMessage(msg);
-        })
+        });
         
         socket.on('chat message', (msg) => {
             addMessage(msg);
@@ -71,7 +73,7 @@ const Room = (props) => {
                     <div id="player" className='video-wrapper w-100 h-100' style={{backgroundColor: '#E53A3A'}}>
                         <YouTube
                             videoId="V2hlQkVJZhE"
-                            opts={opts}
+                            opts={videoOptions}
                             onReady={_onReady}
                         />
                     </div>
