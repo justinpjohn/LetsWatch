@@ -6,8 +6,10 @@ const Chat = ({group, messages, emitMessage}) => {
 
     const handleMessageSubmit = (e) => {
         // e.preventDefault();
-        emitMessage(currMessage);
-        setCurrMessage('');
+        if (currMessage.length !== 0 && (/\S/).test(currMessage)) {
+            emitMessage(currMessage);
+            setCurrMessage('');
+        }
     }
     
     const handleKeyPress = (e) => {
@@ -18,16 +20,14 @@ const Chat = ({group, messages, emitMessage}) => {
 
     return (
         <div id='chat-container' className='d-flex flex-column h-100' style={{backgroundColor: '#252526'}}>
-            <div className='text-center py-2' style={{backgroundColor: '#343a40', borderBottom: 'solid 1px #E53A3A'}}>
+            <div className='text-center py-2' style={{backgroundColor: '#343a40', borderBottom: 'solid 1px #E53A3A', marginBottom: '5px'}}>
                 <b>{group}</b> Chatroom
             </div>
             
             <div id='chat-area' className='' style={{height: '90%'}}>
-                <ul>
-                    {messages.map((value, index) => {
-                        return <li key={index}>{value}</li>
-                    })}
-                </ul>
+                {messages.map((value, index) => {
+                    return <div className='msg-container'><span id={`msg-${index}`}>{value}</span></div>
+                })}
             </div>
             <div id='chat-input-container' className='d-flex flex-column'>
                 <div> 
@@ -39,7 +39,7 @@ const Chat = ({group, messages, emitMessage}) => {
                         <input type="text" placeholder="Say something..." value={currMessage} onKeyPress={handleKeyPress} onChange={e => setCurrMessage(e.target.value)} style={{width: '95%'}}/>
                     </div>
                     <div className='mr-2 mb-2'>
-                        <button id='chat-send' className='btn btn-primary' onClick={handleMessageSubmit}>Send</button>
+                        <button id='chat-send' className='btn btn-primary' style={{backgroundColor: '#E53A3A', borderColor: '#E53A3A'}} onClick={handleMessageSubmit}>Send</button>
                     </div>
                 </div>
             </div>
