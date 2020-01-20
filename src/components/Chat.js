@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Chat = ({group, messages, emitMessage}) => {
+const Chat = ({group, user, socketID, messages, emitMessage}) => {
     
     const [currMessage, setCurrMessage] = useState('');
 
@@ -26,7 +26,18 @@ const Chat = ({group, messages, emitMessage}) => {
             
             <div id='chat-area' className='' style={{height: '90%'}}>
                 {messages.map((value, index) => {
-                    return <div className='msg-container'><span id={`msg-${index}`}>{value}</span></div>
+                    console.log(value);
+                    let className = 'msg-container';
+                    if (socketID === value.sockID) {
+                        className = 'msg-container-send';
+                    } else if (value.sockID === 'admin') {
+                        className = 'msg-container-admin';
+                    }
+                    return (
+                        <div className={className}>
+                            <span id={`msg-${index}`}>{value.msg}</span>
+                        </div>
+                    );
                 })}
             </div>
             <div id='chat-input-container' className='d-flex flex-column'>

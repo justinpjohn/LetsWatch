@@ -61,13 +61,23 @@ html, body {
 	position: relative;
 }
 
-.msg-container-send{
+.msg-container-send {
 	margin-top: auto;
-	margin-bottom: auto;
+	margin-bottom: 15px;
 	margin-right: 10px;
 	border-radius: 25px;
 	background-color: #78e08f;
-	padding: 10px;
+	padding: 7px;
+	position: relative;
+}
+
+.msg-container-admin {
+	margin-top: auto;
+	margin-bottom: 15px;
+	margin-right: 10px;
+	border-radius: 25px;
+	background-color: #E53A3A;
+	padding: 7px;
 	position: relative;
 }
 

@@ -17,7 +17,6 @@ io.on('connection', (socket) => {
     
     socket.on('room connection', ({roomName, user}) => {
         console.log(`${user} has joined ${roomName}`);
-        socket.join(roomName);
         socket.to(roomName).emit('room connection', `${user} has joined the party! Say hi!`);
     });
     
@@ -36,9 +35,9 @@ io.on('connection', (socket) => {
         io.to(roomName).emit('playSync', {posUser});
     });
     
-    socket.on('chat message', ({roomName, msg}) => {
+    socket.on('chat message', ({roomName, socketID, user, msg}) => {
         console.log(`received: ${msg} from ${roomName}`);
-        io.to(roomName).emit('chat message', msg); 
+        io.to(roomName).emit('chat message', {sockID: socketID, user, msg}); 
     });
     
     socket.on('disconnect', () => {

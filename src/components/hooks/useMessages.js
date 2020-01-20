@@ -4,7 +4,8 @@ const useMessages = () => {
     const [ messages, setMessages ] = useState([]);
     
     const addMessage = (msg) => {
-        setMessages(prevMessages => ([...prevMessages, msg]));
+        // console.log(msg);
+        setMessages(prevMessages => ([...prevMessages, {sockID: msg.sockID, user: msg.user, msg: msg.msg}]));
     }
     
     useEffect(() => {

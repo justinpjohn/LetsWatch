@@ -17,6 +17,7 @@ const Room = (props) => {
     const newUserInfo = props.location.state.user;
 
     const [roomName, setRoomName] = useState(newUserInfo.groupID);
+    const [socketID, setSocketID] = useState('');
     const [user, setUser] = useState(newUserInfo.username);
     const [sync, setSync] = useState(false);
     const [videoOptions, setVideoOptions] = useState( 
@@ -33,7 +34,7 @@ const Room = (props) => {
     const { messages, addMessage } = useMessages();
     
     const emitMessage = (msg) => {
-        socket.emit('chat message', {roomName, user, msg});
+        socket.emit('chat message', {roomName, socketID, user, msg});
     }
     
     const _onReady = (event) => {
@@ -68,11 +69,14 @@ const Room = (props) => {
         setRoomName(newUserInfo.groupID);
         setUser(newUserInfo.username);
         socket = io(SERVER_ENDPOINT);
+        console.log(socket);
         socket.emit('room connection', {roomName, user});
         
         socket.on('room connection', (msg) => {
+            // console.log(socket.id);
+            // setSocketID(socket.id);
             console.log('received room connection' + msg);
-            addMessage(msg);
+            addMessage({sockID: 'admin', user: '', msg});
         });
         
         socket.on('sync', ({posUser, pos}) => {
@@ -81,20 +85,22 @@ const Room = (props) => {
             player.seekTo(pos);
         });
         
-        socket.on('pauseSync', ({posUser, pos}) => {
+        socket.on('pauseSync', ({posUser}) => {
             console.log('Received pauseSync');
             setSync(true);
             player.pauseVideo();
         });
         
-        socket.on('playSync', ({posUser, pos}) => {
+        socket.on('playSync', ({posUser}) => {
             console.log('Received playSync');
             // setSync(true);
             player.playVideo();
         });
         
-        socket.on('chat message', (msg) => {
-            addMessage(msg);
+        socket.on('chat message', ({sockID, user, msg}) => {
+            console.log(socket);
+            // console.log({user, msg});
+            addMessage({sockID, user, msg});
         });
         
         return () => {
@@ -127,7 +133,7 @@ const Room = (props) => {
                 </div>
                 
                 <div className='col pr-0'>
-                    <Chat group={roomName} messages={messages} emitMessage={emitMessage}/>
+                    <Chat group={roomName} user={user} socketID={socketID} messages={messages} emitMessage={emitMessage}/>
                 </div>
             </div>
         </div> 
