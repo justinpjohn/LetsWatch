@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import YouTube from 'react-youtube';
 
 import Chat from './Chat';
+import Search from './Search';
 
 import useMessages from './hooks/useMessages';
 
@@ -136,6 +137,9 @@ const Room = (props) => {
                 <div className='col pr-0'>
                     <Chat group={roomName} user={user} socketID={socketID} messages={messages} emitMessage={emitMessage}/>
                 </div>
+            </div>
+            <div className='row h-25 p-3'>
+                <Search/>
             </div>
         </div> 
           
