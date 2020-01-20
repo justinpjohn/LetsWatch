@@ -98,6 +98,7 @@ const Room = (props) => {
         });
         
         return () => {
+            player.destroy();
             socket.emit('disconnect');
             socket.disconnect();
         }
