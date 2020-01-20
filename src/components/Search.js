@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import fetch from 'node-fetch';
 
+import SearchResults from './SearchResults';
+
 
 const Search = () => {
   
@@ -16,7 +18,7 @@ const Search = () => {
     }
     
     const searchYoutube = (query) => {
-        query.replace(' ', '+');
+        query = query.replace(' ', '+');
         console.log(query);
         fetch('https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBa-JzGFfw19oswz7L6WV0BwbNMBIZw5Ko&part=snippet&q='+query+'&maxResults=25')
         .then((response) => {
@@ -33,10 +35,13 @@ const Search = () => {
     }, [searchResults]);
 
     return (
-        <div className='h-100 w-100' style={{backgroundColor:'blue'}}>
-            <input type='text' value={currQuery} onChange={e => setCurrQuery(e.target.value)}/>
-            <button type='submit' onClick={handleMessageSubmit}>Search</button>
-            Search goes here
+        <div className='row h-100 w-100'>
+            <div className='' style={{backgroundColor:'blue'}}>
+                <input type='text' value={currQuery} onChange={e => setCurrQuery(e.target.value)}/>
+                <button type='submit' onClick={handleMessageSubmit}>Search</button>
+                Search goes here
+            </div>
+            <SearchResults results={searchResults}/>
         </div>
     );
 }
