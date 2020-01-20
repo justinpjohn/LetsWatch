@@ -37,7 +37,7 @@ const Chat = ({group, user, socketID, messages, emitMessage}) => {
                     return (
                         <div className={`d-flex justify-content-${justify} mb-3`}>
                             <div className={className}>
-                                <div className={`d-flex justify-content-${justify} msg-header pl-1 pr-1`}>{value.user}</div>
+                                <div className={`d-flex justify-content-${justify} msg-header`}>{value.user}</div>
                                 <span id={`msg-${index}`}>{value.msg}</span>
                             </div>
                         </div>
