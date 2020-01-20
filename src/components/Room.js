@@ -45,13 +45,12 @@ const Room = (props) => {
     const _onPlay = (event) => {
         if (sync) {
             console.log('playSync: ' + player.getCurrentTime());
-            // socket.emit('playSync', {roomName, posUser: user});
             setSync(false);
         } else {
             console.log('Emiting sync to: ' + player.getCurrentTime());
-            socket.emit('sync', {roomName, posUser: user, pos: player.getCurrentTime()});
+            socket.emit('sync', {roomName, reqUser: user, pos: player.getCurrentTime()});
         }
-        socket.emit('playSync', {roomName, posUser: user});
+        socket.emit('playSync', {roomName, reqUser: user});
     }
     
     const _onPause = (event) => {
@@ -60,7 +59,7 @@ const Room = (props) => {
             console.log('pauseSync: ' + player.getCurrentTime());
             setSync(false);
         } else {
-            console.log('Emiting playSync');
+            console.log('Emiting pauseSync');
             socket.emit('pauseSync', {roomName, posUser: user});
         }
     }
@@ -79,7 +78,7 @@ const Room = (props) => {
             addMessage({sockID: 'admin', user: '', msg});
         });
         
-        socket.on('sync', ({posUser, pos}) => {
+        socket.on('sync', ({reqUser, pos}) => {
             console.log('Received Position: ' + pos);
             setSync(true);
             player.seekTo(pos);
