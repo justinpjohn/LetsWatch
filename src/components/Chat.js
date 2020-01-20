@@ -26,16 +26,20 @@ const Chat = ({group, user, socketID, messages, emitMessage}) => {
             
             <div id='chat-area' className='' style={{height: '90%'}}>
                 {messages.map((value, index) => {
-                    console.log(value);
                     let className = 'msg-container';
+                    let justify = 'start';
                     if (socketID === value.sockID) {
+                        justify = 'end';
                         className = 'msg-container-send';
                     } else if (value.sockID === 'admin') {
                         className = 'msg-container-admin';
                     }
                     return (
-                        <div className={className}>
-                            <span id={`msg-${index}`}>{value.msg}</span>
+                        <div className={`d-flex justify-content-${justify} mb-3`}>
+                            <div className={className}>
+                                <div className={`d-flex justify-content-${justify} msg-header pl-1 pr-1`}>{value.user}</div>
+                                <span id={`msg-${index}`}>{value.msg}</span>
+                            </div>
                         </div>
                     );
                 })}

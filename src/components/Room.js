@@ -47,8 +47,8 @@ const Room = (props) => {
             console.log('playSync: ' + player.getCurrentTime());
             setSync(false);
         } else {
-            console.log('Emiting sync to: ' + player.getCurrentTime());
-            socket.emit('sync', {roomName, reqUser: user, pos: player.getCurrentTime()});
+            console.log('Emiting seekSync to: ' + player.getCurrentTime());
+            socket.emit('seekSync', {roomName, reqUser: user, pos: player.getCurrentTime()});
         }
         socket.emit('playSync', {roomName, reqUser: user});
     }
@@ -68,17 +68,19 @@ const Room = (props) => {
         setRoomName(newUserInfo.groupID);
         setUser(newUserInfo.username);
         socket = io(SERVER_ENDPOINT);
-        console.log(socket);
         socket.emit('room connection', {roomName, user});
         
+        socket.on('connection', (msg) => {
+            console.log("Socket ID: " + socket.id);
+            setSocketID(socket.id);
+        });
+        
         socket.on('room connection', (msg) => {
-            // console.log(socket.id);
-            // setSocketID(socket.id);
             console.log('received room connection' + msg);
             addMessage({sockID: 'admin', user: '', msg});
         });
         
-        socket.on('sync', ({reqUser, pos}) => {
+        socket.on('seekSync', ({reqUser, pos}) => {
             console.log('Received Position: ' + pos);
             setSync(true);
             player.seekTo(pos);

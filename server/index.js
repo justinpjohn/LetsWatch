@@ -19,12 +19,13 @@ io.on('connection', (socket) => {
         // console.log(`${user} has joined ${roomName}`);
         socket.join(roomName);
         socket.to(roomName).emit('room connection', `${user} has joined the party! Say hi!`);
+        socket.emit('connection', 'hey');
     });
     
-    socket.on('sync', ({roomName, reqUser, pos}) => {
+    socket.on('seekSync', ({roomName, reqUser, pos}) => {
         // console.log('Server received sync: ');
         // console.log({roomName, reqUser, pos});
-        io.to(roomName).emit('sync', {reqUser, pos});
+        io.to(roomName).emit('seekSync', {reqUser, pos});
     });
     
     socket.on('pauseSync', ({roomName, reqUser, pos}) => {

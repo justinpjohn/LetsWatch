@@ -43,6 +43,14 @@ html, body {
     opacity: 0.50;
 }
 
+#chat-container {
+    /*position: absolute;*/
+}
+
+#chat-area {
+    /*overflow-y: scroll;*/
+}
+
 #chat-input input {
     border: none;
     color: white;
@@ -52,33 +60,45 @@ html, body {
 
 .msg-container {
 	margin-top: auto;
-	margin-bottom: 15px;
+	margin-bottom: auto;
 	margin-left: 10px;
-	border-radius: 25px;
+	border-radius: 8px 20px 20px 8px;
 	color: black;
 	background-color: #82ccdd;
 	padding: 7px;
+	padding-left: 10px;
+	padding-right: 10px;
 	position: relative;
 }
 
 .msg-container-send {
 	margin-top: auto;
-	margin-bottom: 15px;
+	margin-bottom: auto;
 	margin-right: 10px;
-	border-radius: 25px;
+	border-radius: 20px 8px 8px 20px;
 	background-color: #78e08f;
 	padding: 7px;
+	padding-left: 10px;
+	padding-right: 10px;
 	position: relative;
 }
 
 .msg-container-admin {
 	margin-top: auto;
-	margin-bottom: 15px;
-	margin-right: 10px;
+	margin-bottom: auto;
+	margin-left: 10px;
 	border-radius: 25px;
 	background-color: #E53A3A;
 	padding: 7px;
+	padding-left: 10px;
+	padding-right: 10px;
 	position: relative;
+}
+
+.msg-header {
+    color: black !important;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .video-wrapper {position: relative; padding-bottom: 56.25%; /* 16:9 */  padding-top: 25px;}
