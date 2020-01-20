@@ -4,10 +4,14 @@ import fetch from 'node-fetch';
 import SearchResults from './SearchResults';
 
 
-const Search = () => {
+const Search = ({player}) => {
   
     const [currQuery, setCurrQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+    
+    const handleResultClick = (videoId) => {
+        player.loadVideoById(videoId, 0);
+    }
     
     const handleMessageSubmit = (e) => {
         // e.preventDefault();
@@ -41,7 +45,7 @@ const Search = () => {
                 <button type='submit' onClick={handleMessageSubmit}>Search</button>
                 Search goes here
             </div>
-            <SearchResults results={searchResults}/>
+            <SearchResults results={searchResults} handleResultClick={handleResultClick}/>
         </div>
     );
 }

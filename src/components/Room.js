@@ -139,7 +139,7 @@ const Room = (props) => {
                 </div>
             </div>
             <div className='row h-25 p-3'>
-                <Search/>
+                <Search player={player}/>
             </div>
         </div> 
           
