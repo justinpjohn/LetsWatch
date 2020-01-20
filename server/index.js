@@ -24,7 +24,6 @@ io.on('connection', (socket) => {
     
     socket.on('seekSync', ({roomName, reqUser, pos}) => {
         // console.log('Server received sync: ');
-        // console.log({roomName, reqUser, pos});
         io.to(roomName).emit('seekSync', {reqUser, pos});
     });
     
@@ -41,6 +40,11 @@ io.on('connection', (socket) => {
     socket.on('chat message', ({roomName, socketID, user, msg}) => {
         // console.log(`received: ${msg} from ${roomName}`);
         io.to(roomName).emit('chat message', {sockID: socketID, user, msg}); 
+    });
+    
+    socket.on('video select', ({roomName, user, videoId}) => {
+        // console.log('Server received video select' + videoId);
+        io.to(roomName).emit('video select', {user, videoId}); 
     });
     
     socket.on('disconnect', () => {

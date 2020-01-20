@@ -21,6 +21,7 @@ const Room = (props) => {
     const [socketID, setSocketID] = useState('');
     const [user, setUser] = useState(newUserInfo.username);
     const [sync, setSync] = useState(false);
+    const [videoId, setVideoId] = useState('V2hlQkVJZhE');
     const [videoOptions, setVideoOptions] = useState( 
         {
           height: '390',
@@ -34,6 +35,11 @@ const Room = (props) => {
     );
     const { messages, addMessage } = useMessages();
     
+    const emitVideoId = (videoId) => {
+        // console.log('Emiting video select: ' + videoId);
+        socket.emit('video select', {roomName, user, videoId});
+    }
+    
     const emitMessage = (msg) => {
         socket.emit('chat message', {roomName, socketID, user, msg});
     }
@@ -45,10 +51,10 @@ const Room = (props) => {
     
     const _onPlay = (event) => {
         if (sync) {
-            console.log('playSync: ' + player.getCurrentTime());
+            // console.log('playSync: ' + player.getCurrentTime());
             setSync(false);
         } else {
-            console.log('Emiting seekSync to: ' + player.getCurrentTime());
+            // console.log('Emiting seekSync to: ' + player.getCurrentTime());
             socket.emit('seekSync', {roomName, reqUser: user, pos: player.getCurrentTime()});
         }
         socket.emit('playSync', {roomName, reqUser: user});
@@ -57,10 +63,10 @@ const Room = (props) => {
     const _onPause = (event) => {
         console.log(sync);
         if (sync) {
-            console.log('pauseSync: ' + player.getCurrentTime());
+            // console.log('pauseSync: ' + player.getCurrentTime());
             setSync(false);
         } else {
-            console.log('Emiting pauseSync');
+            // console.log('Emiting pauseSync');
             socket.emit('pauseSync', {roomName, posUser: user});
         }
     }
@@ -72,35 +78,42 @@ const Room = (props) => {
         socket.emit('room connection', {roomName, user});
         
         socket.on('connection', (msg) => {
-            console.log("Socket ID: " + socket.id);
+            // console.log("Socket ID: " + socket.id);
             setSocketID(socket.id);
         });
         
         socket.on('room connection', (msg) => {
-            console.log('received room connection' + msg);
+            // console.log('received room connection' + msg);
             addMessage({sockID: 'admin', user: '', msg});
         });
         
         socket.on('seekSync', ({reqUser, pos}) => {
-            console.log('Received Position: ' + pos);
+            // console.log('Received Position: ' + pos);
             setSync(true);
             player.seekTo(pos);
         });
         
         socket.on('pauseSync', ({posUser}) => {
-            console.log('Received pauseSync');
+            // console.log('Received pauseSync');
             setSync(true);
             player.pauseVideo();
         });
         
         socket.on('playSync', ({posUser}) => {
-            console.log('Received playSync');
+            // console.log('Received playSync');
             // setSync(true);
             player.playVideo();
         });
         
+        socket.on('video select', ({user, videoId}) => {
+            // console.log('received video id: ' + videoId);
+            setSync(true);
+            setVideoId(videoId);
+            
+        })
+        
         socket.on('chat message', ({sockID, user, msg}) => {
-            console.log(socket);
+            // console.log(socket);
             // console.log({user, msg});
             addMessage({sockID, user, msg});
         });
@@ -125,7 +138,7 @@ const Room = (props) => {
                 <div className='col-8' style={{backgroundColor: 'black'}}>
                     <div id="player" className='video-wrapper w-100 h-100' style={{backgroundColor: '#E53A3A'}}>
                         <YouTube
-                            videoId="V2hlQkVJZhE"
+                            videoId={videoId}
                             opts={videoOptions}
                             onReady={_onReady}
                             onPlay={_onPlay}
@@ -139,7 +152,7 @@ const Room = (props) => {
                 </div>
             </div>
             <div className='row h-25 p-3'>
-                <Search player={player}/>
+                <Search player={player} emitVideoId={emitVideoId}/>
             </div>
         </div> 
           

@@ -4,11 +4,8 @@ import React, {useEffect} from 'react';
 const SearchResults = ({results, handleResultClick}) => {
     
     const handleContainerClick = (e) => {
-        e.persist();
-        
+        // e.persist();
         let videoId = e.target.attributes.alt.value;
-        
-        console.log(videoId);
         handleResultClick(videoId);
     }
     
