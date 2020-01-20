@@ -43,11 +43,24 @@ const Room = (props) => {
     
     const _onPlay = (event) => {
         if (sync) {
-            console.log('current time: ' + player.getCurrentTime());
+            console.log('playSync: ' + player.getCurrentTime());
+            // socket.emit('playSync', {roomName, posUser: user});
             setSync(false);
         } else {
             console.log('Emiting sync to: ' + player.getCurrentTime());
             socket.emit('sync', {roomName, posUser: user, pos: player.getCurrentTime()});
+        }
+        socket.emit('playSync', {roomName, posUser: user});
+    }
+    
+    const _onPause = (event) => {
+        console.log(sync);
+        if (sync) {
+            console.log('pauseSync: ' + player.getCurrentTime());
+            setSync(false);
+        } else {
+            console.log('Emiting playSync');
+            socket.emit('pauseSync', {roomName, posUser: user});
         }
     }
 
@@ -66,6 +79,18 @@ const Room = (props) => {
             console.log('Received Position: ' + pos);
             setSync(true);
             player.seekTo(pos);
+        });
+        
+        socket.on('pauseSync', ({posUser, pos}) => {
+            console.log('Received pauseSync');
+            setSync(true);
+            player.pauseVideo();
+        });
+        
+        socket.on('playSync', ({posUser, pos}) => {
+            console.log('Received playSync');
+            // setSync(true);
+            player.playVideo();
         });
         
         socket.on('chat message', (msg) => {
@@ -95,6 +120,7 @@ const Room = (props) => {
                             opts={videoOptions}
                             onReady={_onReady}
                             onPlay={_onPlay}
+                            onPause={_onPause}
                         />
                     </div>
                 </div>

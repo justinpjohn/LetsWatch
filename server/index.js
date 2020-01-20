@@ -26,6 +26,16 @@ io.on('connection', (socket) => {
         io.to(roomName).emit('sync', {posUser, pos});
     });
     
+    socket.on('pauseSync', ({roomName, posUser, pos}) => {
+        console.log('Server received pauseSync');
+        socket.to(roomName).emit('pauseSync', {posUser});
+    });
+    
+    socket.on('playSync', ({roomName, posUser, pos}) => {
+        console.log('Server received playSync');
+        io.to(roomName).emit('playSync', {posUser});
+    });
+    
     socket.on('chat message', ({roomName, msg}) => {
         console.log(`received: ${msg} from ${roomName}`);
         io.to(roomName).emit('chat message', msg); 
