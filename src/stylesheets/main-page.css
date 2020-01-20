@@ -62,8 +62,8 @@ html, body {
 	margin-top: auto;
 	margin-bottom: auto;
 	margin-left: 10px;
-	border-radius: 8px 20px 20px 8px;
-	color: black;
+	/*border-radius: 8px 20px 20px 8px;*/
+	border-radius: 8px;
 	background-color: #82ccdd;
 	padding: 7px;
 	padding-left: 10px;
@@ -75,7 +75,8 @@ html, body {
 	margin-top: auto;
 	margin-bottom: auto;
 	margin-right: 10px;
-	border-radius: 20px 8px 8px 20px;
+	/*border-radius: 20px 8px 8px 20px;*/
+	border-radius: 8px;
 	background-color: #78e08f;
 	padding: 7px;
 	padding-left: 10px;

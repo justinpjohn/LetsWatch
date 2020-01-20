@@ -26,8 +26,8 @@ const Chat = ({group, user, socketID, messages, emitMessage}) => {
             
             <div id='chat-area' className='' style={{height: '90%'}}>
                 {messages.map((value, index) => {
-                    let className = 'msg-container';
                     let justify = 'start';
+                    let className = 'msg-container';
                     if (socketID === value.sockID) {
                         justify = 'end';
                         className = 'msg-container-send';
