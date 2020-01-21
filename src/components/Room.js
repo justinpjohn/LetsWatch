@@ -81,8 +81,6 @@ const Room = (props) => {
                 <Search player={player} emitVideoId={emitVideoId}/>
             </div>
         </div> 
-          
-        // <h1 style={{color: 'white'}}>Hello '{user.username}'! You are in the '{user.groupID}' group.</h1>
     );
 }
 
