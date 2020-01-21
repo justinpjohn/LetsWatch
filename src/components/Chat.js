@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import Message from './Message';
+
 const Chat = ({group, user, socketID, messages, emitMessage}) => {
     
     const [currMessage, setCurrMessage] = useState('');
@@ -25,23 +27,8 @@ const Chat = ({group, user, socketID, messages, emitMessage}) => {
             </div>
             
             <div id='chat-area' className='' style={{height: '90%'}}>
-                {messages.map((value, index) => {
-                    let justify = 'start';
-                    let className = 'msg-container';
-                    if (socketID === value.sockID) {
-                        justify = 'end';
-                        className = 'msg-container-send';
-                    } else if (value.sockID === 'admin') {
-                        className = 'msg-container-admin';
-                    }
-                    return (
-                        <div className={`d-flex justify-content-${justify} mb-3`}>
-                            <div className={className}>
-                                <div className={`d-flex justify-content-${justify} msg-header`}>{value.user}</div>
-                                <span id={`msg-${index}`}>{value.msg}</span>
-                            </div>
-                        </div>
-                    );
+                {messages.map((content, index) => {
+                    return <Message messageInfo={ {currUserSockID: socketID, message: {content, index}} }/>
                 })}
             </div>
             <div id='chat-input-container' className='d-flex flex-column'>

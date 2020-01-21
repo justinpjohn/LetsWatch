@@ -22,7 +22,6 @@ const Room = (props) => {
     const [player, setPlayer] = useState({});
     const { messages, addMessage } = useMessages();
     
-    
     const emitVideoId = (videoId) => {
         // console.log('Emiting video select: ' + videoId);
         socket.emit('video select', {roomName, user, videoId});
@@ -44,13 +43,13 @@ const Room = (props) => {
         
         socket.on('room connection', (msg) => {
             // console.log('received room connection' + msg);
-            addMessage({sockID: 'admin', user: '', msg});
+            addMessage({authorSock: 'admin', authorUser: '', text: msg});
         });
         
         socket.on('chat message', ({sockID, user, msg}) => {
             // console.log(socket);
             // console.log({user, msg});
-            addMessage({sockID, user, msg});
+            addMessage({authorSock: sockID, authorUser: user, text: msg});
         });
         
         return () => {
