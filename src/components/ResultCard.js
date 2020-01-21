@@ -1,33 +1,15 @@
 import React from 'react';
 
-const ReactCard = ({result}) => {
+const ResultCard = ({result, index, handleOnClick}) => {
     
     console.log(result.snippet.thumbnails.medium);
     
     return (
-        <div class="container">
-          <section class="cards">
-            <article class="card card--1">
-              <div class="card__info-hover">
-                <svg class="card__like"  viewBox="0 0 24 24"></svg>
-                  <div class="card__clock-info">
-                    <svg class="card__clock"  viewBox="0 0 24 24">
-                    </svg><span class="card__time">15 min</span>
-                  </div>
-              </div>
-              <div class="card__img" style={{backgroundImage: `url(${result.snippet.thumbnails.high.url})`}}></div>
-              <a href="#" class="card_link">
-                 <div class="card__img--hover" style={{backgroundImage: `url(${result.snippet.thumbnails.high.url})`}}></div>
-               </a>
-              <div class="card__info">
-                <span class="card__category">{result.snippet.title}</span>
-                <h3 class="card__title">{result.snippet.title}</h3>
-                <span class="card__by">by <a href="#" class="card__author" title="author">{result.snippet.channelTitle}</a></span>
-              </div>
-            </article>
-          </section>
+        <div className={`result-container`} id={`result-${index}`} alt={result.id.videoId} onClick={handleOnClick}>
+            <div className={`result-title`} alt={result.id.videoId}>{result.snippet.title}</div>
+            <span className={`result-videoId`} alt={result.id.videoId}>{result.id.videoId}</span>
         </div>
     );
 }
 
-export default ReactCard;
+export default ResultCard;

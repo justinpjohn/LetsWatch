@@ -20,7 +20,7 @@ const SearchResults = ({results, handleResultClick}) => {
         {results.map((result, index) => {
             // console.log(result);
             return (
-                <ResultCard result={result}/>
+                <ResultCard result={result} index={index} handleOnClick={handleContainerClick}/>
             );
         })}
       </div>
