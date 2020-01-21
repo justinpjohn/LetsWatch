@@ -5,8 +5,13 @@ const SearchResults = ({results, handleResultClick}) => {
     
     const handleContainerClick = (e) => {
         // e.persist();
-        let videoId = e.target.attributes.alt.value;
-        handleResultClick(videoId);
+        try {
+            let videoId = e.target.attributes.alt.value;
+            handleResultClick(videoId);
+        }
+        catch(error) {
+            console.error(error);
+        }
     }
     
     return (

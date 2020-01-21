@@ -19,7 +19,7 @@ io.on('connection', (socket) => {
         // console.log(`${user} has joined ${roomName}`);
         socket.join(roomName);
         socket.to(roomName).emit('room connection', `${user} has joined the party! Say hi!`);
-        socket.emit('connection', 'hey');
+        socket.emit('socket connection', 'socket connection successful');
     });
     
     socket.on('seekSync', ({roomName, reqUser, pos}) => {

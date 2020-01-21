@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
-import YouTube from 'react-youtube';
 
 import Chat from './Chat';
+import Video from './Video';
 import Search from './Search';
 
 import useMessages from './hooks/useMessages';
@@ -11,29 +11,17 @@ const SERVER_URL = 'https://58aab3c90017465bbb8c7cbf0b87d6b3.vfs.cloud9.us-east-
 const SERVER_PORT = '8081';
 const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
-let socket;
-let player;
+let socket = io(SERVER_ENDPOINT);
 
 const Room = (props) => {
     const newUserInfo = props.location.state.user;
 
-    const [roomName, setRoomName] = useState(newUserInfo.groupID);
     const [socketID, setSocketID] = useState('');
+    const [roomName, setRoomName] = useState(newUserInfo.groupID);
     const [user, setUser] = useState(newUserInfo.username);
-    const [sync, setSync] = useState(false);
-    const [videoId, setVideoId] = useState('V2hlQkVJZhE');
-    const [videoOptions, setVideoOptions] = useState( 
-        {
-          height: '390',
-          width: '640',
-          playerVars: { // https://developers.google.com/youtube/player_parameters
-            autoplay: 1,
-            loop: 1,
-            start: 0,
-          }
-        }
-    );
+    const [player, setPlayer] = useState({});
     const { messages, addMessage } = useMessages();
+    
     
     const emitVideoId = (videoId) => {
         // console.log('Emiting video select: ' + videoId);
@@ -43,41 +31,13 @@ const Room = (props) => {
     const emitMessage = (msg) => {
         socket.emit('chat message', {roomName, socketID, user, msg});
     }
-    
-    const _onReady = (event) => {
-        // access to player in all event handlers via event.target
-        player = event.target;
-    }
-    
-    const _onPlay = (event) => {
-        if (sync) {
-            // console.log('playSync: ' + player.getCurrentTime());
-            setSync(false);
-        } else {
-            // console.log('Emiting seekSync to: ' + player.getCurrentTime());
-            socket.emit('seekSync', {roomName, reqUser: user, pos: player.getCurrentTime()});
-        }
-        socket.emit('playSync', {roomName, reqUser: user});
-    }
-    
-    const _onPause = (event) => {
-        console.log(sync);
-        if (sync) {
-            // console.log('pauseSync: ' + player.getCurrentTime());
-            setSync(false);
-        } else {
-            // console.log('Emiting pauseSync');
-            socket.emit('pauseSync', {roomName, posUser: user});
-        }
-    }
 
     useEffect(() => {
         setRoomName(newUserInfo.groupID);
         setUser(newUserInfo.username);
-        socket = io(SERVER_ENDPOINT);
         socket.emit('room connection', {roomName, user});
         
-        socket.on('connection', (msg) => {
+        socket.on('socket connection', (msg) => {
             // console.log("Socket ID: " + socket.id);
             setSocketID(socket.id);
         });
@@ -86,31 +46,6 @@ const Room = (props) => {
             // console.log('received room connection' + msg);
             addMessage({sockID: 'admin', user: '', msg});
         });
-        
-        socket.on('seekSync', ({reqUser, pos}) => {
-            // console.log('Received Position: ' + pos);
-            setSync(true);
-            player.seekTo(pos);
-        });
-        
-        socket.on('pauseSync', ({posUser}) => {
-            // console.log('Received pauseSync');
-            setSync(true);
-            player.pauseVideo();
-        });
-        
-        socket.on('playSync', ({posUser}) => {
-            // console.log('Received playSync');
-            // setSync(true);
-            player.playVideo();
-        });
-        
-        socket.on('video select', ({user, videoId}) => {
-            // console.log('received video id: ' + videoId);
-            setSync(true);
-            setVideoId(videoId);
-            
-        })
         
         socket.on('chat message', ({sockID, user, msg}) => {
             // console.log(socket);
@@ -123,7 +58,7 @@ const Room = (props) => {
             socket.emit('disconnect');
             socket.disconnect();
         }
-    }, []);
+    }, [socket]);
 
     return (
         <div className="container-fluid m-auto h-100" style={{color: 'white'}}>
@@ -136,15 +71,7 @@ const Room = (props) => {
             
             <div className='row h-75 p-3'>
                 <div className='col-8' style={{backgroundColor: 'black'}}>
-                    <div id="player" className='video-wrapper w-100 h-100' style={{backgroundColor: '#E53A3A'}}>
-                        <YouTube
-                            videoId={videoId}
-                            opts={videoOptions}
-                            onReady={_onReady}
-                            onPlay={_onPlay}
-                            onPause={_onPause}
-                        />
-                    </div>
+                    <Video socket={socket} roomName={roomName} user={user} player={player} setPlayer={setPlayer}/>
                 </div>
                 
                 <div className='col pr-0'>
