@@ -128,6 +128,22 @@ html, body {
 
 /*-------------------------------------TEST CSS FOR DISPLAYING RESULTS-------------------------------------*/
 
+#search-container {
+    width: 75%;
+    background-color: #1E1E1E;
+}
+
+#search-container input{
+    border: none;
+    outline: none;
+    padding-left: 10px;
+	padding-right: 10px;
+    width: 100%;
+    height: 100%;
+    color: white;
+    background-color: #252526;
+}
+
 .result-container {
     overflow: auto;
     width: 75%;

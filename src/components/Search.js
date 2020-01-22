@@ -42,10 +42,13 @@ const Search = ({player, emitVideoId}) => {
 
     return (
         <div className='container'>
-            <div className='p-2' style={{backgroundColor:'blue'}}>
-                <input type='text' value={currQuery} onChange={e => setCurrQuery(e.target.value)}/>
-                <button type='submit' onClick={handleMessageSubmit}>Search</button>
-                Search goes here
+            <div className='row justify-content-center m-auto py-2' id='search-container'>
+                <div className='col-11 px-0'>
+                    <input type='text' placeholder="Search youtube..." value={currQuery} onChange={e => setCurrQuery(e.target.value)}/>
+                </div>
+                <div className='col-1 pl-0'>
+                    <button type='submit' className='btn btn-danger' onClick={handleMessageSubmit}>Search</button>
+                </div>
             </div>
             <SearchResults results={searchResults} handleResultClick={handleResultClick}/>
         </div>
