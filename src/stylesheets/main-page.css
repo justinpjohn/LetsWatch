@@ -129,10 +129,12 @@ html, body {
 /*-------------------------------------TEST CSS FOR DISPLAYING RESULTS-------------------------------------*/
 
 .result-container {
-    max-height: 180px;
+    max-height: 150px;
+    max-width: 350px;
     overflow: hidden;
-    border-radius: 25px;
+    border-radius: 15px;
     border: 1px solid black;
+    background-color: #191919;
 }
 
 .result-image {
@@ -151,4 +153,9 @@ html, body {
     min-height: 100%;
     width: auto;
     height: auto;
+}
+
+.result-title {
+    font-size: 0.75em;
+    font-weight: bold;
 }
