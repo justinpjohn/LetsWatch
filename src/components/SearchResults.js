@@ -5,9 +5,11 @@ import ResultCard from './ResultCard';
 const SearchResults = ({results, handleResultClick}) => {
     
     const handleContainerClick = (e) => {
+        console.log('Clicked!');
+        console.log(e.currentTarget);
         // e.persist();
         try {
-            let videoId = e.target.attributes.alt.value;
+            let videoId = e.currentTarget.attributes.alt.value;
             handleResultClick(videoId);
         }
         catch(error) {
@@ -16,7 +18,7 @@ const SearchResults = ({results, handleResultClick}) => {
     }
     
     return (
-      <div>
+      <div class="card-deck">
         {results.map((result, index) => {
             // console.log(result);
             return (

@@ -128,34 +128,19 @@ html, body {
 
 /*-------------------------------------TEST CSS FOR DISPLAYING RESULTS-------------------------------------*/
 
-.result-container {
-    max-height: 150px;
-    max-width: 350px;
-    overflow: hidden;
-    border-radius: 15px;
-    border: 1px solid black;
+.card {
+    max-width: 250px;
     background-color: #191919;
 }
 
-.result-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    max-height: 100%;
-    max-width: 100%;
-    background-color: black;
+.card:hover {
+    cursor: pointer;
 }
 
-.result-image img {
-    flex-shrink: 0;
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
+.card-title {
+    color: white;
 }
 
-.result-title {
-    font-size: 0.75em;
-    font-weight: bold;
+.card-footer {
+    background-color: #252526;
 }
