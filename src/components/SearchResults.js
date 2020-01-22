@@ -20,7 +20,7 @@ const SearchResults = ({results, handleResultClick}) => {
     }
     
     return (
-      <div class="horizontal-scroll-wrapper">
+      <div class="result-container d-flex flex-column m-auto">
         {_results.map((result, index) => {
             // console.log(result);
             return (
@@ -33,7 +33,7 @@ const SearchResults = ({results, handleResultClick}) => {
 
 export default SearchResults;
 
-                // <div className={`result-container`} id={`result-${index}`} alt={result.id.videoId} onClick={handleContainerClick}>
-                //     <div className={`result-title`} alt={result.id.videoId}>{result.snippet.title}</div>
-                //     <span className={`result-videoId`} alt={result.id.videoId}>{result.id.videoId}</span>
-                // </div>
+    // <div className={`result-container`} id={`result-${index}`} alt={result.id.videoId} onClick={handleContainerClick}>
+    //     <div className={`result-title`} alt={result.id.videoId}>{result.snippet.title}</div>
+    //     <span className={`result-videoId`} alt={result.id.videoId}>{result.id.videoId}</span>
+    // </div>
