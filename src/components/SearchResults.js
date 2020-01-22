@@ -4,6 +4,8 @@ import ResultCard from './ResultCard';
 
 const SearchResults = ({results, handleResultClick}) => {
     
+    const _results = results || [];
+    
     const handleContainerClick = (e) => {
         console.log('Clicked!');
         console.log(e.currentTarget);
@@ -19,7 +21,7 @@ const SearchResults = ({results, handleResultClick}) => {
     
     return (
       <div class="horizontal-scroll-wrapper">
-        {results.map((result, index) => {
+        {_results.map((result, index) => {
             // console.log(result);
             return (
                 <ResultCard result={result} index={index} handleOnClick={handleContainerClick}/>

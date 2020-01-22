@@ -132,7 +132,7 @@ html, body {
     position: absolute;
     display: block;
     width: calc(250px + 1px);
-    max-height: 750px;
+    max-height: 100%;
     margin: 0;
     padding-top: 1px;
     overflow-y: auto;
