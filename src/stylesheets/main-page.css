@@ -128,8 +128,33 @@ html, body {
 
 /*-------------------------------------TEST CSS FOR DISPLAYING RESULTS-------------------------------------*/
 
+.horizontal-scroll-wrapper {
+    position: absolute;
+    display: block;
+    width: calc(250px + 1px);
+    max-height: 750px;
+    margin: 0;
+    padding-top: 1px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-transform: rotate(-90deg) translateY(-250px);
+    transform: rotate(-90deg) translateY(-250px);
+    -webkit-transform-origin: right top;
+    transform-origin: right top;
+}
+
+.horizontal-scroll-wrapper > div {
+    display: block;
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+    -webkit-transform-origin: right top;
+    transform-origin: right top;
+}
+
 .card {
+    flex: 0 0 auto;
     max-width: 250px;
+    height: 100%;
     background-color: #191919;
 }
 

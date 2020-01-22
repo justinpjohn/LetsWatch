@@ -26,7 +26,7 @@ const Search = ({player, emitVideoId}) => {
     const searchYoutube = (query) => {
         query = query.replace(' ', '+');
         console.log(query);
-        fetch('https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBa-JzGFfw19oswz7L6WV0BwbNMBIZw5Ko&part=snippet&q='+query+'&maxResults=5&type=video')
+        fetch('https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBa-JzGFfw19oswz7L6WV0BwbNMBIZw5Ko&part=snippet&q='+query+'&maxResults=25&type=video')
         .then((response) => {
           return response.json();
         })
@@ -41,7 +41,7 @@ const Search = ({player, emitVideoId}) => {
     }, [searchResults]);
 
     return (
-        <div className=''>
+        <div className='d-flex flex-column w-100 h-100'>
             <div className='' style={{backgroundColor:'blue'}}>
                 <input type='text' value={currQuery} onChange={e => setCurrQuery(e.target.value)}/>
                 <button type='submit' onClick={handleMessageSubmit}>Search</button>

@@ -18,7 +18,7 @@ const SearchResults = ({results, handleResultClick}) => {
     }
     
     return (
-      <div class="card-deck">
+      <div class="horizontal-scroll-wrapper">
         {results.map((result, index) => {
             // console.log(result);
             return (
