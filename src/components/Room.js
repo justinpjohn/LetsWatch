@@ -69,11 +69,11 @@ const Room = (props) => {
             </div>
             
             <div className='row p-3'>
-                <div className='col-8' style={{backgroundColor: 'black'}}>
+                <div className='col-lg-8 col-12' style={{backgroundColor: 'black'}}>
                     <Video socket={socket} roomName={roomName} user={user} player={player} setPlayer={setPlayer}/>
                 </div>
                 
-                <div className='col pr-0'>
+                <div className='col-lg-4 col-12'>
                     <Chat group={roomName} user={user} socketID={socketID} messages={messages} emitMessage={emitMessage}/>
                 </div>
             </div>

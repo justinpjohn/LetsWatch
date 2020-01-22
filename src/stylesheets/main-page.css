@@ -64,8 +64,23 @@ html, body {
 }
 
 #chat-container {
-    position: absolute;
+    min-height: 30vh;
+    max-height: 80vh;
+    position: relative;
 }
+
+@media (max-width: 1170px) { 
+    #chat-container {
+        min-height: 30vh;
+        max-height: 30vh;
+        padding-right: 0;
+        padding-left: 0;
+        margin-top: 10px;
+        position: relative;
+    }
+}
+
+
 
 #chat-area {
     overflow-y: auto;

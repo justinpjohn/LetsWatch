@@ -71,7 +71,7 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
     }
     
     return (
-        <div id="player" className='video-wrapper w-100 h-100' style={{backgroundColor: '#E53A3A'}}>
+        <div className='video-wrapper w-100 h-100' style={{backgroundColor: '#E53A3A'}}>
             <YouTube
                 videoId={videoId}
                 opts={videoOptions}
