@@ -77,7 +77,7 @@ const Room = (props) => {
                     <Chat group={roomName} user={user} socketID={socketID} messages={messages} emitMessage={emitMessage}/>
                 </div>
             </div>
-            <div className='row h-25 p-3'>
+            <div className='d-flex flex-row justify-content-center w-100 h-25 p-3'>
                 <Search player={player} emitVideoId={emitVideoId}/>
             </div>
         </div> 

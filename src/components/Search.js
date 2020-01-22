@@ -41,7 +41,7 @@ const Search = ({player, emitVideoId}) => {
     }, [searchResults]);
 
     return (
-        <div className='row h-100 w-100'>
+        <div className=''>
             <div className='' style={{backgroundColor:'blue'}}>
                 <input type='text' value={currQuery} onChange={e => setCurrQuery(e.target.value)}/>
                 <button type='submit' onClick={handleMessageSubmit}>Search</button>
