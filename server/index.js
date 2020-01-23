@@ -5,14 +5,20 @@ const cors = require('cors');
 const path = require('path');
 
 const PORT = process.env.PORT || 8081;
-// const PORT = 8081;
+// const PORT = 8081
 
-const router = require('./router');
+// const router = require('./router');
 
-const INDEX = '../public/';
+const INDEX = '../';
 
 const app = express().use(express.static(__dirname + '/../build'));
-const server = http.createServer(app);
+
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(path.resolve(INDEX), 'build', 'index.html'));
+});
+
+
+const server = http.Server(app);
 const io = socketio(server);
 
 
@@ -58,7 +64,7 @@ io.on('connection', (socket) => {
 
 
 // app.use(router);
-app.use(cors());
+// app.use(cors());
 
 server.listen(PORT, () => console.log(`Server has started on port ${PORT}`));
 
