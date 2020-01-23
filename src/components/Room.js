@@ -11,7 +11,7 @@ const SERVER_URL = 'https://frozen-harbor-81702.herokuapp.com';
 const SERVER_PORT = '8081';
 const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
-let socket = io(SERVER_ENDPOINT);
+let socket = io(SERVER_URL);
 
 const Room = (props) => {
     const newUserInfo = props.location.state.user;
