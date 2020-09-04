@@ -23,7 +23,6 @@ const io = socketio(server);
 app.use(cors());
 app.use(router);
 
-console.log(app);
 
 io.on('connection', (socket) => {
     console.log('A user has connected.');

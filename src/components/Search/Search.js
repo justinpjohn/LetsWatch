@@ -17,13 +17,14 @@ const Search = ({player, emitVideoId}) => {
     
     const handleKeyPress = (e) => {
         // check if 'Enter' key is pressed
-        if (e.charCode == 13){
+        if (e.charCode === 13){
             handleSubmitClick(e);
         } 
     }
     
     const handleSubmitClick = (e) => {
         // e.preventDefault();
+        // check if query is not empty or only contains spaces
         if (currQuery.length !== 0 && (/\S/).test(currQuery)) {
             searchYoutube(currQuery);
             // setCurrQuery(''); //we don't want to reset query on submission
@@ -31,7 +32,7 @@ const Search = ({player, emitVideoId}) => {
     }
     
     const searchYoutube = (query) => {
-        query = query.replace(' ', '+');
+        query = query.replace(/ /g, '+');
         console.log(query);
         fetch('https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBa-JzGFfw19oswz7L6WV0BwbNMBIZw5Ko&part=snippet&q='+query+'&maxResults=10&type=video')
         .then((response) => {

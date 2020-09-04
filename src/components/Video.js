@@ -5,7 +5,7 @@ import YouTube from 'react-youtube';
 const Video = ({socket, roomName, user, player, setPlayer}) => {
     
     const [receivingSync, setReceivingSync] = useState(false);
-    const [videoId, setVideoId] = useState('EEIk7gwjgIM');
+    const [videoId, setVideoId] = useState('5qap5aO4i9A'); //originally EEIk7gwjgIM
     const [videoOptions, setVideoOptions] = useState( 
         {
           height: '390',
