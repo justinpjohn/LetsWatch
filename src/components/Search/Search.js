@@ -15,11 +15,18 @@ const Search = ({player, emitVideoId}) => {
         // player.loadVideoById(videoId, 0);
     }
     
-    const handleMessageSubmit = (e) => {
+    const handleKeyPress = (e) => {
+        // check if 'Enter' key is pressed
+        if (e.charCode == 13){
+            handleSubmitClick(e);
+        } 
+    }
+    
+    const handleSubmitClick = (e) => {
         // e.preventDefault();
         if (currQuery.length !== 0 && (/\S/).test(currQuery)) {
             searchYoutube(currQuery);
-            setCurrQuery('');
+            // setCurrQuery(''); //we don't want to reset query on submission
         }
     }
     
@@ -44,10 +51,10 @@ const Search = ({player, emitVideoId}) => {
         <div className='container'>
             <div className='row justify-content-center m-auto py-2' id='search-container'>
                 <div className='col-11 px-0'>
-                    <input type='text' placeholder="Search youtube..." value={currQuery} onChange={e => setCurrQuery(e.target.value)}/>
+                    <input type='text' placeholder="Search youtube..." value={currQuery} onChange={e => setCurrQuery(e.target.value)} onKeyPress={handleKeyPress}/>
                 </div>
                 <div className='col-1 pl-0'>
-                    <button type='submit' className='btn btn-danger' onClick={handleMessageSubmit}>Search</button>
+                    <button type='submit' className='btn btn-danger' onClick={handleSubmitClick}>Search</button>
                 </div>
             </div>
             <SearchResults results={searchResults} handleResultClick={handleResultClick}/>
