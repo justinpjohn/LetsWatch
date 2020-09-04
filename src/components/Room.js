@@ -8,10 +8,10 @@ import Search from './Search';
 import useMessages from './hooks/useMessages';
 
 const SERVER_URL = 'https://58aab3c90017465bbb8c7cbf0b87d6b3.vfs.cloud9.us-east-2.amazonaws.com';
-const SERVER_PORT = '8081';
+const SERVER_PORT = '8080';
 const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
-let socket = io();
+let socket = io(SERVER_ENDPOINT);
 
 const Room = (props) => {
     const newUserInfo = props.location.state.user;

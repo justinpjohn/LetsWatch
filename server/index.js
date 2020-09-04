@@ -7,19 +7,27 @@ const path = require('path');
 const PORT = process.env.PORT || 8081;
 // const PORT = 8081
 
-// const router = require('./router');
+const router = require('./router');
 
-const INDEX = '../';
+// const INDEX = '../';
 
-const app = express().use(express.static(__dirname + '/../build'));
+// const app = express().use(express.static(__dirname + '/../build'));
 
-app.get('/*', function (req, res) {
-    res.sendFile(path.join(path.resolve(INDEX), 'build', 'index.html'));
-});
+// app.get('/*', function (req, res) {
+//     res.sendFile(path.join(path.resolve(INDEX), 'build', 'index.html'));
+// });
 
 
-const server = http.Server(app);
+// const server = http.Server(app);
+// const io = socketio(server);
+
+
+const app = express();
+const server = http.createServer(app);
 const io = socketio(server);
+
+app.use(cors());
+app.use(router);
 
 
 io.on('connection', (socket) => {

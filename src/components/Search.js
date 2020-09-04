@@ -36,8 +36,8 @@ const Search = ({player, emitVideoId}) => {
     }
       
     useEffect(() => {
-        console.log('fetching youtube search');
-        console.log(searchResults);
+        // console.log('fetching youtube search');
+        // console.log(searchResults);
     }, [searchResults]);
 
     return (
