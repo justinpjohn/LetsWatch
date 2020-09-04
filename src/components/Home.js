@@ -2,7 +2,7 @@ import React from 'react';
 
 import Form from './Form';
 import Modal from './Modal';
-import useModal from './hooks/useModal';
+import useModal from '../hooks/useModal';
 
 const Home = () => {
     

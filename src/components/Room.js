@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
-import Chat from './Chat';
+import Chat from './Chat/Chat';
 import Video from './Video';
-import Search from './Search';
+import Search from './Search/Search';
 
-import useMessages from './hooks/useMessages';
+import useMessages from '../hooks/useMessages';
 
-const SERVER_URL = 'https://58aab3c90017465bbb8c7cbf0b87d6b3.vfs.cloud9.us-east-2.amazonaws.com';
+// const SERVER_URL = 'https://58aab3c90017465bbb8c7cbf0b87d6b3.vfs.cloud9.us-east-2.amazonaws.com';
+const SERVER_URL = 'https://9e057b5691a24d17a179648c6553f432.vfs.cloud9.us-east-1.amazonaws.com/';
 const SERVER_PORT = '8080';
 const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
+console.log(SERVER_ENDPOINT);
 
-let socket = io(SERVER_ENDPOINT);
+let socket = io(SERVER_URL);
 
 const Room = (props) => {
     const newUserInfo = props.location.state.user;
@@ -23,7 +25,6 @@ const Room = (props) => {
     const { messages, addMessage } = useMessages();
     
     const emitVideoId = (videoId) => {
-        // console.log('Emiting video select: ' + videoId);
         socket.emit('video select', {roomName, user, videoId});
     }
     
