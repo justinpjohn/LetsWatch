@@ -20,25 +20,32 @@ const Room = (props) => {
 
     const [socketID, setSocketID] = useState('');
     const [roomName, setRoomName] = useState(newUserInfo.groupID);
-    const [user, setUser] = useState(newUserInfo.username);
+    const [userName, setUserName] = useState(newUserInfo.username);
     const [player, setPlayer] = useState({});
     const { messages, addMessage } = useMessages();
     
-    const emitVideoId = (videoId) => {
-        socket.emit('video select', {roomName, user, videoId});
+    const emitVideoId = (videoID) => {
+        // console.log('emitting videoId: ' + videoID);
+        const videoState = {
+            videoID,
+            videoTimestamp : Date.now(),
+            playerState : 'PLAYING'
+        } 
+        socket.emit('video select', {roomName, userName, videoState});
     }
     
     const emitMessage = (msg) => {
-        socket.emit('chat message', {roomName, socketID, user, msg});
+        socket.emit('chat message', {roomName, userName, msg});
     }
 
     useEffect(() => {
-        setRoomName(newUserInfo.groupID);
-        setUser(newUserInfo.username);
-        socket.emit('room connection', {roomName, user});
+        // setRoomName(newUserInfo.groupID);
+        // setUserName(newUserInfo.username);
+        // console.log({roomName, userName});
+        socket.emit('room connection', {roomName, userName});
         
-        socket.on('socket connection', (msg) => {
-            // console.log("Socket ID: " + socket.id);
+        socket.on('socket connection', () => {
+            // console.log('setting socket connection');
             setSocketID(socket.id);
         });
         
@@ -47,10 +54,8 @@ const Room = (props) => {
             addMessage({authorSock: 'admin', authorUser: '', text: msg});
         });
         
-        socket.on('chat message', ({sockID, user, msg}) => {
-            // console.log(socket);
-            // console.log({user, msg});
-            addMessage({authorSock: sockID, authorUser: user, text: msg});
+        socket.on('chat message', ({authorSocketID, authorUserName, msg}) => {
+            addMessage({authorSock: authorSocketID, authorUser: authorUserName, text: msg});
         });
         
         return () => {
@@ -65,17 +70,17 @@ const Room = (props) => {
             <div className='row'>
                 <nav className="navbar navbar-dark bg-dark w-100">
                     <a className="navbar-brand" href="/">Lets<span style={{color: '#E53A3A'}}>Watch</span></a>
-                    <span>{user}</span>
+                    <span>{userName}</span>
                 </nav>
             </div>
             
             <div className='row p-3'>
                 <div className='col-lg-8 col-12' style={{backgroundColor: 'black'}}>
-                    <Video socket={socket} roomName={roomName} user={user} player={player} setPlayer={setPlayer}/>
+                    <Video socket={socket} roomName={roomName} user={userName} player={player} setPlayer={setPlayer}/>
                 </div>
                 
                 <div className='col-lg-4 col-12'>
-                    <Chat group={roomName} user={user} socketID={socketID} messages={messages} emitMessage={emitMessage}/>
+                    <Chat group={roomName} user={userName} socketID={socketID} messages={messages} emitMessage={emitMessage}/>
                 </div>
             </div>
             <div className='row p-3'>

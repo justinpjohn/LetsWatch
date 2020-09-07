@@ -10,7 +10,6 @@ const Search = ({player, emitVideoId}) => {
     const [searchResults, setSearchResults] = useState([]);
     
     const handleResultClick = (videoId) => {
-        // console.log(videoId);
         emitVideoId(videoId);
         // player.loadVideoById(videoId, 0);
     }
@@ -27,13 +26,13 @@ const Search = ({player, emitVideoId}) => {
         // check if query is not empty or only contains spaces
         if (currQuery.length !== 0 && (/\S/).test(currQuery)) {
             searchYoutube(currQuery);
-            // setCurrQuery(''); //we don't want to reset query on submission
+            // setCurrQuery(''); // reset query on submission
         }
     }
     
     const searchYoutube = (query) => {
         query = query.replace(/ /g, '+');
-        console.log(query);
+        // console.log(query);
         fetch('https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBa-JzGFfw19oswz7L6WV0BwbNMBIZw5Ko&part=snippet&q='+query+'&maxResults=10&type=video')
         .then((response) => {
           return response.json();
