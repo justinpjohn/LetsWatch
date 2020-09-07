@@ -28,7 +28,7 @@ const Room = (props) => {
         // console.log('emitting videoId: ' + videoID);
         const videoState = {
             videoID,
-            videoTimestamp : Date.now(),
+            videoTimestamp : 0,
             playerState : 'PLAYING'
         } 
         socket.emit('video select', {roomName, userName, videoState});

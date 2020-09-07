@@ -74,13 +74,13 @@ io.on('connection', (socket) => {
         console.log('Server received video select: ' + videoID);
         console.log(videoState);
         
-        let serverVideoState = Object.assign({}, videoState);;
+        let serverVideoState = Object.assign({}, videoState);
         serverVideoState["videoTimestamp"] = Date.now();
         updateRoomVideoState({roomName, videoState: serverVideoState});
         
         io.to(roomName).emit('video select', {
             requestingUser: userName, 
-            requestingVideoID: videoID
+            videoState
         }); 
     }); 
     
@@ -88,7 +88,7 @@ io.on('connection', (socket) => {
         console.log('Server received sync: ');
         console.log(videoState);
         
-        let serverVideoState = Object.assign({}, videoState);;
+        let serverVideoState = Object.assign({}, videoState);
         serverVideoState["videoTimestamp"] = Date.now() - (videoState["videoTimestamp"] * 1000);
         updateRoomVideoState({roomName, videoState: serverVideoState});
 
@@ -103,7 +103,7 @@ io.on('connection', (socket) => {
         console.log('Server received pauseSync');
         console.log(videoState);
         
-        let serverVideoState = Object.assign({}, videoState);;
+        let serverVideoState = Object.assign({}, videoState);
         serverVideoState["videoTimestamp"] = Date.now();
         updateRoomVideoState({roomName, videoState: serverVideoState});
         
@@ -114,7 +114,7 @@ io.on('connection', (socket) => {
         console.log('Server received playSync');
         console.log(videoState);
         
-        let serverVideoState = Object.assign({}, videoState);;
+        let serverVideoState = Object.assign({}, videoState);
         serverVideoState["videoTimestamp"] = Date.now() - (videoState["videoTimestamp"] * 1000);
         updateRoomVideoState({roomName, videoState: serverVideoState});
         
