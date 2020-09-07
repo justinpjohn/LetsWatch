@@ -23,7 +23,7 @@ const io = socketio(server);
 app.use(cors());
 app.use(router);
 
-const DEFAULT_VIDEO_ID = '5qap5aO4i9A';
+const DEFAULT_VIDEO_ID = 'V2hlQkVJZhE';
 const DEFAULT_VIDEO_STATE = 'PLAYING';
 
 
@@ -34,16 +34,19 @@ io.on('connection', (socket) => {
         console.log(`${userName} has joined ${roomName}`);
         socket.join(roomName);
         
-        const roomVideoState = getRoomVideoState(roomName);
+        let roomVideoState = getRoomVideoState(roomName);
         if (roomVideoState === undefined) {
-            const videoState = {
+            const newRoomVideoState = {
                 videoID: DEFAULT_VIDEO_ID, 
                 videoTimestamp: Date.now(),
                 playerState: DEFAULT_VIDEO_STATE
             };
-            updateRoomVideoState({roomName, videoState});
+            updateRoomVideoState({roomName, newRoomVideoState});
+        } else {
+            const currDatetime = Date.now();
+            const estimatedTimestamp = (currDatetime - roomVideoState["videoTimestamp"]) / 1000;
+            roomVideoState["videoTimestamp"] = (estimatedTimestamp + 2);
         }
-        console.log(roomVideoState);
          
         socket.emit('socket connection');
         setTimeout(() => { socket.emit('video state', {roomVideoState}); }, 1000);
@@ -71,7 +74,10 @@ io.on('connection', (socket) => {
         console.log('Server received video select: ' + videoID);
         console.log(videoState);
         
-        updateRoomVideoState({roomName, videoState});
+        let serverVideoState = Object.assign({}, videoState);;
+        serverVideoState["videoTimestamp"] = Date.now();
+        updateRoomVideoState({roomName, videoState: serverVideoState});
+        
         io.to(roomName).emit('video select', {
             requestingUser: userName, 
             requestingVideoID: videoID
@@ -82,14 +88,14 @@ io.on('connection', (socket) => {
         console.log('Server received sync: ');
         console.log(videoState);
         
-        const videoID = videoState["videoID"];
-        updateRoomVideoState({roomName, videoState});
-        
-        console.log('emitting from server timestamp: ' + videoState["videoTimestamp"]);
-        
+        let serverVideoState = Object.assign({}, videoState);;
+        serverVideoState["videoTimestamp"] = Date.now() - (videoState["videoTimestamp"] * 1000);
+        updateRoomVideoState({roomName, videoState: serverVideoState});
+
+        console.log('emitting from server timestamp: ' + videoState["videoTimestamp"]);        
         io.to(roomName).emit('seekSync', {
-            userName, 
-            reqUserVideoPos: videoState["videoTimestamp"]
+            requestingUser: userName, 
+            videoState
         });
     });
     
@@ -97,23 +103,27 @@ io.on('connection', (socket) => {
         console.log('Server received pauseSync');
         console.log(videoState);
         
-        const videoID = videoState["videoID"];
-        updateRoomVideoState({roomName, videoState});
-        socket.to(roomName).emit('pauseSync', {userName});
+        let serverVideoState = Object.assign({}, videoState);;
+        serverVideoState["videoTimestamp"] = Date.now();
+        updateRoomVideoState({roomName, videoState: serverVideoState});
+        
+        socket.to(roomName).emit('pauseSync', {requestingUser: userName});
     });
     
     socket.on('playSync', ({roomName, userName, videoState}) => {
         console.log('Server received playSync');
         console.log(videoState);
         
-        const videoID = videoState["videoID"];
-        updateRoomVideoState({roomName, videoState});
-        socket.to(roomName).emit('playSync', {userName});
+        let serverVideoState = Object.assign({}, videoState);;
+        serverVideoState["videoTimestamp"] = Date.now() - (videoState["videoTimestamp"] * 1000);
+        updateRoomVideoState({roomName, videoState: serverVideoState});
+        
+        io.to(roomName).emit('playSync', {requestingUser: userName});
     });
     
-    socket.on('disconnect', ({roomName}) => {
+    socket.on('disconnect', ({roomName, userName}) => {
         removeUser({socketID: socket.id, roomName});
-        console.log('A user has disconnected.'); 
+        console.log(`${userName} has disconnected from ${roomName}`); 
     });
 });
 

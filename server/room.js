@@ -3,16 +3,6 @@ const roomStates = new Map();
 
 
 const updateRoomVideoState = ({roomName, videoState}) => {
-    if (roomStates.has(roomName)) {
-        const currState = roomStates.get(roomName);
-        const playerState = currState["playerState"];
-        
-        if (playerState === 'PAUSED') {
-            let timeStarted = Date.now();
-            timeStarted -= (Math.floor(currState["videoTimestamp"] * 1000));
-            videoState["videoTimestamp"] = timeStarted;
-        }
-    }
     roomStates.set(roomName, videoState);
 }
 
@@ -46,6 +36,7 @@ const removeUser = ({ socketID, roomName }) => {
         if (room.size === 0) {
             rooms.delete(roomName);
             roomStates.delete(roomName);
+            console.log(`removing ${roomName} from map'`);
         }
     }
 }

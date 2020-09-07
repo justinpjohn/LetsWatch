@@ -4,69 +4,79 @@ import YouTube from 'react-youtube';
 
 const Video = ({socket, roomName, user, player, setPlayer}) => {
     
-    const [receivingSync, setReceivingSync] = useState(false);
-    const [videoID, setVideoID] = useState('5qap5aO4i9A'); //originally EEIk7gwjgIM
+    const [receivingSync, setReceivingSync] = useState(true);
+    const [initalSync, setInitialSync] = useState(true);
+    const [isSeeking, setIsSeeking] = useState(false);
+    const [timestamp, setTimeStamp] = useState(0);
+    const [datetime, setDateTime] = useState(Date.now());
+    
+    const [videoID, setVideoID] = useState('V2hlQkVJZhE'); //originally 5qap5aO4i9A
     const [videoOptions, setVideoOptions] = useState( 
         {
           height: '390',
           width: '640',
           playerVars: { // https://developers.google.com/youtube/player_parameters
             autoplay: 1,
-            loop: 1,
-            start: 0,
+            loop: 1
+            // start: 0,
           }
         }
     );
+    
+    useEffect(() => {
+        socket.on('video state', ({roomVideoState}) => {
+            if (roomVideoState !== undefined && roomVideoState !== null) {
+                const videoID = roomVideoState["videoID"];
+                
+                let videoTimestamp = roomVideoState["videoTimestamp"];
+                console.log('RECEIVED VIDEO STATE');
+                console.log(roomVideoState);
+            
+                setVideoID(videoID);
+                
+                // setVideoID(videoID);
+                // console.log("seeking to: " + videoTimestamp);
+                // _player.seekTo(videoTimestamp);
+                // if (playerState === 'PAUSED') _player.pauseVideo();
+            } else {
+                console.log('Received video state was undefined!');
+            }
+        });
+    });
+    
+    
     
     const _onReady = (event) => {
         // access to player in all event handlers via event.target
         let _player = event.target;
         setPlayer(_player);
+        _player.pauseVideo();
         
-        socket.on('video state', ({roomVideoState}) => {
-           if (roomVideoState !== undefined && roomVideoState !== null) {
-                console.log(roomVideoState);
-                const videoID = roomVideoState["videoID"];
-                const playerState = roomVideoState["playerState"];
-                
-                let videoTimestamp = roomVideoState["videoTimestamp"];
-                if (playerState !== 'PAUSED') {
-                    console.log('PLAYING');
-                    const timeElapsedInMilli = Date.now() - videoTimestamp;
-                    console.log('elapsed milli: ' + timeElapsedInMilli);
-                    const timeElapsedInSeconds = Math.ceil(timeElapsedInMilli / 1000);
-                    console.log('elapsed seconds: ' + timeElapsedInMilli);
-                    // console.log(roomVideoState);
-                    // console.log(timeElapsedInSeconds); 
-                    videoTimestamp = timeElapsedInSeconds;
-                }
-                console.log('RECEIVED TIMESTAMP: ' + videoTimestamp); 
-
-                setVideoID(videoID);
-                _player.loadVideoById({
-                    'videoId': videoID,
-                    'startSeconds': videoTimestamp
-                });
-                if (playerState === 'PAUSED') _player.pauseVideo();
-            } else {
-                console.log('Received video state was undefined!');
+        socket.on('seekSync', ({requestingUser, videoState}) => {
+            const videoTimestamp = videoState["videoTimestamp"];
+            
+            if (initalSync) {
+                console.log('INITIAL SYNCING');
+                console.log('Seeking Position: ' + videoTimestamp);
+                // setVideoID(videoState["videoID"]);
+                //  _player.loadVideoById({
+                //     'videoId': videoID,
+                //     'startSeconds': videoTimestamp
+                // });
             }
-        });
-        
-        socket.on('seekSync', ({requestingUser, reqUserVideoPos}) => {
-            console.log('Seeking Position: ' + reqUserVideoPos);
+            
             setReceivingSync(true);
-            _player.seekTo(reqUserVideoPos);
+            _player.seekTo(videoTimestamp);
         });
         
         socket.on('pauseSync', ({requestingUser}) => {
-            // console.log('Received pauseSync');
+            console.log('Received pauseSync');
             setReceivingSync(true);
             _player.pauseVideo();
         });
         
         socket.on('playSync', ({requestingUser}) => {
-            // console.log('Received playSync');
+            console.log('Received playSync');
             _player.playVideo();
         });
         
@@ -78,6 +88,10 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
     }
     
     const _onPlay = (event) => {
+        if (initalSync) {
+            setInitialSync(false)
+            return;
+        }
         const videoState = getVideoState();
         
         if (receivingSync) {
@@ -87,7 +101,7 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
             // console.log('Emiting seekSync to: ' + player.getCurrentTime());
             socket.emit('seekSync', {
                 roomName, 
-                userName: user, 
+                userName: user,
                 videoState
             });
         }
@@ -99,6 +113,9 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
     }
     
     const _onPause = (event) => {
+        if (initalSync) { 
+            return;
+        }
         const videoState = getVideoState();
         
         if (receivingSync) {
@@ -114,11 +131,34 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
         }
     }
     
+    const isSeek = () => {
+        const currTimestamp = player.getCurrentTime();
+        const diffTimestamp = Math.abs(timestamp - currTimestamp);
+        
+        const currDatetime = Date.now();
+        const diffDatetime = Math.abs(datetime - currDatetime) / 1000;
+        
+        if (currTimestamp < timestamp) {
+            console.log('seeking');
+            setIsSeeking(true);
+        } else if (diffTimestamp - diffDatetime > 2) {
+            console.log('seeking: ' + (diffTimestamp - diffDatetime));
+            setIsSeeking(true);
+        } else {
+            console.log('not seeking');
+            setIsSeeking(false);
+        }
+        setTimeStamp(player.getCurrentTime());
+        setDateTime(Date.now());
+    }
+    
     const getVideoState = () => {
+        const isPlaying = (player.getPlayerState() === 1);
         return { 
             videoID,
             videoTimestamp : player.getCurrentTime(),
-            playerState : ((player.getPlayerState() == 1) ? 'PLAYING' : 'PAUSED')
+            playerState : (isPlaying ? 'PLAYING' : 'PAUSED')
+            // videoTimestamp : (isPlaying ? Date.now() : player.getCurrentTime()),
         };
     }
     
