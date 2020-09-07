@@ -7,11 +7,6 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
     const [receivingSync, setReceivingSync] = useState(true);
     const [initalSync, setInitialSync] = useState(true);
     
-    // for isSeek()
-    // const [isSeeking, setIsSeeking] = useState(false);
-    // const [timestamp, setTimeStamp] = useState(0);
-    // const [datetime, setDateTime] = useState(Date.now());
-    
     const [videoPlayer, setVideoPlayer] = useState(null);
     const [videoData, setVideoData] = useState({ 
         videoID: 'V2hlQkVJZhE',
@@ -121,29 +116,7 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
             console.log('player is null');
         }
     }, [videoData]);
-    
-    
-    // const isSeek = () => {
-    //     const currTimestamp = player.getCurrentTime();
-    //     const diffTimestamp = Math.abs(timestamp - currTimestamp);
-        
-    //     const currDatetime = Date.now();
-    //     const diffDatetime = Math.abs(datetime - currDatetime) / 1000;
-        
-    //     if (currTimestamp < timestamp) {
-    //         console.log('seeking');
-    //         setIsSeeking(true);
-    //     } else if (diffTimestamp - diffDatetime > 2) {
-    //         console.log('seeking: ' + (diffTimestamp - diffDatetime));
-    //         setIsSeeking(true);
-    //     } else {
-    //         console.log('not seeking');
-    //         setIsSeeking(false);
-    //     }
-    //     setTimeStamp(player.getCurrentTime());
-    //     setDateTime(Date.now());
-    // }
-    
+
     const getVideoState = () => {
         const isPlaying = (player.getPlayerState() === 1);
         return { 
