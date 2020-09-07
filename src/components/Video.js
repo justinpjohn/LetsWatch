@@ -15,7 +15,8 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
     const [videoPlayer, setVideoPlayer] = useState(null);
     const [videoData, setVideoData] = useState({ 
         videoID: 'V2hlQkVJZhE',
-        videoTS: 0
+        videoTS: 0,
+        videoPS: 'PLAYING'
     });
     
     const _onReady = (event) => {
@@ -28,15 +29,16 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
             if (roomVideoState !== undefined && roomVideoState !== null) {
                 const videoID = roomVideoState["videoID"];
                 const videoTimestamp = roomVideoState["videoTimestamp"];
+                const playerState = roomVideoState["playerState"];
                 
-                console.log('RECEIVED VIDEO STATE');
-                console.log(roomVideoState);
+                // console.log('RECEIVED VIDEO STATE');
+                // console.log(roomVideoState);
         
                 setVideoData({
                     videoID: videoID,
-                    videoTS: videoTimestamp
+                    videoTS: videoTimestamp,
+                    videoPS: playerState
                 });
-                // if (playerState === 'PAUSED') _player.pauseVideo();
             } else {
                 console.log('Received video state was undefined!');
             }
@@ -49,32 +51,34 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
         });
         
         socket.on('pauseSync', ({requestingUser}) => {
-            console.log('Received pauseSync');
+            // console.log('Received pauseSync');
             setReceivingSync(true);
             _player.pauseVideo();
         });
         
         socket.on('playSync', ({requestingUser}) => {
-            console.log('Received playSync');
+            // console.log('Received playSync');
             _player.playVideo();
         });
     
         socket.on('video select', ({requestingUser, videoState}) => {
-            console.log('received video state: ');
-            console.log(videoState);
+            // console.log('received video state: ');
+            // console.log(videoState);
             setReceivingSync(true);
             
             const videoID = videoState["videoID"];
             setVideoData({
                 videoID: videoID,
-                videoTS: 0
+                videoTS: 0,
+                videoPS: 'PLAYING'
             });
         });
     }
 
     const _onPlay = (event) => {
+        if (initalSync) return;
         const videoState = getVideoState();
-        
+
         if (receivingSync) {
             setReceivingSync(false);
         } else {
@@ -92,8 +96,9 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
     }
     
     const _onPause = (event) => {
+        if (initalSync) return;
         const videoState = getVideoState();
-        
+
         if (receivingSync) {
             setReceivingSync(false);
         } else {
@@ -108,11 +113,12 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
     useEffect(() => {
         console.log("USE EFFECT");
         if (videoPlayer !== null) {
-            console.log(videoData);
+            // console.log(videoData);
             videoPlayer.loadVideoById(videoData["videoID"], videoData["videoTS"]);
-            // videoPlayer.seekTo(videoData["videoTS"]);
+            if (videoData["videoPS"] === 'PAUSED') videoPlayer.pauseVideo();
+            setInitialSync(false);
         } else {
-            console.log('_player is null');
+            console.log('player is null');
         }
     }, [videoData]);
     
@@ -144,7 +150,6 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
             videoID: videoData["videoID"],
             videoTimestamp : player.getCurrentTime(),
             playerState : (isPlaying ? 'PLAYING' : 'PAUSED')
-            // videoTimestamp : (isPlaying ? Date.now() : player.getCurrentTime()),
         };
     }
     
