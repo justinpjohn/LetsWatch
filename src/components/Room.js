@@ -21,7 +21,7 @@ const Room = (props) => {
     const [socketID, setSocketID] = useState('');
     const [roomName, setRoomName] = useState(newUserInfo.groupID);
     const [userName, setUserName] = useState(newUserInfo.username);
-    const [player, setPlayer] = useState({});
+    const [videoPlayer, setvideoPlayer] = useState(null);
     const { messages, addMessage } = useMessages();
     
     const emitVideoId = (videoID) => {
@@ -39,9 +39,6 @@ const Room = (props) => {
     }
 
     useEffect(() => {
-        // setRoomName(newUserInfo.groupID);
-        // setUserName(newUserInfo.username);
-        // console.log({roomName, userName});
         socket.emit('room connection', {roomName, userName});
         
         socket.on('socket connection', () => {
@@ -59,7 +56,7 @@ const Room = (props) => {
         });
         
         return () => {
-            player.destroy();
+            videoPlayer.destroy();
             // console.log({roomName, userName});
             socket.emit('disconnect', {roomName, userName});
             socket.disconnect();
@@ -77,15 +74,15 @@ const Room = (props) => {
             
             <div className='row p-3'>
                 <div className='col-lg-8 col-12' style={{backgroundColor: 'black'}}>
-                    <Video socket={socket} roomName={roomName} user={userName} player={player} setPlayer={setPlayer}/>
+                    <Video socket={socket} roomName={roomName} user={userName} videoPlayer={videoPlayer} setvideoPlayer={setvideoPlayer}/>
                 </div>
                 
                 <div className='col-lg-4 col-12'>
-                    <Chat group={roomName} user={userName} socketID={socketID} messages={messages} emitMessage={emitMessage}/>
+                    <Chat group={roomName} userName={userName} socketID={socketID} messages={messages} emitMessage={emitMessage}/>
                 </div>
             </div>
             <div className='row p-3'>
-                <Search player={player} emitVideoId={emitVideoId}/>
+                <Search emitVideoId={emitVideoId}/>
             </div>
         </div> 
     );

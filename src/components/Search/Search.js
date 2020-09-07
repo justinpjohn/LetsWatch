@@ -4,14 +4,13 @@ import fetch from 'node-fetch';
 import SearchResults from './SearchResults';
 
 
-const Search = ({player, emitVideoId}) => {
+const Search = ({emitVideoId}) => {
   
     const [currQuery, setCurrQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     
     const handleResultClick = (videoId) => {
         emitVideoId(videoId);
-        // player.loadVideoById(videoId, 0);
     }
     
     const handleKeyPress = (e) => {

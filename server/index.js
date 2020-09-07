@@ -23,7 +23,7 @@ const io = socketio(server);
 app.use(cors());
 app.use(router);
 
-const DEFAULT_VIDEO_ID = 'V2hlQkVJZhE';
+const DEFAULT_VIDEO_ID = 'nMVFSwfV6wk';
 const DEFAULT_VIDEO_STATE = 'PLAYING';
 
 
@@ -41,7 +41,9 @@ io.on('connection', (socket) => {
                 videoTimestamp: Date.now(),
                 playerState: DEFAULT_VIDEO_STATE
             };
-            updateRoomVideoState({roomName, newRoomVideoState});
+            console.log('INSERTING FIRST ' + roomName);
+            console.log(newRoomVideoState);
+            updateRoomVideoState({roomName, videoState: newRoomVideoState});
         } else {
             const currDatetime = Date.now();
             const estimatedTimestamp = (currDatetime - roomVideoState["videoTimestamp"]) / 1000;

@@ -2,14 +2,14 @@ import React, {useState, useEffect} from 'react';
 import YouTube from 'react-youtube';
 
 
-const Video = ({socket, roomName, user, player, setPlayer}) => {
+const Video = ({socket, roomName, userName, videoPlayer, setvideoPlayer}) => {
     
     const DEFAULT_VIDEO_URL = 'nMVFSwfV6wk';
     
     const [receivingSync, setReceivingSync] = useState(true);
     const [initalSync, setInitialSync] = useState(true);
     
-    const [videoPlayer, setVideoPlayer] = useState(null);
+    // const [videoPlayer, setVideoPlayer] = useState(null);
     const [videoData, setVideoData] = useState({ 
         videoID: DEFAULT_VIDEO_URL,
         videoTS: 0,
@@ -19,8 +19,8 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
     const _onReady = (event) => {
         // access to player in all event handlers via event.target
         const _player = event.target;
-        setVideoPlayer(_player)
-        setPlayer(_player);
+        // setVideoPlayer(_player)
+        setvideoPlayer(_player);
         
         socket.on('video state', ({roomVideoState}) => {
             if (roomVideoState !== undefined && roomVideoState !== null) {
@@ -28,8 +28,8 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
                 const videoTimestamp = roomVideoState["videoTimestamp"];
                 const playerState = roomVideoState["playerState"];
                 
-                // console.log('RECEIVED VIDEO STATE');
-                // console.log(roomVideoState);
+                console.log('RECEIVED VIDEO STATE');
+                console.log(roomVideoState);
         
                 setVideoData({
                     videoID: videoID,
@@ -81,13 +81,13 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
         } else {
             socket.emit('seekSync', {
                 roomName, 
-                userName: user,
+                userName: userName,
                 videoState
             });
         }
         socket.emit('playSync', {
             roomName, 
-            userName: user,
+            userName: userName,
             videoState
         });
     }
@@ -101,7 +101,7 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
         } else {
             socket.emit('pauseSync', {
                 roomName, 
-                userName: user,
+                userName: userName,
                 videoState
             });
         }
@@ -120,10 +120,10 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
     }, [videoData]);
 
     const getVideoState = () => {
-        const isPlaying = (player.getPlayerState() === 1);
+        const isPlaying = (videoPlayer.getPlayerState() === 1);
         return { 
             videoID: videoData["videoID"],
-            videoTimestamp : player.getCurrentTime(),
+            videoTimestamp : videoPlayer.getCurrentTime(),
             playerState : (isPlaying ? 'PLAYING' : 'PAUSED')
         };
     }
