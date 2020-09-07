@@ -60,7 +60,7 @@ const Room = (props) => {
         
         return () => {
             player.destroy();
-            console.log({roomName, userName});
+            // console.log({roomName, userName});
             socket.emit('disconnect', {roomName, userName});
             socket.disconnect();
         }

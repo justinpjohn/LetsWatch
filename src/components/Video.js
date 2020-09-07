@@ -4,12 +4,14 @@ import YouTube from 'react-youtube';
 
 const Video = ({socket, roomName, user, player, setPlayer}) => {
     
+    const DEFAULT_VIDEO_URL = 'nMVFSwfV6wk';
+    
     const [receivingSync, setReceivingSync] = useState(true);
     const [initalSync, setInitialSync] = useState(true);
     
     const [videoPlayer, setVideoPlayer] = useState(null);
     const [videoData, setVideoData] = useState({ 
-        videoID: 'V2hlQkVJZhE',
+        videoID: DEFAULT_VIDEO_URL,
         videoTS: 0,
         videoPS: 'PLAYING'
     });
@@ -129,7 +131,7 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
     return (
         <div className='video-wrapper w-100 h-100' style={{backgroundColor: '#E53A3A'}}>
             <YouTube
-                videoId={'V2hlQkVJZhE'}
+                videoId={DEFAULT_VIDEO_URL}
                 opts={
                     {
                         height: '390',
