@@ -6,8 +6,8 @@ import SearchResults from './SearchResults';
 
 const Search = ({emitVideoId}) => {
   
-    const [currQuery, setCurrQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
+    const [ currQuery, setCurrQuery ] = useState('');
+    const [ searchResults, setSearchResults ] = useState([]);
     
     const handleResultClick = (videoId) => {
         emitVideoId(videoId);

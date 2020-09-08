@@ -70,7 +70,7 @@ io.on('connection', (socket) => {
         }); 
     });
     
-    socket.on('video select', ({roomName, userName, videoState}) => {
+    socket.on('select', ({roomName, userName, videoState}) => {
         const videoID = videoState["videoID"];
         
         console.log('Server received video select: ' + videoID);
@@ -80,13 +80,13 @@ io.on('connection', (socket) => {
         serverVideoState["videoTimestamp"] = Date.now();
         updateRoomVideoState({roomName, videoState: serverVideoState});
         
-        io.to(roomName).emit('video select', {
+        io.to(roomName).emit('select', {
             requestingUser: userName, 
             videoState
         }); 
     }); 
     
-    socket.on('seekSync', ({roomName, userName, videoState}) => {
+    socket.on('seek', ({roomName, userName, videoState}) => {
         console.log('Server received sync: ');
         console.log(videoState);
         
@@ -95,13 +95,13 @@ io.on('connection', (socket) => {
         updateRoomVideoState({roomName, videoState: serverVideoState});
 
         console.log('emitting from server timestamp: ' + videoState["videoTimestamp"]);        
-        io.to(roomName).emit('seekSync', {
+        io.to(roomName).emit('seek', {
             requestingUser: userName, 
             videoState
         });
     });
     
-    socket.on('pauseSync', ({roomName, userName, videoState}) => {
+    socket.on('pause', ({roomName, userName, videoState}) => {
         console.log('Server received pauseSync');
         console.log(videoState);
         
@@ -109,10 +109,10 @@ io.on('connection', (socket) => {
         serverVideoState["videoTimestamp"] = Date.now();
         updateRoomVideoState({roomName, videoState: serverVideoState});
         
-        socket.to(roomName).emit('pauseSync', {requestingUser: userName});
+        socket.to(roomName).emit('pause', {requestingUser: userName});
     });
     
-    socket.on('playSync', ({roomName, userName, videoState}) => {
+    socket.on('play', ({roomName, userName, videoState}) => {
         console.log('Server received playSync');
         console.log(videoState);
         
@@ -120,7 +120,7 @@ io.on('connection', (socket) => {
         serverVideoState["videoTimestamp"] = Date.now() - (videoState["videoTimestamp"] * 1000);
         updateRoomVideoState({roomName, videoState: serverVideoState});
         
-        io.to(roomName).emit('playSync', {requestingUser: userName});
+        io.to(roomName).emit('play', {requestingUser: userName});
     });
     
     socket.on('disconnect', ({roomName, userName}) => {

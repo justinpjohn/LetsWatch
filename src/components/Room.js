@@ -28,13 +28,14 @@ const Room = (props) => {
     const [ videoPlayer, setVideoPlayer ] = useState(null);
     const { messages, addMessage } = useMessages();
     
+    //this is here because i didn't think the Chat component should have access to socket
     const emitVideoId = (videoID) => {
         const videoState = {
             videoID,
             videoTimestamp : DEFAULT_VIDEO_TIMESTAMP,
             playerState : DEFAULT_VIDEO_STATE
         } 
-        socket.emit('video select', {roomName, userName, videoState});
+        socket.emit('select', {roomName, userName, videoState});
     }
     
     const emitMessage = (msg) => {

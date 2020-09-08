@@ -41,24 +41,24 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
             }
         });
         
-        socket.on('seekSync', ({requestingUser, videoState}) => {
+        socket.on('seek', ({requestingUser, videoState}) => {
             const videoTimestamp = videoState["videoTimestamp"];
             setReceivingSync(true);
             _player.seekTo(videoTimestamp);
         });
         
-        socket.on('pauseSync', ({requestingUser}) => {
+        socket.on('pause', ({requestingUser}) => {
             // console.log('Received pauseSync');
             setReceivingSync(true);
             _player.pauseVideo();
         });
         
-        socket.on('playSync', ({requestingUser}) => {
+        socket.on('play', ({requestingUser}) => {
             // console.log('Received playSync');
             _player.playVideo();
         });
     
-        socket.on('video select', ({requestingUser, videoState}) => {
+        socket.on('select', ({requestingUser, videoState}) => {
             // console.log('received video state: ');
             // console.log(videoState);
             setReceivingSync(true);
@@ -79,13 +79,13 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
         if (receivingSync) {
             setReceivingSync(false);
         } else {
-            socket.emit('seekSync', {
+            socket.emit('seek', {
                 roomName, 
                 userName: userName,
                 videoState
             });
         }
-        socket.emit('playSync', {
+        socket.emit('play', {
             roomName, 
             userName: userName,
             videoState
@@ -98,7 +98,7 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
         if (receivingSync) {
             setReceivingSync(false);
         } else {
-            socket.emit('pauseSync', {
+            socket.emit('pause', {
                 roomName, 
                 userName: userName,
                 videoState: getVideoState()
