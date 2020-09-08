@@ -119,7 +119,7 @@ io.on('connection', (socket) => {
         serverVideoState["videoTimestamp"] = Date.now() - (clientVideoState["videoTimestamp"] * 1000);
         updateRoomVideoState({roomName, videoState: serverVideoState});
         
-        io.to(roomName).emit('play', {requestingUser: userName});
+        socket.to(roomName).emit('play', {requestingUser: userName});
     });
     
     socket.on('disconnect', ({roomName, userName}) => {
