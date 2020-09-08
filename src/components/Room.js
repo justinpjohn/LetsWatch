@@ -13,23 +13,26 @@ const SERVER_PORT = '8080';
 const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 console.log(SERVER_ENDPOINT);
 
-let socket = io(SERVER_URL);
+const socket = io(SERVER_URL);
+
+
+const DEFAULT_VIDEO_TIMESTAMP = 0;
+const DEFAULT_VIDEO_STATE = 'PLAYING';
 
 const Room = (props) => {
-    const newUserInfo = props.location.state.user;
+    const userData = props.location.state.userData;
 
-    const [socketID, setSocketID] = useState('');
-    const [roomName, setRoomName] = useState(newUserInfo.groupID);
-    const [userName, setUserName] = useState(newUserInfo.username);
-    const [videoPlayer, setvideoPlayer] = useState(null);
+    const [ socketID, setSocketID ] = useState('');
+    const [ roomName, setRoomName ] = useState(userData["roomName"]);
+    const [ userName, setUserName ] = useState(userData["userName"]);
+    const [ videoPlayer, setVideoPlayer ] = useState(null);
     const { messages, addMessage } = useMessages();
     
     const emitVideoId = (videoID) => {
-        // console.log('emitting videoId: ' + videoID);
         const videoState = {
             videoID,
-            videoTimestamp : 0,
-            playerState : 'PLAYING'
+            videoTimestamp : DEFAULT_VIDEO_TIMESTAMP,
+            playerState : DEFAULT_VIDEO_STATE
         } 
         socket.emit('video select', {roomName, userName, videoState});
     }
@@ -42,12 +45,10 @@ const Room = (props) => {
         socket.emit('room connection', {roomName, userName});
         
         socket.on('socket connection', () => {
-            // console.log('setting socket connection');
             setSocketID(socket.id);
         });
         
         socket.on('room connection', (msg) => {
-            // console.log('received room connection' + msg);
             addMessage({authorSock: 'admin', authorUser: '', text: msg});
         });
         
@@ -57,7 +58,6 @@ const Room = (props) => {
         
         return () => {
             videoPlayer.destroy();
-            // console.log({roomName, userName});
             socket.emit('disconnect', {roomName, userName});
             socket.disconnect();
         }
@@ -74,11 +74,23 @@ const Room = (props) => {
             
             <div className='row p-3'>
                 <div className='col-lg-8 col-12' style={{backgroundColor: 'black'}}>
-                    <Video socket={socket} roomName={roomName} user={userName} videoPlayer={videoPlayer} setvideoPlayer={setvideoPlayer}/>
+                    <Video  
+                        socket         = { socket } 
+                        roomName       = { roomName } 
+                        userName       = { userName } 
+                        videoPlayer    = { videoPlayer } 
+                        setVideoPlayer = { setVideoPlayer }
+                    />
                 </div>
                 
                 <div className='col-lg-4 col-12'>
-                    <Chat group={roomName} userName={userName} socketID={socketID} messages={messages} emitMessage={emitMessage}/>
+                    <Chat 
+                        roomName    = { roomName } 
+                        userName    = { userName } 
+                        socketID    = { socketID } 
+                        messages    = { messages } 
+                        emitMessage = { emitMessage }
+                    />
                 </div>
             </div>
             <div className='row p-3'>

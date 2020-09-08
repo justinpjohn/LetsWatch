@@ -2,25 +2,24 @@ import React, {useState, useEffect} from 'react';
 import YouTube from 'react-youtube';
 
 
-const Video = ({socket, roomName, userName, videoPlayer, setvideoPlayer}) => {
+const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
     
-    const DEFAULT_VIDEO_URL = 'nMVFSwfV6wk';
+    const DEFAULT_VIDEO_ID = 'nMVFSwfV6wk';
+    const DEFAULT_VIDEO_TIMESTAMP = 0;
+    const DEFAULT_VIDEO_STATE = 'PLAYING';
     
-    const [receivingSync, setReceivingSync] = useState(true);
-    const [initalSync, setInitialSync] = useState(true);
-    
-    // const [videoPlayer, setVideoPlayer] = useState(null);
-    const [videoData, setVideoData] = useState({ 
-        videoID: DEFAULT_VIDEO_URL,
-        videoTS: 0,
-        videoPS: 'PLAYING'
+    const [ receivingSync, setReceivingSync ] = useState(true);
+    const [ initalSync, setInitialSync ] = useState(true);
+    const [ videoData, setVideoData ] = useState({ 
+        videoID: DEFAULT_VIDEO_ID,
+        videoTS: DEFAULT_VIDEO_TIMESTAMP,
+        videoPS: DEFAULT_VIDEO_STATE
     });
     
     const _onReady = (event) => {
         // access to player in all event handlers via event.target
         const _player = event.target;
-        // setVideoPlayer(_player)
-        setvideoPlayer(_player);
+        setVideoPlayer(_player);
         
         socket.on('video state', ({roomVideoState}) => {
             if (roomVideoState !== undefined && roomVideoState !== null) {
@@ -37,6 +36,7 @@ const Video = ({socket, roomName, userName, videoPlayer, setvideoPlayer}) => {
                     videoPS: playerState
                 });
             } else {
+                setInitialSync(false);
                 console.log('Received video state was undefined!');
             }
         });
@@ -66,8 +66,8 @@ const Video = ({socket, roomName, userName, videoPlayer, setvideoPlayer}) => {
             const videoID = videoState["videoID"];
             setVideoData({
                 videoID: videoID,
-                videoTS: 0,
-                videoPS: 'PLAYING'
+                videoTS: DEFAULT_VIDEO_TIMESTAMP,
+                videoPS: DEFAULT_VIDEO_STATE
             });
         });
     }
@@ -94,7 +94,6 @@ const Video = ({socket, roomName, userName, videoPlayer, setvideoPlayer}) => {
     
     const _onPause = (event) => {
         if (initalSync) return;
-        const videoState = getVideoState();
 
         if (receivingSync) {
             setReceivingSync(false);
@@ -102,7 +101,7 @@ const Video = ({socket, roomName, userName, videoPlayer, setvideoPlayer}) => {
             socket.emit('pauseSync', {
                 roomName, 
                 userName: userName,
-                videoState
+                videoState: getVideoState()
             });
         }
     }
@@ -131,7 +130,7 @@ const Video = ({socket, roomName, userName, videoPlayer, setvideoPlayer}) => {
     return (
         <div className='video-wrapper w-100 h-100' style={{backgroundColor: '#E53A3A'}}>
             <YouTube
-                videoId={DEFAULT_VIDEO_URL}
+                videoId = { DEFAULT_VIDEO_ID }
                 opts={
                     {
                         height: '390',
@@ -143,9 +142,9 @@ const Video = ({socket, roomName, userName, videoPlayer, setvideoPlayer}) => {
                         }
                     }
                 }
-                onReady={_onReady}
-                onPlay={_onPlay}
-                onPause={_onPause}
+                onPlay  = { _onPlay }
+                onPause = { _onPause }
+                onReady = { _onReady } 
             />
         </div>  
     );

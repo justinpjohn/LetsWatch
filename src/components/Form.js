@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom'
 
 const Form = () => {
-    const [ user, setUser ] = useState({username: '', groupID: ''});
+    const [ userData, setUserData ] = useState({userName: '', roomName: ''});
     const [ redirect, setRedirect ] = useState(false);
     
     
@@ -10,9 +10,9 @@ const Form = () => {
         const value = e.target.value;
         
         if (e.target.id === 'username-input') {
-            setUser({username: value, groupID: user.groupID});
+            setUserData({userName: value, roomName: userData.groupID});
         } else {
-            setUser({username: user.username, groupID: value});
+            setUserData({userName: userData.userName, roomName: value});
         }
     }
     
@@ -23,7 +23,7 @@ const Form = () => {
     
     return redirect ? <Redirect to={{
                         pathname: '/room',
-                        state: { user }
+                        state: { userData }
                     }} /> :
         (
             <div>
