@@ -1,3 +1,4 @@
+const users = new Map();
 const rooms = new Map();
 const roomStates = new Map();
 
@@ -14,21 +15,26 @@ const getRoomVideoState = (roomName) => {
 }
 
 const addUser = ({ socketID, userName, roomName }) => {
-//   name = name.trim().toLowerCase();
-//   room = room.trim().toLowerCase();
-
+    //should possibly consider normalizing keys
     if (!(rooms.has(roomName))) {
         rooms.set(roomName, new Map());
     }
     
     const user = { socketID, userName };
     rooms.get(roomName).set(socketID, user);
+    users.set(socketID, roomName);
     
     return {user};
 }
 
-const removeUser = ({ socketID, roomName }) => {
-    if (rooms.has(roomName)) {
+const removeUser = ({ socketID }) => {
+    let roomName = null;
+    if (users.has(socketID)) {
+        roomName = users.get(socketID);
+        users.delete(socketID);
+    }
+    
+    if (roomName !== null && rooms.has(roomName)) {
         let room = rooms.get(roomName);
         room.delete(socketID);
         
@@ -43,9 +49,6 @@ const removeUser = ({ socketID, roomName }) => {
 
 // not really random, just pick first person?
 const getRandomUserInRoom = (roomName) => {
-    // console.log('request room: ' + roomName);
-    // console.log(rooms);
-    
     if (!(rooms.has(roomName))) {
         console.log('could not get random user, because room doesnt exist');
         return undefined;
