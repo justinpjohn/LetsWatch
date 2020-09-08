@@ -41,8 +41,7 @@ io.on('connection', (socket) => {
                 videoTimestamp: Date.now(),
                 playerState: DEFAULT_VIDEO_STATE
             };
-            console.log('INSERTING FIRST ' + roomName);
-            console.log(newRoomVideoState);
+            // set the initial state, since it doesn't exist
             updateRoomVideoState({roomName, videoState: newRoomVideoState});
         } else {
             const currDatetime = Date.now();
@@ -51,7 +50,7 @@ io.on('connection', (socket) => {
         }
          
         socket.emit('socket connection');
-        setTimeout(() => { socket.emit('video state', {roomVideoState}); }, 1000);
+        setTimeout(() => { socket.emit('initial sync', {serverVideoState: roomVideoState}); }, 1000);
         
         socket.to(roomName).emit('room connection', `${userName} has joined the party! Say hi!`);
         addUser({
@@ -70,54 +69,54 @@ io.on('connection', (socket) => {
         }); 
     });
     
-    socket.on('select', ({roomName, userName, videoState}) => {
-        const videoID = videoState["videoID"];
+    socket.on('select', ({roomName, userName, clientVideoState}) => {
+        const videoID = clientVideoState["videoID"];
         
         console.log('Server received video select: ' + videoID);
-        console.log(videoState);
+        console.log(clientVideoState);
         
-        let serverVideoState = Object.assign({}, videoState);
+        let serverVideoState = Object.assign({}, clientVideoState);
         serverVideoState["videoTimestamp"] = Date.now();
         updateRoomVideoState({roomName, videoState: serverVideoState});
         
         io.to(roomName).emit('select', {
             requestingUser: userName, 
-            videoState
+            serverVideoState: clientVideoState
         }); 
     }); 
     
-    socket.on('seek', ({roomName, userName, videoState}) => {
+    socket.on('seek', ({roomName, userName, clientVideoState}) => {
         console.log('Server received sync: ');
-        console.log(videoState);
+        console.log(clientVideoState);
         
-        let serverVideoState = Object.assign({}, videoState);
-        serverVideoState["videoTimestamp"] = Date.now() - (videoState["videoTimestamp"] * 1000);
+        let serverVideoState = Object.assign({}, clientVideoState);
+        serverVideoState["videoTimestamp"] = Date.now() - (clientVideoState["videoTimestamp"] * 1000);
         updateRoomVideoState({roomName, videoState: serverVideoState});
 
-        console.log('emitting from server timestamp: ' + videoState["videoTimestamp"]);        
+        console.log('emitting from server timestamp: ' + clientVideoState["videoTimestamp"]);        
         io.to(roomName).emit('seek', {
             requestingUser: userName, 
-            videoState
+            serverVideoState: clientVideoState
         });
     });
     
-    socket.on('pause', ({roomName, userName, videoState}) => {
+    socket.on('pause', ({roomName, userName, clientVideoState}) => {
         console.log('Server received pauseSync');
-        console.log(videoState);
+        console.log(clientVideoState);
         
-        let serverVideoState = Object.assign({}, videoState);
+        let serverVideoState = Object.assign({}, clientVideoState);
         serverVideoState["videoTimestamp"] = Date.now();
         updateRoomVideoState({roomName, videoState: serverVideoState});
         
         socket.to(roomName).emit('pause', {requestingUser: userName});
     });
     
-    socket.on('play', ({roomName, userName, videoState}) => {
+    socket.on('play', ({roomName, userName, clientVideoState}) => {
         console.log('Server received playSync');
-        console.log(videoState);
+        console.log(clientVideoState);
         
-        let serverVideoState = Object.assign({}, videoState);
-        serverVideoState["videoTimestamp"] = Date.now() - (videoState["videoTimestamp"] * 1000);
+        let serverVideoState = Object.assign({}, clientVideoState);
+        serverVideoState["videoTimestamp"] = Date.now() - (clientVideoState["videoTimestamp"] * 1000);
         updateRoomVideoState({roomName, videoState: serverVideoState});
         
         io.to(roomName).emit('play', {requestingUser: userName});

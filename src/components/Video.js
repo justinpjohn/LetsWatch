@@ -8,9 +8,9 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
     const DEFAULT_VIDEO_TIMESTAMP = 0;
     const DEFAULT_VIDEO_STATE = 'PLAYING';
     
-    const [ receivingSync, setReceivingSync ] = useState(true);
     const [ initalSync, setInitialSync ] = useState(true);
-    const [ videoData, setVideoData ] = useState({ 
+    const [ receivingSync, setReceivingSync ] = useState(true);
+    const [ clientVideoState, setClientVideoState ] = useState({ 
         videoID: DEFAULT_VIDEO_ID,
         videoTS: DEFAULT_VIDEO_TIMESTAMP,
         videoPS: DEFAULT_VIDEO_STATE
@@ -21,16 +21,16 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
         const _player = event.target;
         setVideoPlayer(_player);
         
-        socket.on('video state', ({roomVideoState}) => {
-            if (roomVideoState !== undefined && roomVideoState !== null) {
-                const videoID = roomVideoState["videoID"];
-                const videoTimestamp = roomVideoState["videoTimestamp"];
-                const playerState = roomVideoState["playerState"];
+        socket.on('initial sync', ({serverVideoState}) => {
+            if (serverVideoState !== undefined && serverVideoState !== null) {
+                const videoID = serverVideoState["videoID"];
+                const videoTimestamp = serverVideoState["videoTimestamp"];
+                const playerState = serverVideoState["playerState"];
                 
                 console.log('RECEIVED VIDEO STATE');
-                console.log(roomVideoState);
+                console.log(serverVideoState);
         
-                setVideoData({
+                setClientVideoState({
                     videoID: videoID,
                     videoTS: videoTimestamp,
                     videoPS: playerState
@@ -41,8 +41,8 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
             }
         });
         
-        socket.on('seek', ({requestingUser, videoState}) => {
-            const videoTimestamp = videoState["videoTimestamp"];
+        socket.on('seek', ({requestingUser, serverVideoState}) => {
+            const videoTimestamp = serverVideoState["videoTimestamp"];
             setReceivingSync(true);
             _player.seekTo(videoTimestamp);
         });
@@ -58,13 +58,13 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
             _player.playVideo();
         });
     
-        socket.on('select', ({requestingUser, videoState}) => {
+        socket.on('select', ({requestingUser, serverVideoState}) => {
             // console.log('received video state: ');
-            // console.log(videoState);
+            // console.log(serverVideoState);
             setReceivingSync(true);
             
-            const videoID = videoState["videoID"];
-            setVideoData({
+            const videoID = serverVideoState["videoID"];
+            setClientVideoState({
                 videoID: videoID,
                 videoTS: DEFAULT_VIDEO_TIMESTAMP,
                 videoPS: DEFAULT_VIDEO_STATE
@@ -82,13 +82,13 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
             socket.emit('seek', {
                 roomName, 
                 userName: userName,
-                videoState
+                clientVideoState: videoState
             });
         }
         socket.emit('play', {
             roomName, 
             userName: userName,
-            videoState
+            clientVideoState: videoState
         });
     }
     
@@ -101,7 +101,7 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
             socket.emit('pause', {
                 roomName, 
                 userName: userName,
-                videoState: getVideoState()
+                clientVideoState: getVideoState()
             });
         }
     }
@@ -110,18 +110,18 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
         console.log("USE EFFECT");
         if (videoPlayer !== null) {
             // console.log(videoData);
-            videoPlayer.loadVideoById(videoData["videoID"], videoData["videoTS"]);
-            if (videoData["videoPS"] === 'PAUSED') videoPlayer.pauseVideo();
+            videoPlayer.loadVideoById(clientVideoState["videoID"], clientVideoState["videoTS"]);
+            if (clientVideoState["videoPS"] === 'PAUSED') videoPlayer.pauseVideo();
             setInitialSync(false);
         } else {
             console.log('player is null');
         }
-    }, [videoData]);
+    }, [clientVideoState]);
 
     const getVideoState = () => {
         const isPlaying = (videoPlayer.getPlayerState() === 1);
         return { 
-            videoID: videoData["videoID"],
+            videoID: clientVideoState["videoID"],
             videoTimestamp : videoPlayer.getCurrentTime(),
             playerState : (isPlaying ? 'PLAYING' : 'PAUSED')
         };

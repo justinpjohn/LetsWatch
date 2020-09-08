@@ -16,11 +16,11 @@ console.log(SERVER_ENDPOINT);
 const socket = io(SERVER_URL);
 
 
-const DEFAULT_VIDEO_TIMESTAMP = 0;
-const DEFAULT_VIDEO_STATE = 'PLAYING';
-
 const Room = (props) => {
+    
     const userData = props.location.state.userData;
+    const DEFAULT_VIDEO_TIMESTAMP = 0;
+    const DEFAULT_VIDEO_STATE = 'PLAYING';
 
     const [ socketID, setSocketID ] = useState('');
     const [ roomName, setRoomName ] = useState(userData["roomName"]);
@@ -35,7 +35,7 @@ const Room = (props) => {
             videoTimestamp : DEFAULT_VIDEO_TIMESTAMP,
             playerState : DEFAULT_VIDEO_STATE
         } 
-        socket.emit('select', {roomName, userName, videoState});
+        socket.emit('select', {roomName, userName, clientVideoState: videoState});
     }
     
     const emitMessage = (msg) => {
