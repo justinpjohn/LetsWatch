@@ -34,7 +34,7 @@ const removeUser = ({ socketID }) => {
         users.delete(socketID);
     }
     
-    if (roomName !== null && rooms.has(roomName)) {
+    if (roomName && rooms.has(roomName)) {
         let room = rooms.get(roomName);
         room.delete(socketID);
         

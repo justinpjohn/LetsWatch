@@ -22,7 +22,7 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
         setVideoPlayer(_player);
         
         socket.on('initial sync', ({serverVideoState}) => {
-            if (serverVideoState !== undefined && serverVideoState !== null) {
+            if (serverVideoState) {
                 const videoID = serverVideoState["videoID"];
                 const videoTimestamp = serverVideoState["videoTimestamp"];
                 const playerState = serverVideoState["playerState"];
@@ -59,8 +59,6 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
         });
     
         socket.on('select', ({requestingUser, serverVideoState}) => {
-            // console.log('received video state: ');
-            // console.log(serverVideoState);
             setReceivingSync(true);
             
             const videoID = serverVideoState["videoID"];
@@ -107,14 +105,10 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
     }
     
     useEffect(() => {
-        console.log("USE EFFECT");
-        if (videoPlayer !== null) {
-            // console.log(videoData);
+        if (videoPlayer) {
             videoPlayer.loadVideoById(clientVideoState["videoID"], clientVideoState["videoTS"]);
             if (clientVideoState["videoPS"] === 'PAUSED') videoPlayer.pauseVideo();
             setInitialSync(false);
-        } else {
-            console.log('player is null');
         }
     }, [clientVideoState]);
 

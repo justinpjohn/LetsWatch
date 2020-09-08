@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
         socket.join(roomName);
         
         let roomVideoState = getRoomVideoState(roomName);
-        if (roomVideoState === undefined) {
+        if (!roomVideoState) {
             const newRoomVideoState = {
                 videoID: DEFAULT_VIDEO_ID, 
                 videoTimestamp: Date.now(),
