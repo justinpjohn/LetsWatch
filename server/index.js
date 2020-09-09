@@ -7,21 +7,21 @@ const path = require('path');
 
 const router = require('./router');
 const { updateRoomVideoState, getRoomVideoState, addUser, removeUser, getRandomUserInRoom } = require('./room');
-const PORT = process.env.PORT || 8081;
-// const INDEX = '../';
+const PORT = process.env.PORT || 8080;
+const INDEX = '../';
 
-// const app = express().use(express.static(__dirname + '/../build'));
+const app = express().use(express.static(__dirname + '/../build'));
 
-// app.get('/*', function (req, res) {
-//     res.sendFile(path.join(path.resolve(INDEX), 'build', 'index.html'));
-// }); 
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(path.resolve(INDEX), 'build', 'index.html'));
+}); 
 
-const app = express();
+// const app = express();
+app.use(cors({credentials: true, origin: true}));
+app.use(router);
+
 const server = http.createServer(app);
 const io = socketio(server);
-
-app.use(cors());
-app.use(router);
 
 const DEFAULT_VIDEO_ID = 'nMVFSwfV6wk';
 const DEFAULT_VIDEO_STATE = 'PLAYING';

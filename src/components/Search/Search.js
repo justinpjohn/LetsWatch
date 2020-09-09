@@ -3,6 +3,13 @@ import fetch from 'node-fetch';
 
 import SearchResults from './SearchResults';
 
+// const SERVER_URL = 'https://9e057b5691a24d17a179648c6553f432.vfs.cloud9.us-east-1.amazonaws.com';
+// const SERVER_PORT = '8080';
+
+const SERVER_URL = 'https://letswatch9897.herokuapp.com';
+const SERVER_PORT = '8080';
+const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
+
 
 const Search = ({emitVideoId}) => {
   
@@ -31,14 +38,25 @@ const Search = ({emitVideoId}) => {
     
     const searchYoutube = (query) => {
         query = query.replace(/ /g, '+');
-        // console.log(query);
-        fetch('https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBa-JzGFfw19oswz7L6WV0BwbNMBIZw5Ko&part=snippet&q='+query+'&maxResults=10&type=video')
-        .then((response) => {
-          return response.json();
-        })
-        .then((json) => {
-          setSearchResults(json.items);
-        });
+        console.log(query);
+                
+        const URL = SERVER_ENDPOINT.concat('/', `youtube/query=${query}`);
+        console.log(URL);
+        
+        fetch(URL, { method: 'GET' })
+            .then((response) => {
+                console.log('received response from server');
+                console.log(response)
+              return response.json();
+            })
+            .then((json) => {
+                console.log('received json from server');
+                console.log(json);
+                setSearchResults(json.items);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
       
     useEffect(() => {
