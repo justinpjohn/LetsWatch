@@ -7,8 +7,8 @@ import SearchResults from './SearchResults';
 // const SERVER_PORT = '8080';
 
 const SERVER_URL = 'https://letswatch9897.herokuapp.com';
-const SERVER_PORT = process.env.PORT || 8080;
-const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
+// const SERVER_PORT = process.env.PORT || 8080;
+// const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
 
 const Search = ({emitVideoId}) => {
