@@ -40,7 +40,7 @@ const Search = ({emitVideoId}) => {
         query = query.replace(/ /g, '+');
         console.log(query);
                 
-        const URL = SERVER_ENDPOINT.concat('/', `youtube/query=${query}`);
+        const URL = SERVER_URL.concat('/', `youtube/query=${query}`);
         console.log(URL);
         
         fetch(URL, { method: 'GET' })
