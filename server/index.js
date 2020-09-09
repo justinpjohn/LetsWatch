@@ -12,9 +12,9 @@ const INDEX = '../';
 
 const app = express().use(express.static(__dirname + '/../build'));
 
-app.get('/*', function (req, res) {
-    res.sendFile(path.join(path.resolve(INDEX), 'build', 'index.html'));
-}); 
+// app.get('/*', function (req, res) {
+//     res.sendFile(path.join(path.resolve(INDEX), 'build', 'index.html'));
+// }); 
 
 // const app = express();
 app.use(cors({credentials: true, origin: true}));
