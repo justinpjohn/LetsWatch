@@ -4,9 +4,9 @@ import YouTube from 'react-youtube';
 
 const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
     
-    const DEFAULT_VIDEO_ID = 'nMVFSwfV6wk';
-    const DEFAULT_VIDEO_TIMESTAMP = 0;
-    const DEFAULT_VIDEO_STATE = 'PLAYING';
+    const DEFAULT_VIDEO_ID        = process.env.REACT_APP_DEFAULT_VIDEO_ID;
+    const DEFAULT_VIDEO_TIMESTAMP = process.env.REACT_APP_DEFAULT_VIDEO_TIMESTAMP;
+    const DEFAULT_VIDEO_STATE     = process.env.REACT_APP_DEFAULT_VIDEO_STATE;
     
     const [ initalSync, setInitialSync ] = useState(true);
     const [ receivingSync, setReceivingSync ] = useState(true);

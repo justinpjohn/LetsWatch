@@ -13,8 +13,8 @@ const socket = io();
 const Room = (props) => {
     
     const userData = props.location.state.userData;
-    const DEFAULT_VIDEO_TIMESTAMP = 0;
-    const DEFAULT_VIDEO_STATE = 'PLAYING';
+    const DEFAULT_VIDEO_TIMESTAMP = process.env.REACT_APP_DEFAULT_VIDEO_TIMESTAMP;
+    const DEFAULT_VIDEO_STATE     = process.env.REACT_APP_DEFAULT_VIDEO_STATE;
 
     const [ socketID, setSocketID ] = useState('');
     const [ roomName, setRoomName ] = useState(userData["roomName"]);

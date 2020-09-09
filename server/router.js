@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fetch = require('node-fetch');
 
-const YT_API_KEY = 'AIzaSyBa-JzGFfw19oswz7L6WV0BwbNMBIZw5Ko'
+const YT_API_KEY = process.env.REACT_APP_YT_API_KEY;
 
 // router.get('/', (req, res) => {
 //     res.send('Server is up and running');
