@@ -26,9 +26,6 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
                 const videoID = serverVideoState["videoID"];
                 const videoTimestamp = serverVideoState["videoTimestamp"];
                 const playerState = serverVideoState["playerState"];
-                
-                console.log('RECEIVED VIDEO STATE');
-                console.log(serverVideoState);
         
                 setClientVideoState({
                     videoID: videoID,
@@ -37,7 +34,6 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
                 });
             } else {
                 setInitialSync(false);
-                console.log('Received video state was undefined!');
             }
         });
         
@@ -48,13 +44,11 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
         });
         
         socket.on('pause', ({requestingUser}) => {
-            // console.log('Received pauseSync');
             setReceivingSync(true);
             _player.pauseVideo();
         });
         
         socket.on('play', ({requestingUser}) => {
-            // console.log('Received playSync');
             _player.playVideo();
         });
     

@@ -7,11 +7,6 @@ import Search from './Search/Search';
 
 import useMessages from '../hooks/useMessages';
 
-// const SERVER_URL = 'https://58aab3c90017465bbb8c7cbf0b87d6b3.vfs.cloud9.us-east-2.amazonaws.com';
-// const SERVER_URL = 'https://9e057b5691a24d17a179648c6553f432.vfs.cloud9.us-east-1.amazonaws.com/';
-// const SERVER_PORT = '8080';
-// const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
-
 const socket = io();
 
 
@@ -49,11 +44,19 @@ const Room = (props) => {
         });
         
         socket.on('room connection', (msg) => {
-            addMessage({authorSock: 'admin', authorUser: '', text: msg});
+            addMessage({
+                authorSock: 'admin', 
+                authorUser: '', 
+                text: msg
+            });
         });
         
         socket.on('chat message', ({authorSocketID, authorUserName, msg}) => {
-            addMessage({authorSock: authorSocketID, authorUser: authorUserName, text: msg});
+            addMessage({
+                authorSock: authorSocketID, 
+                authorUser: authorUserName, 
+                text: msg
+            });
         });
         
         return () => {

@@ -7,7 +7,6 @@ const Chat = ({roomName, userName, socketID, messages, emitMessage}) => {
     const [ currMessage, setCurrMessage ] = useState('');
 
     const handleMessageSubmit = (e) => {
-        // e.preventDefault();
         if (currMessage.length !== 0 && (/\S/).test(currMessage)) {
             emitMessage(currMessage);
             setCurrMessage('');

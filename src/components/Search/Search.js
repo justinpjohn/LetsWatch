@@ -3,13 +3,7 @@ import fetch from 'node-fetch';
 
 import SearchResults from './SearchResults';
 
-// const SERVER_URL = 'https://9e057b5691a24d17a179648c6553f432.vfs.cloud9.us-east-1.amazonaws.com';
-// const SERVER_PORT = '8080';
-
 const SERVER_URL = 'https://letswatch9897.herokuapp.com';
-// const SERVER_PORT = process.env.PORT || 8080;
-// const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
-
 
 const Search = ({emitVideoId}) => {
   
@@ -28,7 +22,6 @@ const Search = ({emitVideoId}) => {
     }
     
     const handleSubmitClick = (e) => {
-        // e.preventDefault();
         // check if query is not empty or only contains spaces
         if (currQuery.length !== 0 && (/\S/).test(currQuery)) {
             searchYoutube(currQuery);
@@ -38,20 +31,13 @@ const Search = ({emitVideoId}) => {
     
     const searchYoutube = (query) => {
         query = query.replace(/ /g, '+');
-        console.log(query);
-                
-        const URL = SERVER_URL.concat('/', `youtube/${query}`);
-        // console.log(URL);
+        const FETCH_URL = SERVER_URL.concat('/', `youtube/${query}`);
         
-        fetch(URL, { method: 'GET' })
+        fetch(FETCH_URL, { method: 'GET' })
             .then((response) => {
-                console.log('received response from server');
-                console.log(response)
               return response.json();
             })
             .then((json) => {
-                console.log('received json from server');
-                console.log(json);
                 setSearchResults(json.items);
             })
             .catch((error) => {
@@ -60,8 +46,7 @@ const Search = ({emitVideoId}) => {
     }
       
     useEffect(() => {
-        // console.log('fetching youtube search');
-        // console.log(searchResults);
+        
     }, [searchResults]);
 
     return (
