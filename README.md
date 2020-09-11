@@ -7,7 +7,9 @@ that allows users to create and join rooms where they can watch Youtube videos t
 
 ### [Try it here!](https://letswatch9897.herokuapp.com/)
 
-<!--<img src="./images/visualized.png">-->
+## Demo
+
+![](./README_assets/LetsWatchGif.gif)
 
 ## Installation
 
