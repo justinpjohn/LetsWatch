@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 
 import SearchResults from './SearchResults';
 
+const SERVER_URL = 'https://letswatch9897.herokuapp.com';
 
 const Search = ({emitVideoId}) => {
   
@@ -21,7 +22,6 @@ const Search = ({emitVideoId}) => {
     }
     
     const handleSubmitClick = (e) => {
-        // e.preventDefault();
         // check if query is not empty or only contains spaces
         if (currQuery.length !== 0 && (/\S/).test(currQuery)) {
             searchYoutube(currQuery);
@@ -31,19 +31,22 @@ const Search = ({emitVideoId}) => {
     
     const searchYoutube = (query) => {
         query = query.replace(/ /g, '+');
-        // console.log(query);
-        fetch('https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBa-JzGFfw19oswz7L6WV0BwbNMBIZw5Ko&part=snippet&q='+query+'&maxResults=10&type=video')
-        .then((response) => {
-          return response.json();
-        })
-        .then((json) => {
-          setSearchResults(json.items);
-        });
+        const FETCH_URL = SERVER_URL.concat('/', `youtube/${query}`);
+        
+        fetch(FETCH_URL, { method: 'GET' })
+            .then((response) => {
+              return response.json();
+            })
+            .then((json) => {
+                setSearchResults(json.items);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
       
     useEffect(() => {
-        // console.log('fetching youtube search');
-        // console.log(searchResults);
+        
     }, [searchResults]);
 
     return (

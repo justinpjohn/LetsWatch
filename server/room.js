@@ -42,7 +42,6 @@ const removeUser = ({ socketID }) => {
         if (room.size === 0) {
             rooms.delete(roomName);
             roomStates.delete(roomName);
-            console.log(`removing ${roomName} from map'`);
         }
     }
 }
@@ -50,7 +49,6 @@ const removeUser = ({ socketID }) => {
 // not really random, just pick first person?
 const getRandomUserInRoom = (roomName) => {
     if (!(rooms.has(roomName))) {
-        console.log('could not get random user, because room doesnt exist');
         return undefined;
     }
 
@@ -59,8 +57,5 @@ const getRandomUserInRoom = (roomName) => {
     
     return rooms.get(roomName).get(next);
 }
-
-// const getUser = (socketId) => users.find((user) => user.socketId === socketId);
-// const getUsersInRoom = (room) => users.filter((user) => user.room === room);
 
 module.exports = { updateRoomVideoState, getRoomVideoState, addUser, removeUser, getRandomUserInRoom };

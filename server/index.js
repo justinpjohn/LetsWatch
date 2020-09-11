@@ -4,33 +4,30 @@ const http = require('http');
 const cors = require('cors');
 const path = require('path');
 
-
 const router = require('./router');
 const { updateRoomVideoState, getRoomVideoState, addUser, removeUser, getRandomUserInRoom } = require('./room');
-const PORT = process.env.PORT || 8081;
+const PORT = process.env.PORT || 8080;
+
+const app = express().use(express.static(__dirname + '/../build'));
+
 // const INDEX = '../';
-
-// const app = express().use(express.static(__dirname + '/../build'));
-
 // app.get('/*', function (req, res) {
 //     res.sendFile(path.join(path.resolve(INDEX), 'build', 'index.html'));
 // }); 
 
-const app = express();
-const server = http.createServer(app);
-const io = socketio(server);
-
-app.use(cors());
+app.use(cors({credentials: true, origin: true}));
 app.use(router);
 
-const DEFAULT_VIDEO_ID = 'nMVFSwfV6wk';
-const DEFAULT_VIDEO_STATE = 'PLAYING';
+const server = http.createServer(app);
+const io     = socketio(server);
+
+const DEFAULT_VIDEO_ID    = process.env.REACT_APP_DEFAULT_VIDEO_ID;
+const DEFAULT_VIDEO_STATE = process.env.REACT_APP_DEFAULT_VIDEO_STATE;
 
 
 io.on('connection', (socket) => {
 
     socket.on('room connection', ({roomName, userName}) => {
-        console.log(`${userName} has joined ${roomName}`);
         socket.join(roomName);
         
         let roomVideoState = getRoomVideoState(roomName);
@@ -60,7 +57,6 @@ io.on('connection', (socket) => {
     });
     
     socket.on('chat message', ({roomName, userName, msg}) => {
-        // console.log(`received: ${msg} from ${roomName} by ${userName}`);
         io.to(roomName).emit('chat message', {
             authorSocketID: socket.id, 
             authorUserName: userName, 
@@ -70,9 +66,6 @@ io.on('connection', (socket) => {
     
     socket.on('select', ({roomName, userName, clientVideoState}) => {
         const videoID = clientVideoState["videoID"];
-        
-        // console.log('Server received video select: ' + videoID);
-        // console.log(clientVideoState);
         
         let serverVideoState = Object.assign({}, clientVideoState);
         serverVideoState["videoTimestamp"] = Date.now();
@@ -85,14 +78,10 @@ io.on('connection', (socket) => {
     }); 
     
     socket.on('seek', ({roomName, userName, clientVideoState}) => {
-        // console.log('Server received sync: ');
-        // console.log(clientVideoState);
-        
         let serverVideoState = Object.assign({}, clientVideoState);
         serverVideoState["videoTimestamp"] = Date.now() - (clientVideoState["videoTimestamp"] * 1000);
         updateRoomVideoState({roomName, videoState: serverVideoState});
 
-        // console.log('emitting from server timestamp: ' + clientVideoState["videoTimestamp"]);        
         io.to(roomName).emit('seek', {
             requestingUser: userName, 
             serverVideoState: clientVideoState
@@ -100,9 +89,6 @@ io.on('connection', (socket) => {
     });
     
     socket.on('pause', ({roomName, userName, clientVideoState}) => {
-        // console.log('Server received pauseSync');
-        // console.log(clientVideoState);
-        
         let serverVideoState = Object.assign({}, clientVideoState);
         serverVideoState["videoTimestamp"] = Date.now();
         updateRoomVideoState({roomName, videoState: serverVideoState});
@@ -111,9 +97,6 @@ io.on('connection', (socket) => {
     });
     
     socket.on('play', ({roomName, userName, clientVideoState}) => {
-        // console.log('Server received playSync');
-        // console.log(clientVideoState);
-        
         let serverVideoState = Object.assign({}, clientVideoState);
         serverVideoState["videoTimestamp"] = Date.now() - (clientVideoState["videoTimestamp"] * 1000);
         updateRoomVideoState({roomName, videoState: serverVideoState});
@@ -123,7 +106,6 @@ io.on('connection', (socket) => {
     
     socket.on('disconnect', ({roomName, userName}) => {
         removeUser({socketID: socket.id, roomName});
-        console.log(`${userName} has disconnected from ${roomName}`); 
     });
 });
 
