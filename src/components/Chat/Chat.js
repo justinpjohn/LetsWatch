@@ -4,6 +4,7 @@ import Message from './Message';
 
 const Chat = ({roomName, userName, socketID, messages, emitMessage}) => {
     
+    const MAX_CHAR_LIMIT = 500;
     const [ currMessage, setCurrMessage ] = useState('');
 
     const handleMessageSubmit = (e) => {
@@ -47,6 +48,7 @@ const Chat = ({roomName, userName, socketID, messages, emitMessage}) => {
                             onKeyPress = { handleKeyPress } 
                             onChange   = { e => setCurrMessage(e.target.value) } 
                             style      = { {width: '95%'} }
+                            maxlength  = { MAX_CHAR_LIMIT }
                         />
                     </div>
                     <div className='mr-2 mb-2'>
