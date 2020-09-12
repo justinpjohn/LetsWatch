@@ -50,16 +50,15 @@ const Search = ({emitVideoId}) => {
     }, [searchResults]);
 
     return (
-        <div className='container'>
-            <div className='row justify-content-center m-auto py-2' id='search-container'>
-                <div className='col-11 px-0'>
-                    <input type='text' placeholder="Search youtube..." value={currQuery} onChange={e => setCurrQuery(e.target.value)} onKeyPress={handleKeyPress}/>
-                </div>
-                <div className='col-1 pl-0'>
-                    <button type='submit' className='btn btn-danger' onClick={handleSubmitClick}>Search</button>
+        <div className='h-100 w-100 mw-100 mh-100 p-0 m-0'> 
+            <div className='row m-0 py-2 mh-100' id='search-container'>
+                <div className='col-12 px-3'>
+                    <input className='w-100' type='text' placeholder="Search youtube..." value={currQuery} onChange={e => setCurrQuery(e.target.value)} onKeyPress={handleKeyPress}/>
                 </div>
             </div>
-            <SearchResults results={searchResults} handleResultClick={handleResultClick}/>
+            <div className='row m-0 mh-100' style={{height: '95%', backgroundColor: '#1E1E1E'}}>
+                <SearchResults results={searchResults} handleResultClick={handleResultClick}/>
+            </div>
         </div>
     );
 }

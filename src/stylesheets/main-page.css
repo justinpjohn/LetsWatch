@@ -65,26 +65,52 @@ html, body {
 
 #chat-container {
     min-height: 30vh;
-    max-height: 80vh;
+    max-height: 100%;
     position: relative;
 }
 
-@media (max-width: 1170px) { 
-    #chat-container {
-        min-height: 30vh;
-        max-height: 30vh;
-        padding-right: 0;
-        padding-left: 0;
-        margin-top: 10px;
-        position: relative;
+/*@media (max-width: 1170px) { */
+/*    #chat-container {*/
+/*        min-height: 30vh;*/
+/*        max-height: 30vh;*/
+/*        padding-right: 0;*/
+/*        padding-left: 0;*/
+/*        margin-top: 10px;*/
+/*        position: relative;*/
+/*    }*/
+/*}*/
+
+/*#chat-area {*/
+/*    overflow-y: auto;*/
+/*}*/
+
+#navbar {
+    height: 5%;
+    /*min-height: '50px';*/
+}
+
+#body-wrapper {
+    height: 95%;
+}
+
+@media (max-width: 960px) {
+    #navbar {
+        display:none;
+    }
+    
+    #body-wrapper {
+        height: 95%;
+    }
+    
+    #video-wrapper {
+        height: 40%;
+    }
+    
+    #side-wrapper {
+        height: 60%;
     }
 }
 
-
-
-#chat-area {
-    overflow-y: auto;
-}
 
 #chat-input input {
     border: none;
@@ -137,38 +163,109 @@ html, body {
     font-weight: bold;
 }
 
-.video-wrapper {position: relative; padding-bottom: 56.25%; /* 16:9 */  padding-top: 25px;}
+.video-wrapper div {
+  display: inline-block;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+/* 16:9 */  
+/*.video-wrapper {position: relative; padding-bottom: 56.25%; padding-top: 25px;} */
+.video-wrapper {position: relative;} 
 .video-wrapper iframe {position: absolute; top: 0; left: 0; width: 100%; height: 100%;}
+
+
+/*#chat-tab {*/
+/*    color: white;*/
+/*    background-color: rgb(52, 58, 64);*/
+/*}*/
+
+.nav-tabs .nav-link {
+    color: white;
+    background-color: #871212;
+    border: none;
+}
+
+/*.nav-tabs .nav-link:not(.active):hover {*/
+/*    background-color: white !important;*/
+/*    border: medium none;*/
+/*    border-radius: 0;*/
+/*    color: black;*/
+/*}*/
+
+.nav-tabs .nav-link:hover {
+    background-color: white !important;
+    border: medium none;
+    color: black !important;
+}
+
+.nav-tabs .nav-link.active {
+    color: white;
+    background-color: #E53A3A;
+    outline: none;
+    border:none;
+}
+
+/*.nav-tabs > li > a:hover{*/
+    
+/*}*/
+
+
+/* https://css-tricks.com/snippets/css/glowing-blue-input-highlights/ */
+input[type=text], textarea {
+  -webkit-transition: all  0.30s ease-in-out;
+  -moz-transition: all 0.30s ease-in-out;
+  -ms-transition: all 0.30s ease-in-out;
+  -o-transition: all 0.30s ease-in-out;
+  outline: none;
+  padding: 3px 0px 3px 3px;
+  /*margin: 5px 1px 3px 0px;*/
+  border: 1px solid white;
+}
+ 
+input[type=text]:focus, textarea:focus {
+  box-shadow: 0 0 5px white;
+  padding: 3px 0px 3px 3px;
+  /*margin: 5px 1px 3px 0px;*/
+  border: 1px solid white;
+}
 
 
 /*-------------------------------------TEST CSS FOR DISPLAYING RESULTS-------------------------------------*/
 
 #search-container {
-    width: 75%;
-    background-color: #1E1E1E;
+    width: 100%;
+    /*background-color: #1E1E1E;*/
+    background-color: #252526;
+    border-bottom: 1px solid red;;
 }
 
 #search-container input{
     border: none;
     outline: none;
-    padding-left: 10px;
-	padding-right: 10px;
-    width: 100%;
-    height: 100%;
+ /*   padding-left: 10px;*/
+	/*padding-right: 10px;*/
+ /*   margin-left: 10px;*/
+	/*margin-right: 10px;*/
+ /*   width: 100%;*/
+    /*height: 100%;*/
     color: white;
     background-color: #252526;
 }
 
 .result-container {
-    overflow: auto;
-    width: 75%;
-    max-height: 500px;
+    overflow-y: auto;
+    /*width: 75%;*/
+    /*max-height: 500px;*/
+    /*max-height: 75vh;*/
+    max-height: 100%;
     background-color: #191919;
 }
 
 .card {
     width: 100%;
-    height: 100px;
+    /*height: 100px;*/
+    /*height: 1%;*/
     background-color: #191919;
     overflow: hidden;
 }
@@ -195,3 +292,7 @@ html, body {
 .card-footer {
     background-color: #252526;
 }
+
+/** {*/
+/*outline: 1px solid red;*/
+/*}*/

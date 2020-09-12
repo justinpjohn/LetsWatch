@@ -73,15 +73,15 @@ const Room = (props) => {
 
     return (
         <div className="container-fluid m-auto h-100" style={{color: 'white'}}>
-            <div className='row'>
+            <div className='row' id='navbar' id='navbar'>
                 <nav className="navbar navbar-dark bg-dark w-100">
                     <a className="navbar-brand" href="/">Lets<span style={{color: '#E53A3A'}}>Watch</span></a>
                     <span>{userName}</span>
                 </nav>
             </div>
             
-            <div className='row p-3'>
-                <div className='col-lg-8 col-12' style={{backgroundColor: 'black'}}>
+            <div className='row' id='body-wrapper'>
+                <div className='col-lg-9 col-12 mh-100 p-3' id='video-wrapper' style={{backgroundColor: 'black'}}>
                     <Video  
                         socket         = { socket } 
                         roomName       = { roomName } 
@@ -91,18 +91,34 @@ const Room = (props) => {
                     />
                 </div>
                 
-                <div className='col-lg-4 col-12'>
-                    <Chat 
-                        roomName    = { roomName } 
-                        userName    = { userName } 
-                        socketID    = { socketID } 
-                        messages    = { messages } 
-                        emitMessage = { emitMessage }
-                    />
+                <div className='col-lg-3 col-12 mh-100' id='side-wrapper' style={{backgroundColor: 'black'}}>
+                    <div className='row text-center text-uppercase'>
+                        <ul class="nav nav-tabs col-12 p-0" id="myTab" role="tablist">
+                            <li class="nav-item col-6 p-0">
+                                <a class="nav-link" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
+                                  aria-selected="true">Chat</a>
+                            </li>
+                            <li class="nav-item col-6 p-0">
+                                <a class="nav-link active" id="search-tab" data-toggle="tab" href="#search" role="tab" aria-controls="search"
+                                  aria-selected="false">Search</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className='row tab-content' style={{height: '95%'}}>
+                        <div class="tab-pane col-12 p-0" id="chat" role="tabpanel" aria-labelledby="chat-tab">
+                            <Chat 
+                                roomName    = { roomName } 
+                                userName    = { userName } 
+                                socketID    = { socketID } 
+                                messages    = { messages } 
+                                emitMessage = { emitMessage }
+                            />
+                        </div>
+                        <div class="tab-pane show active col-12 p-0 mh-100" id="search" role="tabpanel" aria-labelledby="search-tab">
+                            <Search emitVideoId={emitVideoId}/>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div className='row p-3'>
-                <Search emitVideoId={emitVideoId}/>
             </div>
         </div> 
     );
