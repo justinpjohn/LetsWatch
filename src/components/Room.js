@@ -70,7 +70,7 @@ const Room = (props) => {
     return (
         <div className="container-fluid m-auto h-100" style={{color: 'white'}}>
             <div className='row' id='navbar' id='navbar'>
-                <nav className="navbar navbar-dark bg-dark w-100">
+                <nav className="navbar navbar-dark bg-dark py-0 w-100">
                     <a className="navbar-brand" href="/">Lets<span style={{color: '#E53A3A'}}>Watch</span></a>
                     <span>{userName}</span>
                 </nav>
