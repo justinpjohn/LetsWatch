@@ -212,7 +212,7 @@ html, body {
 
 
 /* https://css-tricks.com/snippets/css/glowing-blue-input-highlights/ */
-input[type=text], textarea {
+input[type=text]:not(.form-control), textarea {
   -webkit-transition: all  0.30s ease-in-out;
   -moz-transition: all 0.30s ease-in-out;
   -ms-transition: all 0.30s ease-in-out;
@@ -223,7 +223,7 @@ input[type=text], textarea {
   border: 1px solid white;
 }
  
-input[type=text]:focus, textarea:focus {
+input[type=text]:not(.form-control):focus, textarea:focus {
   box-shadow: 0 0 5px white;
   padding: 3px 0px 3px 3px;
   /*margin: 5px 1px 3px 0px;*/
