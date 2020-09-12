@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Message from './Message';
 
@@ -18,6 +18,11 @@ const Chat = ({roomName, userName, socketID, messages, emitMessage}) => {
             handleMessageSubmit(e);
         }
     }
+    
+    useEffect(() => {
+        let chatArea = document.getElementById("chat-area");
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }, [messages]);
 
     return (
         <div id='chat-container' className='d-flex flex-column h-100 w-100' style={{backgroundColor: '#252526', overflow: 'hidden'}}>
