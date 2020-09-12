@@ -2,75 +2,64 @@ import React, {useState, useEffect} from 'react';
 import YouTube from 'react-youtube';
 
 
-const Video = ({socket, roomName, user, player, setPlayer}) => {
+const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
     
-    const [receivingSync, setReceivingSync] = useState(true);
-    const [initalSync, setInitialSync] = useState(true);
+    const DEFAULT_VIDEO_ID        = process.env.REACT_APP_DEFAULT_VIDEO_ID;
+    const DEFAULT_VIDEO_TIMESTAMP = process.env.REACT_APP_DEFAULT_VIDEO_TIMESTAMP;
+    const DEFAULT_VIDEO_STATE     = process.env.REACT_APP_DEFAULT_VIDEO_STATE;
     
-    // for isSeek()
-    // const [isSeeking, setIsSeeking] = useState(false);
-    // const [timestamp, setTimeStamp] = useState(0);
-    // const [datetime, setDateTime] = useState(Date.now());
-    
-    const [videoPlayer, setVideoPlayer] = useState(null);
-    const [videoData, setVideoData] = useState({ 
-        videoID: 'V2hlQkVJZhE',
-        videoTS: 0,
-        videoPS: 'PLAYING'
+    const [ initalSync, setInitialSync ] = useState(true);
+    const [ receivingSync, setReceivingSync ] = useState(true);
+    const [ clientVideoState, setClientVideoState ] = useState({ 
+        videoID: DEFAULT_VIDEO_ID,
+        videoTS: DEFAULT_VIDEO_TIMESTAMP,
+        videoPS: DEFAULT_VIDEO_STATE
     });
     
     const _onReady = (event) => {
         // access to player in all event handlers via event.target
         const _player = event.target;
-        setVideoPlayer(_player)
-        setPlayer(_player);
+        setVideoPlayer(_player);
         
-        socket.on('video state', ({roomVideoState}) => {
-            if (roomVideoState !== undefined && roomVideoState !== null) {
-                const videoID = roomVideoState["videoID"];
-                const videoTimestamp = roomVideoState["videoTimestamp"];
-                const playerState = roomVideoState["playerState"];
-                
-                // console.log('RECEIVED VIDEO STATE');
-                // console.log(roomVideoState);
+        socket.on('initial sync', ({serverVideoState}) => {
+            if (serverVideoState) {
+                const videoID = serverVideoState["videoID"];
+                const videoTimestamp = serverVideoState["videoTimestamp"];
+                const playerState = serverVideoState["playerState"];
         
-                setVideoData({
+                setClientVideoState({
                     videoID: videoID,
                     videoTS: videoTimestamp,
                     videoPS: playerState
                 });
             } else {
-                console.log('Received video state was undefined!');
+                setInitialSync(false);
             }
         });
         
-        socket.on('seekSync', ({requestingUser, videoState}) => {
-            const videoTimestamp = videoState["videoTimestamp"];
+        socket.on('seek', ({requestingUser, serverVideoState}) => {
+            const videoTimestamp = serverVideoState["videoTimestamp"];
             setReceivingSync(true);
             _player.seekTo(videoTimestamp);
         });
         
-        socket.on('pauseSync', ({requestingUser}) => {
-            // console.log('Received pauseSync');
+        socket.on('pause', ({requestingUser}) => {
             setReceivingSync(true);
             _player.pauseVideo();
         });
         
-        socket.on('playSync', ({requestingUser}) => {
-            // console.log('Received playSync');
+        socket.on('play', ({requestingUser}) => {
             _player.playVideo();
         });
     
-        socket.on('video select', ({requestingUser, videoState}) => {
-            // console.log('received video state: ');
-            // console.log(videoState);
+        socket.on('select', ({requestingUser, serverVideoState}) => {
             setReceivingSync(true);
             
-            const videoID = videoState["videoID"];
-            setVideoData({
+            const videoID = serverVideoState["videoID"];
+            setClientVideoState({
                 videoID: videoID,
-                videoTS: 0,
-                videoPS: 'PLAYING'
+                videoTS: DEFAULT_VIDEO_TIMESTAMP,
+                videoPS: DEFAULT_VIDEO_STATE
             });
         });
     }
@@ -82,73 +71,46 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
         if (receivingSync) {
             setReceivingSync(false);
         } else {
-            socket.emit('seekSync', {
+            socket.emit('seek', {
                 roomName, 
-                userName: user,
-                videoState
+                userName: userName,
+                clientVideoState: videoState
             });
         }
-        socket.emit('playSync', {
+        socket.emit('play', {
             roomName, 
-            userName: user,
-            videoState
+            userName: userName,
+            clientVideoState: videoState
         });
     }
     
     const _onPause = (event) => {
         if (initalSync) return;
-        const videoState = getVideoState();
 
         if (receivingSync) {
             setReceivingSync(false);
         } else {
-            socket.emit('pauseSync', {
+            socket.emit('pause', {
                 roomName, 
-                userName: user,
-                videoState
+                userName: userName,
+                clientVideoState: getVideoState()
             });
         }
     }
     
     useEffect(() => {
-        console.log("USE EFFECT");
-        if (videoPlayer !== null) {
-            // console.log(videoData);
-            videoPlayer.loadVideoById(videoData["videoID"], videoData["videoTS"]);
-            if (videoData["videoPS"] === 'PAUSED') videoPlayer.pauseVideo();
+        if (videoPlayer) {
+            videoPlayer.loadVideoById(clientVideoState["videoID"], clientVideoState["videoTS"]);
+            if (clientVideoState["videoPS"] === 'PAUSED') videoPlayer.pauseVideo();
             setInitialSync(false);
-        } else {
-            console.log('player is null');
         }
-    }, [videoData]);
-    
-    
-    // const isSeek = () => {
-    //     const currTimestamp = player.getCurrentTime();
-    //     const diffTimestamp = Math.abs(timestamp - currTimestamp);
-        
-    //     const currDatetime = Date.now();
-    //     const diffDatetime = Math.abs(datetime - currDatetime) / 1000;
-        
-    //     if (currTimestamp < timestamp) {
-    //         console.log('seeking');
-    //         setIsSeeking(true);
-    //     } else if (diffTimestamp - diffDatetime > 2) {
-    //         console.log('seeking: ' + (diffTimestamp - diffDatetime));
-    //         setIsSeeking(true);
-    //     } else {
-    //         console.log('not seeking');
-    //         setIsSeeking(false);
-    //     }
-    //     setTimeStamp(player.getCurrentTime());
-    //     setDateTime(Date.now());
-    // }
-    
+    }, [clientVideoState]);
+
     const getVideoState = () => {
-        const isPlaying = (player.getPlayerState() === 1);
+        const isPlaying = (videoPlayer.getPlayerState() === 1);
         return { 
-            videoID: videoData["videoID"],
-            videoTimestamp : player.getCurrentTime(),
+            videoID: clientVideoState["videoID"],
+            videoTimestamp : videoPlayer.getCurrentTime(),
             playerState : (isPlaying ? 'PLAYING' : 'PAUSED')
         };
     }
@@ -156,7 +118,7 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
     return (
         <div className='video-wrapper w-100 h-100' style={{backgroundColor: '#E53A3A'}}>
             <YouTube
-                videoId={'V2hlQkVJZhE'}
+                videoId = { DEFAULT_VIDEO_ID }
                 opts={
                     {
                         height: '390',
@@ -168,9 +130,9 @@ const Video = ({socket, roomName, user, player, setPlayer}) => {
                         }
                     }
                 }
-                onReady={_onReady}
-                onPlay={_onPlay}
-                onPause={_onPause}
+                onPlay  = { _onPlay }
+                onPause = { _onPause }
+                onReady = { _onReady } 
             />
         </div>  
     );

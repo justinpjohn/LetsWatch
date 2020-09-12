@@ -11,27 +11,30 @@ import useMessages from '../hooks/useMessages';
 const SERVER_URL = 'https://9e057b5691a24d17a179648c6553f432.vfs.cloud9.us-east-1.amazonaws.com/';
 const SERVER_PORT = '8080';
 const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
-console.log(SERVER_ENDPOINT);
 
-let socket = io(SERVER_URL);
+const socket = io(SERVER_URL);
+
 
 const Room = (props) => {
-    const newUserInfo = props.location.state.user;
+    
+    const userData = props.location.state.userData;
+    const DEFAULT_VIDEO_TIMESTAMP = process.env.REACT_APP_DEFAULT_VIDEO_TIMESTAMP;
+    const DEFAULT_VIDEO_STATE     = process.env.REACT_APP_DEFAULT_VIDEO_STATE;
 
-    const [socketID, setSocketID] = useState('');
-    const [roomName, setRoomName] = useState(newUserInfo.groupID);
-    const [userName, setUserName] = useState(newUserInfo.username);
-    const [player, setPlayer] = useState({});
+    const [ socketID, setSocketID ] = useState('');
+    const [ roomName, setRoomName ] = useState(userData["roomName"]);
+    const [ userName, setUserName ] = useState(userData["userName"]);
+    const [ videoPlayer, setVideoPlayer ] = useState(null);
     const { messages, addMessage } = useMessages();
     
+    //this is here because i didn't think the Chat component should have access to socket
     const emitVideoId = (videoID) => {
-        // console.log('emitting videoId: ' + videoID);
         const videoState = {
             videoID,
-            videoTimestamp : 0,
-            playerState : 'PLAYING'
+            videoTimestamp : DEFAULT_VIDEO_TIMESTAMP,
+            playerState : DEFAULT_VIDEO_STATE
         } 
-        socket.emit('video select', {roomName, userName, videoState});
+        socket.emit('select', {roomName, userName, clientVideoState: videoState});
     }
     
     const emitMessage = (msg) => {
@@ -39,28 +42,30 @@ const Room = (props) => {
     }
 
     useEffect(() => {
-        // setRoomName(newUserInfo.groupID);
-        // setUserName(newUserInfo.username);
-        // console.log({roomName, userName});
         socket.emit('room connection', {roomName, userName});
         
         socket.on('socket connection', () => {
-            // console.log('setting socket connection');
             setSocketID(socket.id);
         });
         
         socket.on('room connection', (msg) => {
-            // console.log('received room connection' + msg);
-            addMessage({authorSock: 'admin', authorUser: '', text: msg});
+            addMessage({
+                authorSock: 'admin', 
+                authorUser: '', 
+                text: msg
+            });
         });
         
         socket.on('chat message', ({authorSocketID, authorUserName, msg}) => {
-            addMessage({authorSock: authorSocketID, authorUser: authorUserName, text: msg});
+            addMessage({
+                authorSock: authorSocketID, 
+                authorUser: authorUserName, 
+                text: msg
+            });
         });
         
         return () => {
-            player.destroy();
-            console.log({roomName, userName});
+            videoPlayer.destroy();
             socket.emit('disconnect', {roomName, userName});
             socket.disconnect();
         }
@@ -68,24 +73,52 @@ const Room = (props) => {
 
     return (
         <div className="container-fluid m-auto h-100" style={{color: 'white'}}>
-            <div className='row'>
+            <div className='row' id='navbar'>
                 <nav className="navbar navbar-dark bg-dark w-100">
                     <a className="navbar-brand" href="/">Lets<span style={{color: '#E53A3A'}}>Watch</span></a>
                     <span>{userName}</span>
                 </nav>
             </div>
             
-            <div className='row p-3'>
-                <div className='col-lg-8 col-12' style={{backgroundColor: 'black'}}>
-                    <Video socket={socket} roomName={roomName} user={userName} player={player} setPlayer={setPlayer}/>
+            <div className='row' id='body-wrapper'>
+                <div className='col-lg-9 col-12 mh-100 p-3' id='video-wrapper' style={{backgroundColor: 'black'}}>
+                    <Video  
+                        socket         = { socket } 
+                        roomName       = { roomName } 
+                        userName       = { userName } 
+                        videoPlayer    = { videoPlayer } 
+                        setVideoPlayer = { setVideoPlayer }
+                    />
                 </div>
                 
-                <div className='col-lg-4 col-12'>
-                    <Chat group={roomName} user={userName} socketID={socketID} messages={messages} emitMessage={emitMessage}/>
+                <div className='col-lg-3 col-12 mh-100' id='side-wrapper' style={{backgroundColor: 'black'}}>
+                    <div className='row text-center text-uppercase'>
+                        <ul class="nav nav-tabs col-12 p-0" id="myTab" role="tablist">
+                            <li class="nav-item col-6 p-0">
+                                <a class="nav-link" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
+                                  aria-selected="true">Chat</a>
+                            </li>
+                            <li class="nav-item col-6 p-0">
+                                <a class="nav-link active" id="search-tab" data-toggle="tab" href="#search" role="tab" aria-controls="search"
+                                  aria-selected="false">Search</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className='row tab-content' style={{height: '95%'}}>
+                        <div class="tab-pane col-12 p-0" id="chat" role="tabpanel" aria-labelledby="chat-tab">
+                            <Chat 
+                                roomName    = { roomName } 
+                                userName    = { userName } 
+                                socketID    = { socketID } 
+                                messages    = { messages } 
+                                emitMessage = { emitMessage }
+                            />
+                        </div>
+                        <div class="tab-pane show active col-12 p-0 mh-100" id="search" role="tabpanel" aria-labelledby="search-tab">
+                            <Search emitVideoId={emitVideoId}/>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div className='row p-3'>
-                <Search player={player} emitVideoId={emitVideoId}/>
             </div>
         </div> 
     );

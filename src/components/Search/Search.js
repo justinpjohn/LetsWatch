@@ -3,15 +3,15 @@ import fetch from 'node-fetch';
 
 import SearchResults from './SearchResults';
 
+const SERVER_URL = 'https://letswatch9897.herokuapp.com';
 
-const Search = ({player, emitVideoId}) => {
+const Search = ({emitVideoId}) => {
   
-    const [currQuery, setCurrQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
+    const [ currQuery, setCurrQuery ] = useState('');
+    const [ searchResults, setSearchResults ] = useState([]);
     
     const handleResultClick = (videoId) => {
         emitVideoId(videoId);
-        // player.loadVideoById(videoId, 0);
     }
     
     const handleKeyPress = (e) => {
@@ -22,7 +22,6 @@ const Search = ({player, emitVideoId}) => {
     }
     
     const handleSubmitClick = (e) => {
-        // e.preventDefault();
         // check if query is not empty or only contains spaces
         if (currQuery.length !== 0 && (/\S/).test(currQuery)) {
             searchYoutube(currQuery);
@@ -32,32 +31,35 @@ const Search = ({player, emitVideoId}) => {
     
     const searchYoutube = (query) => {
         query = query.replace(/ /g, '+');
-        // console.log(query);
-        fetch('https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBa-JzGFfw19oswz7L6WV0BwbNMBIZw5Ko&part=snippet&q='+query+'&maxResults=10&type=video')
-        .then((response) => {
-          return response.json();
-        })
-        .then((json) => {
-          setSearchResults(json.items);
-        });
+        const FETCH_URL = SERVER_URL.concat('/', `youtube/${query}`);
+        
+        fetch(FETCH_URL, { method: 'GET' })
+            .then((response) => {
+              return response.json();
+            })
+            .then((json) => {
+                console.log(json.items);
+                setSearchResults(json.items);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
       
     useEffect(() => {
-        // console.log('fetching youtube search');
-        // console.log(searchResults);
+        
     }, [searchResults]);
 
     return (
-        <div className='container'>
-            <div className='row justify-content-center m-auto py-2' id='search-container'>
-                <div className='col-11 px-0'>
-                    <input type='text' placeholder="Search youtube..." value={currQuery} onChange={e => setCurrQuery(e.target.value)} onKeyPress={handleKeyPress}/>
-                </div>
-                <div className='col-1 pl-0'>
-                    <button type='submit' className='btn btn-danger' onClick={handleSubmitClick}>Search</button>
+        <div className='h-100 w-100 mw-100 mh-100 p-0 m-0'> 
+            <div className='row m-0 py-2 mh-100' id='search-container'>
+                <div className='col-12 px-3'>
+                    <input className='w-100' type='text' placeholder="Search youtube..." value={currQuery} onChange={e => setCurrQuery(e.target.value)} onKeyPress={handleKeyPress}/>
                 </div>
             </div>
-            <SearchResults results={searchResults} handleResultClick={handleResultClick}/>
+            <div className='row m-0 mh-100' style={{height: '95%', backgroundColor: '#1E1E1E'}}>
+                <SearchResults results={searchResults} handleResultClick={handleResultClick}/>
+            </div>
         </div>
     );
 }
