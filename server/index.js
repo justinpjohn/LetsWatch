@@ -8,13 +8,7 @@ const router = require('./router');
 const { updateRoomVideoState, getRoomVideoState, addUser, removeUser, getRandomUserInRoom } = require('./room');
 const PORT = process.env.PORT || 8080;
 
-const app = express().use(express.static(__dirname + '/../build'));
-
-// const INDEX = '../';
-// app.get('/*', function (req, res) {
-//     res.sendFile(path.join(path.resolve(INDEX), 'build', 'index.html'));
-// }); 
-
+const app = express();
 app.use(cors({credentials: true, origin: true}));
 app.use(router);
 

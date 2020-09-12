@@ -22,7 +22,7 @@ const Chat = ({roomName, userName, socketID, messages, emitMessage}) => {
     return (
         <div id='chat-container' className='d-flex flex-column h-100 w-100' style={{backgroundColor: '#252526'}}>
             <div className='text-center py-2' style={{backgroundColor: '#343a40', borderBottom: 'solid 1px #E53A3A', marginBottom: '5px'}}>
-                <b>{roomName}</b> Chatroom
+                <b>{roomName}</b>
             </div>
             
             <div id='chat-area' className='' style={{height: '90%'}}>
