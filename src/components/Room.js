@@ -7,9 +7,12 @@ import Search from './Search/Search';
 
 import useMessages from '../hooks/useMessages';
 
+// const SERVER_URL = 'https://58aab3c90017465bbb8c7cbf0b87d6b3.vfs.cloud9.us-east-2.amazonaws.com';
+const SERVER_URL = 'https://9e057b5691a24d17a179648c6553f432.vfs.cloud9.us-east-1.amazonaws.com/';
+const SERVER_PORT = '8080';
+const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
-const socket = io();
-
+const socket = io(SERVER_URL);
 
 const Room = (props) => {
     
@@ -100,7 +103,7 @@ const Room = (props) => {
                             </li>
                         </ul>
                     </div>
-                    <div className='row tab-content' style={{height: '95%'}}>
+                    <div className='row tab-content'>
                         <div class="tab-pane col-12 p-0" id="chat" role="tabpanel" aria-labelledby="chat-tab">
                             <Chat 
                                 roomName    = { roomName } 

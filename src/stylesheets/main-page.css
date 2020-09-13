@@ -99,7 +99,17 @@ html, body {
     height: 95%;
 }
 
-@media (max-width: 960px) {
+#side-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.row .tab-content {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+@media (max-width: 600px) {
     #navbar {
         display:none;
     }
