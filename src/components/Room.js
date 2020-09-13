@@ -14,7 +14,6 @@ const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
 const socket = io(SERVER_URL);
 
-
 const Room = (props) => {
     
     const userData = props.location.state.userData;
@@ -72,15 +71,15 @@ const Room = (props) => {
     }, [socket]);
 
     return (
-        <div className="container-fluid m-auto h-100" style={{color: 'white'}}>
-            <div className='row' id='navbar' id='navbar'>
-                <nav className="navbar navbar-dark bg-dark w-100">
+        <div id='main-container' className="container-fluid m-auto h-100" style={{color: 'white'}}>
+            <div id='main-row-nav' className='row' id='navbar' id='navbar'>
+                <nav className="navbar navbar-dark bg-dark py-0 w-100">
                     <a className="navbar-brand" href="/">Lets<span style={{color: '#E53A3A'}}>Watch</span></a>
                     <span>{userName}</span>
                 </nav>
             </div>
             
-            <div className='row' id='body-wrapper'>
+            <div id='main-row-body' className='row' id='body-wrapper'>
                 <div className='col-lg-9 col-12 mh-100 p-3' id='video-wrapper' style={{backgroundColor: 'black'}}>
                     <Video  
                         socket         = { socket } 
@@ -104,7 +103,7 @@ const Room = (props) => {
                             </li>
                         </ul>
                     </div>
-                    <div className='row tab-content' style={{height: '95%'}}>
+                    <div className='row tab-content'>
                         <div class="tab-pane col-12 p-0" id="chat" role="tabpanel" aria-labelledby="chat-tab">
                             <Chat 
                                 roomName    = { roomName } 

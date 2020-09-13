@@ -4,6 +4,7 @@ html, body {
     
     width: 100%;
     height: 100%;
+    overflow-x: hidden;
 }
 
 ::-webkit-scrollbar-track
@@ -90,6 +91,16 @@ html, body {
 /*    overflow-y: auto;*/
 /*}*/
 
+
+#main-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#main-row-body {
+    flex-grow: 1;
+}
+
 #navbar {
     height: 5%;
     /*min-height: '50px';*/
@@ -99,7 +110,17 @@ html, body {
     height: 95%;
 }
 
-@media (max-width: 960px) {
+#side-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.row .tab-content {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+@media (max-width: 600px) {
     #navbar {
         display:none;
     }

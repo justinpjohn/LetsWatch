@@ -9,6 +9,13 @@ const { updateRoomVideoState, getRoomVideoState, addUser, removeUser, getRandomU
 const PORT = process.env.PORT || 8080;
 
 const app = express();
+// const app = express().use(express.static(__dirname + '/../build'));
+
+// const INDEX = '../';
+// app.get('/*', function (req, res) {
+//     res.sendFile(path.join(path.resolve(INDEX), 'build', 'index.html'));
+// }); 
+
 app.use(cors({credentials: true, origin: true}));
 app.use(router);
 
