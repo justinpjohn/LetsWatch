@@ -27,7 +27,7 @@ const Chat = ({roomName, userName, socketID, messages, emitMessage}) => {
 
     return (
         <div id='chat-container' className='d-flex flex-column h-100 w-100' style={{backgroundColor: '#252526', overflow: 'hidden'}}>
-            <div id='chat-navbar' className='text-center py-2' style={{backgroundColor: '#343a40', borderBottom: 'solid 1px #E53A3A', marginBottom: '5px'}}>
+            <div id='chat-navbar' className='text-center py-2'>
                 <b>{roomName}</b>
             </div>
             
@@ -37,8 +37,8 @@ const Chat = ({roomName, userName, socketID, messages, emitMessage}) => {
                 })}
             </div>
             <div id='chat-input-container' className='d-flex flex-column'>
-                <div> 
-                    <hr className='mb-0' style={{backgroundColor: '#C4C4C4'}}/>
+                <div style={{backgroundColor: '#181818'}}> 
+                    <hr className='mb-0'/>
                 </div>
                 
                 <div className='d-flex align-items-center mt-2'>

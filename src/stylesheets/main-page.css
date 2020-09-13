@@ -97,22 +97,39 @@ html, body {
     flex-direction: column;
 }
 
+#main-row-nav .bg-dark {
+    background-color: #202020 !important; 
+}
+
 #main-row-body {
     flex-grow: 1;
 }
 
-#navbar {
-    height: 5%;
-    /*min-height: '50px';*/
+#body-wrapper {
+    flex-grow: 1;
+    max-height: 100%;
+    overflow-y: hidden;
 }
 
-#body-wrapper {
-    height: 95%;
+#video-wrapper {
+    min-height: 40%;
 }
 
 #side-wrapper {
     display: flex;
     flex-direction: column;
+    max-height: 100%;
+    min-height: 60%;
+}
+
+#chat-navbar {
+    background-color: #202020;
+    border-bottom: solid 1px #E53A3A; 
+    margin-bottom: 5px;
+}
+
+#chat-area {
+    background-color: #181818;
 }
 
 .row .tab-content {
@@ -125,9 +142,9 @@ html, body {
         display:none;
     }
     
-    #body-wrapper {
-        height: 95%;
-    }
+    /*#body-wrapper {*/
+    /*    height: 95%;*/
+    /*}*/
     
     #video-wrapper {
         height: 40%;
