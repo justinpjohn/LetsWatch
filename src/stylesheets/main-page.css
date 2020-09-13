@@ -102,17 +102,25 @@ html, body {
 }
 
 #navbar {
-    height: 5%;
+    /*height: 5%;*/
     /*min-height: '50px';*/
 }
 
 #body-wrapper {
-    height: 95%;
+    flex-grow: 1;
+    max-height: 100%;
+    overflow-y: hidden;
+}
+
+#video-wrapper {
+    min-height: 40%;
 }
 
 #side-wrapper {
     display: flex;
     flex-direction: column;
+    max-height: 100%;
+    min-height: 60%;
 }
 
 .row .tab-content {
@@ -125,9 +133,9 @@ html, body {
         display:none;
     }
     
-    #body-wrapper {
-        height: 95%;
-    }
+    /*#body-wrapper {*/
+    /*    height: 95%;*/
+    /*}*/
     
     #video-wrapper {
         height: 40%;
