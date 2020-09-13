@@ -72,7 +72,7 @@ const Room = (props) => {
 
     return (
         <div id='main-container' className="container-fluid m-auto h-100" style={{color: 'white'}}>
-            <div id='main-row-nav' className='row' id='navbar' id='navbar'>
+            <div id='main-row-nav' className='row'>
                 <nav className="navbar navbar-dark bg-dark py-0 w-100">
                     <a className="navbar-brand" href="/">Lets<span style={{color: '#E53A3A'}}>Watch</span></a>
                     <span>{userName}</span>
@@ -94,17 +94,17 @@ const Room = (props) => {
                     <div className='row text-center text-uppercase'>
                         <ul class="nav nav-tabs col-12 p-0" id="myTab" role="tablist">
                             <li class="nav-item col-6 p-0">
-                                <a class="nav-link" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
+                                <a class="nav-link active" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
                                   aria-selected="true">Chat</a>
                             </li>
                             <li class="nav-item col-6 p-0">
-                                <a class="nav-link active" id="search-tab" data-toggle="tab" href="#search" role="tab" aria-controls="search"
+                                <a class="nav-link" id="search-tab" data-toggle="tab" href="#search" role="tab" aria-controls="search"
                                   aria-selected="false">Search</a>
                             </li>
                         </ul>
                     </div>
                     <div className='row tab-content'>
-                        <div class="tab-pane col-12 p-0" id="chat" role="tabpanel" aria-labelledby="chat-tab">
+                        <div class="tab-pane show active col-12 p-0" id="chat" role="tabpanel" aria-labelledby="chat-tab">
                             <Chat 
                                 roomName    = { roomName } 
                                 userName    = { userName } 
@@ -113,7 +113,7 @@ const Room = (props) => {
                                 emitMessage = { emitMessage }
                             />
                         </div>
-                        <div class="tab-pane show active col-12 p-0 mh-100" id="search" role="tabpanel" aria-labelledby="search-tab">
+                        <div class="tab-pane col-12 p-0 mh-100" id="search" role="tabpanel" aria-labelledby="search-tab">
                             <Search emitVideoId={emitVideoId}/>
                         </div>
                     </div>
