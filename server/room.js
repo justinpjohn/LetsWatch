@@ -1,6 +1,6 @@
-const users = new Map();
-const rooms = new Map();
+const roomUsers = new Map();
 const roomStates = new Map();
+const roomSocketIsIn = new Map();
 
 
 const updateRoomVideoState = ({roomName, videoState}) => {
@@ -16,31 +16,31 @@ const getRoomVideoState = (roomName) => {
 
 const addUser = ({ socketID, userName, roomName }) => {
     //should possibly consider normalizing keys
-    if (!(rooms.has(roomName))) {
-        rooms.set(roomName, new Map());
+    if (!(roomUsers.has(roomName))) {
+        roomUsers.set(roomName, new Map());
     }
     
     const user = { socketID, userName };
-    rooms.get(roomName).set(socketID, user);
-    users.set(socketID, roomName);
+    roomUsers.get(roomName).set(socketID, user);
+    roomSocketIsIn.set(socketID, roomName);
     
     return {user};
 }
 
 const removeUser = ({ socketID }) => {
     let roomName = null;
-    if (users.has(socketID)) {
-        roomName = users.get(socketID);
-        users.delete(socketID);
+    if (roomSocketIsIn.has(socketID)) {
+        roomName = roomSocketIsIn.get(socketID);
+        roomSocketIsIn.delete(socketID);
     }
     
-    if (roomName && rooms.has(roomName)) {
-        let room = rooms.get(roomName);
+    if (roomName && roomUsers.has(roomName)) {
+        let room = roomUsers.get(roomName);
         room.delete(socketID);
         
         // if last person, delete entry in room map
         if (room.size === 0) {
-            rooms.delete(roomName);
+            roomUsers.delete(roomName);
             roomStates.delete(roomName);
         }
     }
@@ -48,14 +48,14 @@ const removeUser = ({ socketID }) => {
 
 // not really random, just pick first person?
 const getRandomUserInRoom = (roomName) => {
-    if (!(rooms.has(roomName))) {
+    if (!(roomUsers.has(roomName))) {
         return undefined;
     }
 
-    let keys = rooms.get(roomName).keys();
+    let keys = roomUsers.get(roomName).keys();
     let next = keys.next().value;
     
-    return rooms.get(roomName).get(next);
+    return roomUsers.get(roomName).get(next);
 }
 
 module.exports = { updateRoomVideoState, getRoomVideoState, addUser, removeUser, getRandomUserInRoom };
