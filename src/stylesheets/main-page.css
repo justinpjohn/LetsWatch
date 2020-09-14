@@ -36,7 +36,7 @@ html, body {
     user-select: none;
 }
 
-.main-button {
+#home-button {
     display: inline-block;
     text-align: center;
     vertical-align: middle;
@@ -59,8 +59,7 @@ html, body {
     /*transition-timing-function: ease-in-out, ease-in-out, ease-in-out, ease-in-out;*/
     /*transition-delay: 0s, 0s, 0s, 0s;*/
 }
-
-.main-button:hover {
+#home-button:hover {
     opacity: 0.50;
 }
 
@@ -151,8 +150,12 @@ html, body {
 }
 
 @media (max-width: 600px) {
-    #navbar {
-        display:none;
+    #home-button {
+        width: 50%;
+    }
+    
+    #main-row-nav {
+        display: none;
     }
     
     /*#body-wrapper {*/
@@ -309,6 +312,9 @@ input[type=text]:not(.form-control):focus, textarea:focus {
     font-weight: bold;
     justify-content: center;
     margin: auto;
+    outline: none;
+    border-color: red;
+    box-shadow: 0 0 10px red;
 }
 
 /*-------------------------------------TEST CSS FOR DISPLAYING RESULTS-------------------------------------*/
@@ -335,10 +341,6 @@ input[type=text]:not(.form-control):focus, textarea:focus {
 
 .result-container {
     overflow-y: auto;
-    /*width: 75%;*/
-    /*max-height: 500px;*/
-    /*max-height: 75vh;*/
-    max-height: 100%;
     background-color: #191919;
 }
 
@@ -352,6 +354,9 @@ input[type=text]:not(.form-control):focus, textarea:focus {
 
 .card:hover {
     cursor: pointer;
+    outline: none;
+    border-color: red;
+    box-shadow: 0 0 10px red;
 }
 
 .card-title {
@@ -363,9 +368,7 @@ input[type=text]:not(.form-control):focus, textarea:focus {
     text-overflow: ellipsis;
     white-space: normal;
     -webkit-line-clamp: 2;
-    font-size: 1.1rem;
-    font-weight: 500;
-    line-height: 1.6rem;
+    font-size: 1.0rem;
     color: white;
 }
 
