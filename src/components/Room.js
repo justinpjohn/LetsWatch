@@ -7,7 +7,10 @@ import Search from './Search/Search';
 
 import useMessages from '../hooks/useMessages';
 
+
 const socket = io();
+
+let messageCount = 0;
 
 const Room = (props) => {
     
@@ -18,6 +21,8 @@ const Room = (props) => {
     const [ socketID, setSocketID ] = useState('');
     const [ roomName, setRoomName ] = useState(userData["roomName"]);
     const [ userName, setUserName ] = useState(userData["userName"]);
+    
+    const [ unseenMessages, setUnseenMessages ] = useState(0);
     const { messages, addMessage } = useMessages();
     
     //this is here because i didn't think the Chat component should have access to socket
@@ -33,6 +38,20 @@ const Room = (props) => {
     const emitMessage = (msg) => {
         socket.emit('chat message', {roomName, userName, msg});
     }
+    
+    useEffect(() => {
+        const chatTextDOM = document.getElementById('chat-text');
+        const unseenDOM = document.getElementById('unseen');
+        console.log(unseenMessages)
+        
+        if (unseenMessages == 0) {
+            chatTextDOM.style.display = 'flex';
+            unseenDOM.style.display = 'none';
+        } else {
+            chatTextDOM.style.display = 'none';
+            unseenDOM.style.display = 'flex';
+        }
+    }, [unseenMessages])
 
     useEffect(() => {
         socket.emit('room connection', {roomName, userName});
@@ -50,6 +69,12 @@ const Room = (props) => {
         });
         
         socket.on('chat message', ({authorSocketID, authorUserName, msg}) => {
+            console.log(authorSocketID + ' SPACE ' + socket.id);
+            if (authorSocketID !== socketID && !isChatTabFocused()) {
+                messageCount += 1;
+                setUnseenMessages(messageCount);
+            }
+            
             addMessage({
                 authorSock: authorSocketID, 
                 authorUser: authorUserName, 
@@ -62,6 +87,16 @@ const Room = (props) => {
             socket.disconnect();
         }
     }, [socket]);
+    
+    const isChatTabFocused = () => {
+        const chatTabDOM = document.getElementById('chat-tab');
+        return (chatTabDOM.classList.contains('active'))
+    }
+    
+    const handleOnClick = () => {
+        messageCount = 0; 
+        setUnseenMessages(0);
+    }
 
     return (
         <div id='main-container' className="container-fluid m-auto h-100" style={{color: 'white'}}>
@@ -83,10 +118,17 @@ const Room = (props) => {
                 
                 <div className='col-lg-3 col-12 mh-100' id='side-wrapper' style={{backgroundColor: 'black'}}>
                     <div className='row text-center text-uppercase'>
-                        <ul class="nav nav-tabs col-12 p-0" id="myTab" role="tablist">
-                            <li class="nav-item col-6 p-0">
-                                <a class="nav-link active" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
-                                  aria-selected="true">Chat</a>
+                        <ul class="nav nav-tabs col-12 p-0" role="tablist">
+                            <li class="nav-item col-6 p-0" onClick={handleOnClick}>
+                                <a class="nav-link active h-100" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
+                                  aria-selected="true" style={{display: 'flex', justifyContent: 'center'}}>
+                                    <div id='chat-text' className='m-auto'>
+                                        <span> Chat </span>
+                                    </div>
+                                    <div id='unseen' className='circle'>
+                                        <span className='m-auto'> {(unseenMessages > 9) ? '9+' : unseenMessages} </span>
+                                    </div>
+                              </a>
                             </li>
                             <li class="nav-item col-6 p-0">
                                 <a class="nav-link" id="search-tab" data-toggle="tab" href="#search" role="tab" aria-controls="search"
