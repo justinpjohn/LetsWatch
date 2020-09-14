@@ -151,8 +151,8 @@ html, body {
 }
 
 @media (max-width: 600px) {
-    #navbar {
-        display:none;
+    #main-row-nav {
+        display: none;
     }
     
     /*#body-wrapper {*/
@@ -335,10 +335,6 @@ input[type=text]:not(.form-control):focus, textarea:focus {
 
 .result-container {
     overflow-y: auto;
-    /*width: 75%;*/
-    /*max-height: 500px;*/
-    /*max-height: 75vh;*/
-    max-height: 100%;
     background-color: #191919;
 }
 
@@ -363,9 +359,7 @@ input[type=text]:not(.form-control):focus, textarea:focus {
     text-overflow: ellipsis;
     white-space: normal;
     -webkit-line-clamp: 2;
-    font-size: 1.1rem;
-    font-weight: 500;
-    line-height: 1.6rem;
+    font-size: 1.0rem;
     color: white;
 }
 
