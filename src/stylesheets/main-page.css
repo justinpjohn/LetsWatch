@@ -312,6 +312,9 @@ input[type=text]:not(.form-control):focus, textarea:focus {
     font-weight: bold;
     justify-content: center;
     margin: auto;
+    outline: none;
+    border-color: red;
+    box-shadow: 0 0 10px red;
 }
 
 /*-------------------------------------TEST CSS FOR DISPLAYING RESULTS-------------------------------------*/
