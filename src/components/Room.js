@@ -14,6 +14,8 @@ const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
 const socket = io(SERVER_URL);
 
+let messageCount = 0;
+
 const Room = (props) => {
     
     const userData = props.location.state.userData;
@@ -23,6 +25,7 @@ const Room = (props) => {
     const [ socketID, setSocketID ] = useState('');
     const [ roomName, setRoomName ] = useState(userData["roomName"]);
     const [ userName, setUserName ] = useState(userData["userName"]);
+    
     const [ unseenMessages, setUnseenMessages ] = useState(0);
     const { messages, addMessage } = useMessages();
     
@@ -69,8 +72,8 @@ const Room = (props) => {
         socket.on('chat message', ({authorSocketID, authorUserName, msg}) => {
             console.log(authorSocketID + ' SPACE ' + socket.id);
             if (authorSocketID !== socketID && !isChatTabFocused()) {
-                console.log('adding messages');
-                setUnseenMessages(unseenMessages+1);
+                messageCount += 1;
+                setUnseenMessages(messageCount);
             }
             
             addMessage({
@@ -89,6 +92,11 @@ const Room = (props) => {
     const isChatTabFocused = () => {
         const chatTabDOM = document.getElementById('chat-tab');
         return (chatTabDOM.classList.contains('active'))
+    }
+    
+    const handleOnClick = () => {
+        messageCount = 0; 
+        setUnseenMessages(0);
     }
 
     return (
@@ -112,7 +120,7 @@ const Room = (props) => {
                 <div className='col-lg-3 col-12 mh-100' id='side-wrapper' style={{backgroundColor: 'black'}}>
                     <div className='row text-center text-uppercase'>
                         <ul class="nav nav-tabs col-12 p-0" role="tablist">
-                            <li class="nav-item col-6 p-0" onClick={() => {setUnseenMessages(0)}}>
+                            <li class="nav-item col-6 p-0" onClick={handleOnClick}>
                                 <a class="nav-link active" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
                                   aria-selected="true" style={{display: 'flex', justifyContent: 'center'}}>
                                     <div id='unseen' className='circle'>
