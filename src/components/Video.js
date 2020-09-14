@@ -32,6 +32,7 @@ const Video = ({socket, roomName, userName}) => {
                 videoPS: playerState
             };
         }
+        videoID = initialVideoState["videoID"];
 
         setVideoPlayerDOM(
             <YouTube

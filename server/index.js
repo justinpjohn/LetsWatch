@@ -31,9 +31,9 @@ io.on('connection', (socket) => {
     socket.on('room connection', ({roomName, userName}) => {
         socket.join(roomName);
         
+        
         let roomVideoState = getRoomVideoState(roomName);
         if (!roomVideoState) {
-            console.log('creating new room state');
             const newRoomVideoState = {
                 videoID: DEFAULT_VIDEO_ID, 
                 videoTimestamp: Date.now(),
@@ -42,17 +42,15 @@ io.on('connection', (socket) => {
             // set the initial state, since it doesn't exist
             updateRoomVideoState({roomName, videoState: newRoomVideoState});
         } else {
-            console.log('fetching existing room state');
+            const storedRoomState = Object.assign({}, roomVideoState);
             const currDatetime = Date.now();
             const estimatedTimestamp = (currDatetime - roomVideoState["videoTimestamp"]) / 1000;
-            roomVideoState["videoTimestamp"] = (estimatedTimestamp + 2);
+            storedRoomState["videoTimestamp"] = (estimatedTimestamp + 1);
+            roomVideoState = storedRoomState
         }
          
-        console.log(roomVideoState);
         socket.emit('socket connection');
-        setTimeout(() => { 
-            socket.emit('initial sync', {serverVideoState: roomVideoState}); 
-        }, 1000);
+        socket.emit('initial sync', {serverVideoState: roomVideoState}); 
         
         socket.to(roomName).emit('room connection', `${userName} has joined the party! Say hi!`);
         addUser({
