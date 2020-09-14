@@ -4,7 +4,9 @@ const roomStates = new Map();
 
 
 const updateRoomVideoState = ({roomName, videoState}) => {
-    roomStates.set(roomName, videoState);
+    console.log('STORING THE FOLLOWING...');
+    console.log(videoState);
+    roomStates.set(roomName, Object.assign({}, videoState));
 }
 
 const getRoomVideoState = (roomName) => {
