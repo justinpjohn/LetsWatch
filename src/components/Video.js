@@ -4,74 +4,16 @@ import YouTube from 'react-youtube';
 
 const Video = ({socket, roomName, userName}) => {
     
-    const DEFAULT_VIDEO_ID    = 'qsdzdUYl5c0';
-    const DEFAULT_VIDEO_STATE = 'PLAYING'
-    const DEFAULT_VIDEO_TIMESTAMP = 0;
+    const DEFAULT_VIDEO_ID    = process.env.REACT_APP_DEFAULT_VIDEO_ID;
+    const DEFAULT_VIDEO_STATE = process.env.REACT_APP_DEFAULT_VIDEO_STATE;
+    const DEFAULT_VIDEO_TIMESTAMP = process.env.REACT_APP_DEFAULT_VIDEO_TIMESTAMP;
     
     const [ videoPlayerDOM, setVideoPlayerDOM ] = useState(null);
-    const [ videoPlayer, setVideoPlayer ] = useState(null);
-    // const [ initialPlay, setInitialPlay ] = useState(false);
-    
-    
-    let initialPlay = false;
+   
+    let videoID = DEFAULT_VIDEO_ID
+    let firstPlayOccurred = false;
     let receivingSync = false;
-    
-    
-    const [ initialSync, setInitialSync ] = useState(true);
-    // const [ receivingSync, setReceivingSync ] = useState(false);
-    const [ clientVideoState, setClientVideoState ] = useState(null);
-    
-    // useEffect(() =>{
-    //     console.log('player change');
-    // }, [videoPlayer]);
-    
-    // useEffect(() =>{
-    //     console.log('dom change');
-    // }, [videoPlayerDOM]);
-    
-    
-    useEffect(() => {
-        if (!initialSync) {
-            console.log(clientVideoState);
-            setVideoPlayerDOM(
-                <YouTube
-                    videoId = { clientVideoState["videoID"] }
-                    opts={
-                        {
-                            height: '390',
-                            width: '640',
-                            playerVars: { // https://developers.google.com/youtube/player_parameters
-                                autoplay: 1,
-                                loop: 1,
-                                start: Number(Math.ceil(clientVideoState["videoTS"])),
-                            }
-                        }
-                    }
-                    onPlay  = { _onPlay }
-                    onPause = { _onPause }
-                    onReady = { _onReady } 
-                />    
-            );
-        }
-    }, [initialSync]);
-    
-    
-    useEffect(() => {
-        console.log('changing video state');
-        console.log(clientVideoState);
-        
-        if (clientVideoState && initialSync) {
-            console.log('flip initialSync');
-            setInitialSync(false);
-        }
-        
-        if (clientVideoState && videoPlayer) {
-            console.log('load video by id');
-            videoPlayer.loadVideoById(clientVideoState["videoID"], clientVideoState["videoTS"]);
-            if (clientVideoState["videoPS"] === 'PAUSED') videoPlayer.pauseVideo();
-        }
-    }, [clientVideoState]);
-    
+
     socket.on('initial sync', ({serverVideoState}) => {
         let initialVideoState = {
             videoID: DEFAULT_VIDEO_ID,
@@ -91,19 +33,34 @@ const Video = ({socket, roomName, userName}) => {
             };
         }
 
-        setClientVideoState(Object.assign({}, initialVideoState));
+        setVideoPlayerDOM(
+            <YouTube
+                videoId = { initialVideoState["videoID"] }
+                opts={
+                    {
+                        height: '390',
+                        width: '640',
+                        playerVars: { // https://developers.google.com/youtube/player_parameters
+                            autoplay: 1,
+                            loop: 1,
+                            start: Number(Math.ceil(initialVideoState["videoTS"])),
+                        }
+                    }
+                }
+                onPlay  = { _onPlay }
+                onPause = { _onPause }
+                onReady = { _onReady } 
+            />    
+        );
     });
     
-    const _onReady = (event) => {
+    const _onReady = (e) => {
         // access to player in all event handlers via event.target
-        const player = event.target;
-        setVideoPlayer(player);
+        const player = e.target;
         
         socket.on('seek', ({requestingUser, serverVideoState}) => {
-            console.log('received seek');
-            const videoTimestamp = serverVideoState["videoTimestamp"];
             receivingSync = true;
-            player.seekTo(videoTimestamp);
+            player.seekTo(serverVideoState["videoTimestamp"]);
         });
         
         socket.on('pause', ({requestingUser}) => {
@@ -117,35 +74,39 @@ const Video = ({socket, roomName, userName}) => {
     
         socket.on('select', ({requestingUser, serverVideoState}) => {
             receivingSync = true;
+            videoID = serverVideoState["videoID"];
             
-            const videoID = serverVideoState["videoID"];
-            setClientVideoState({
-                videoID: videoID,
-                videoTS: DEFAULT_VIDEO_TIMESTAMP,
-                videoPS: DEFAULT_VIDEO_STATE
-            });
+            player.loadVideoById(
+                serverVideoState["videoID"], 
+                serverVideoState["videoPS"]
+            );
+            
+            if (serverVideoState["videoPS"] === 'PAUSED') {
+                player.pauseVideo();
+            }
         });
     }
 
-    const _onPlay = (event) => {
-        if (initialPlay === false) {
-            initialPlay = true;
+    const _onPlay = (e) => {
+        // upon initialization, the video player will pause then play. 
+        // we do not want to emit anything when this happens - it throws off
+        // synchronization
+        if (firstPlayOccurred === false) {
+            firstPlayOccurred = true;
             return;
         };
 
-        const videoState = getVideoState(event.target);
+        const videoState = getVideoState(e.target);
         
         if (receivingSync) {
             receivingSync = false;
         } else {
-            console.log('emitting seek');
             socket.emit('seek', {
                 roomName, 
                 userName: userName,
                 clientVideoState: videoState
             });
         }
-        console.log('emitting play');
         socket.emit('play', {
             roomName, 
             userName: userName,
@@ -153,17 +114,19 @@ const Video = ({socket, roomName, userName}) => {
         });
     }
     
-    const _onPause = (event) => {
-        if (initialPlay === false) {
+    const _onPause = (e) => {
+        // upon initialization, the video player will pause then play. 
+        // we do not want to emit anything when this happens - it throws off
+        // synchronization
+        if (firstPlayOccurred === false) {
             return;
         }
         
         if (!receivingSync) {
-            console.log('emitting pause');
             socket.emit('pause', {
                 roomName, 
                 userName: userName,
-                clientVideoState: getVideoState(event.target)
+                clientVideoState: getVideoState(e.target)
             });
         }
     }
@@ -172,12 +135,18 @@ const Video = ({socket, roomName, userName}) => {
         const isPlaying = (player.getPlayerState() === 1);
         
         const state = { 
-            videoID: clientVideoState["videoID"],
+            videoID: videoID,
             videoTimestamp : player.getCurrentTime(),
             playerState : (isPlaying ? 'PLAYING' : 'PAUSED')
         };
-        // console.log(state);
         return state;
+    }
+    
+    const parseVideoID = (videoURL) => {
+        var queryParams = new global.URLSearchParams(videoURL);
+        const videoID = queryParams.get("v");
+        
+        return videoID
     }
     
     return (
