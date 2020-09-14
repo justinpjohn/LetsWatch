@@ -67,7 +67,7 @@ io.on('connection', (socket) => {
     });
     
     socket.on('select', ({roomName, userName, clientVideoState}) => {
-        storeClientVideoState({roomName, userName, clientVideoState})
+        storeClientVideoState({roomName, userName, clientVideoState});
         
         io.to(roomName).emit('select', {
             requestingUser: userName, 
@@ -76,7 +76,7 @@ io.on('connection', (socket) => {
     }); 
     
     socket.on('seek', ({roomName, userName, clientVideoState}) => {
-        storeClientVideoState({roomName, userName, clientVideoState})
+        storeClientVideoState({roomName, userName, clientVideoState});
 
         io.to(roomName).emit('seek', {
             requestingUser: userName, 
@@ -85,18 +85,24 @@ io.on('connection', (socket) => {
     });
     
     socket.on('pause', ({roomName, userName, clientVideoState}) => {
-        storeClientVideoState({roomName, userName, clientVideoState})
+        storeClientVideoState({roomName, userName, clientVideoState});
         socket.to(roomName).emit('pause', {requestingUser: userName});
     });
     
     socket.on('play', ({roomName, userName, clientVideoState}) => {
-        
-        
+        storeClientVideoState({roomName, userName, clientVideoState});
         socket.to(roomName).emit('play', {requestingUser: userName});
     });
     
     socket.on('disconnect', ({roomName, userName}) => {
-        removeUser({socketID: socket.id, roomName});
+        // for some reason the roomName and userName is always undefined?
+        const response = removeUser({socketID: socket.id, roomName});
+        
+        io.to(response["roomName"]).emit('chat message', {
+            authorSocketID: 'admin', 
+            authorUserName: '', 
+            msg: `${response["userName"]} has left the party! Adios!`
+        });
     });
 });
 
