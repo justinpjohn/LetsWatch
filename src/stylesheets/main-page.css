@@ -351,6 +351,9 @@ input[type=text]:not(.form-control):focus, textarea:focus {
 
 .card:hover {
     cursor: pointer;
+    outline: none;
+    border-color: red;
+    box-shadow: 0 0 10px red;
 }
 
 .card-title {
