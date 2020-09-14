@@ -17,7 +17,6 @@ const SidePanel = ({socket, roomName, userName}) => {
     
     useEffect(() => {
         socket.on('chat message', ({authorSocketID, authorUserName, msg}) => {
-            console.log(authorSocketID + ' SPACE ' + socket.id);
             if (authorSocketID !== socket.id && !isChatTabFocused()) {
                 messageCount += 1;
                 setUnseenMessages(messageCount);
@@ -37,7 +36,7 @@ const SidePanel = ({socket, roomName, userName}) => {
         return (chatTabDOM.classList.contains('active'))
     }
     
-    const handleOnClick = () => {
+    const resetUnseenMessages = () => {
         messageCount = 0; 
         setUnseenMessages(0);
     }
@@ -60,7 +59,7 @@ const SidePanel = ({socket, roomName, userName}) => {
         <div className='col-lg-3 col-12 mh-100' id='side-wrapper' style={{backgroundColor: 'black'}}>
             <div className='row text-center text-uppercase'>
                 <ul class="nav nav-tabs col-12 p-0" role="tablist">
-                    <li class="nav-item col-6 p-0" onClick={handleOnClick}>
+                    <li class="nav-item col-6 p-0" onClick={resetUnseenMessages}>
                         <a class="nav-link active h-100" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
                           aria-selected="true" style={{display: 'flex', justifyContent: 'center'}}>
                             { (unseenMessages === 0) ? 
