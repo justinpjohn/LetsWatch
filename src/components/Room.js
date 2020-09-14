@@ -43,12 +43,15 @@ const Room = (props) => {
     }
     
     useEffect(() => {
+        const chatTextDOM = document.getElementById('chat-text');
         const unseenDOM = document.getElementById('unseen');
         console.log(unseenMessages)
         
         if (unseenMessages == 0) {
+            chatTextDOM.style.display = 'flex';
             unseenDOM.style.display = 'none';
         } else {
+            chatTextDOM.style.display = 'none';
             unseenDOM.style.display = 'flex';
         }
     }, [unseenMessages])
@@ -120,13 +123,13 @@ const Room = (props) => {
                     <div className='row text-center text-uppercase'>
                         <ul class="nav nav-tabs col-12 p-0" role="tablist">
                             <li class="nav-item col-6 p-0" onClick={handleOnClick}>
-                                <a class="nav-link active" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
+                                <a class="nav-link active h-100" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
                                   aria-selected="true" style={{display: 'flex', justifyContent: 'center'}}>
-                                    <div id='unseen' className='circle'>
-                                        <span className='m-auto'> {(unseenMessages > 9) ? '9+' : unseenMessages} </span>
-                                    </div>
                                     <div id='chat-text' className='m-auto'>
                                         <span> Chat </span>
+                                    </div>
+                                    <div id='unseen' className='circle'>
+                                        <span className='m-auto'> {(unseenMessages > 9) ? '9+' : unseenMessages} </span>
                                     </div>
                               </a>
                             </li>

@@ -307,6 +307,8 @@ input[type=text]:not(.form-control):focus, textarea:focus {
     color: black;
     font-size: 90%;
     font-weight: bold;
+    justify-content: center;
+    margin: auto;
 }
 
 /*-------------------------------------TEST CSS FOR DISPLAYING RESULTS-------------------------------------*/
