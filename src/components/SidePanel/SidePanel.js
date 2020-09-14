@@ -8,7 +8,7 @@ import useMessages from '../../hooks/useMessages';
 const DEFAULT_VIDEO_TIMESTAMP = process.env.REACT_APP_DEFAULT_VIDEO_TIMESTAMP;
 const DEFAULT_VIDEO_STATE     = process.env.REACT_APP_DEFAULT_VIDEO_STATE;
 
-let messageCount = 0;
+let unseenMessageCount = 0;
 
 const SidePanel = ({socket, roomName, userName}) => {
     
@@ -18,8 +18,8 @@ const SidePanel = ({socket, roomName, userName}) => {
     useEffect(() => {
         socket.on('chat message', ({authorSocketID, authorUserName, msg}) => {
             if (authorSocketID !== socket.id && !isChatTabFocused()) {
-                messageCount += 1;
-                setUnseenMessages(messageCount);
+                unseenMessageCount += 1;
+                setUnseenMessages(unseenMessageCount);
             }
             
             addMessage({
@@ -37,7 +37,7 @@ const SidePanel = ({socket, roomName, userName}) => {
     }
     
     const resetUnseenMessages = () => {
-        messageCount = 0; 
+        unseenMessageCount = 0; 
         setUnseenMessages(0);
     }
     
