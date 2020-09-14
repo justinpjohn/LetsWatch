@@ -31,7 +31,6 @@ io.on('connection', (socket) => {
     socket.on('room connection', ({roomName, userName}) => {
         socket.join(roomName);
         
-        
         let roomVideoState = getRoomVideoState(roomName);
         if (!roomVideoState) {
             const newRoomVideoState = {
@@ -45,7 +44,7 @@ io.on('connection', (socket) => {
             const storedRoomState = Object.assign({}, roomVideoState);
             const currDatetime = Date.now();
             const estimatedTimestamp = (currDatetime - roomVideoState["videoTimestamp"]) / 1000;
-            storedRoomState["videoTimestamp"] = (estimatedTimestamp + 1);
+            storedRoomState["videoTimestamp"] = estimatedTimestamp;
             roomVideoState = storedRoomState
         }
          
