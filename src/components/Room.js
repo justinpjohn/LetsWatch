@@ -41,20 +41,6 @@ const Room = (props) => {
     const emitMessage = (msg) => {
         socket.emit('chat message', {roomName, userName, msg});
     }
-    
-    useEffect(() => {
-        const chatTextDOM = document.getElementById('chat-text');
-        const unseenDOM = document.getElementById('unseen');
-        console.log(unseenMessages)
-        
-        if (unseenMessages == 0) {
-            chatTextDOM.style.display = 'flex';
-            unseenDOM.style.display = 'none';
-        } else {
-            chatTextDOM.style.display = 'none';
-            unseenDOM.style.display = 'flex';
-        }
-    }, [unseenMessages])
 
     useEffect(() => {
         socket.emit('room connection', {roomName, userName});
@@ -125,12 +111,15 @@ const Room = (props) => {
                             <li class="nav-item col-6 p-0" onClick={handleOnClick}>
                                 <a class="nav-link active h-100" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
                                   aria-selected="true" style={{display: 'flex', justifyContent: 'center'}}>
-                                    <div id='chat-text' className='m-auto'>
-                                        <span> Chat </span>
-                                    </div>
-                                    <div id='unseen' className='circle'>
-                                        <span className='m-auto'> {(unseenMessages > 9) ? '9+' : unseenMessages} </span>
-                                    </div>
+                                    { (unseenMessages === 0) ? 
+                                        <div id='chat-text' className='m-auto'>
+                                            <span> Chat </span>
+                                        </div>
+                                        :
+                                        <div id='unseen' className='circle'>
+                                            <span className='m-auto'> {(unseenMessages > 9) ? '9+' : unseenMessages} </span>
+                                        </div>
+                                    }
                               </a>
                             </li>
                             <li class="nav-item col-6 p-0">
