@@ -49,10 +49,14 @@ io.on('connection', (socket) => {
             roomVideoState = storedRoomState
         }
          
-        socket.emit('socket connection');
         socket.emit('initial sync', {serverVideoState: roomVideoState}); 
         
-        socket.to(roomName).emit('room connection', `${userName} has joined the party! Say hi!`);
+        socket.to(roomName).emit('chat message', {
+            authorSocketID: 'admin', 
+            authorUserName: '', 
+            msg: `${userName} has joined the party! Say hi!`
+        });
+        
         addUser({
             socketID: socket.id, 
             userName, 

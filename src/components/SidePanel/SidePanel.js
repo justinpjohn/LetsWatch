@@ -16,14 +16,6 @@ const SidePanel = ({socket, roomName, userName}) => {
     const { messages, addMessage } = useMessages();
     
     useEffect(() => {
-        socket.on('room connection', (msg) => {
-            addMessage({
-                authorSock: 'admin', 
-                authorUser: '', 
-                text: msg
-            });
-        });
-        
         socket.on('chat message', ({authorSocketID, authorUserName, msg}) => {
             console.log(authorSocketID + ' SPACE ' + socket.id);
             if (authorSocketID !== socket.id && !isChatTabFocused()) {
@@ -37,7 +29,7 @@ const SidePanel = ({socket, roomName, userName}) => {
                 text: msg
             });
         });
-    });
+    }, [socket]);
     
     
     const isChatTabFocused = () => {
