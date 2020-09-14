@@ -112,8 +112,21 @@ html, body {
 }
 
 #video-wrapper {
-    min-height: 40%;
+    /*min-height: 40%;*/
+    background-color: black;
 }
+
+
+#video-wrapper div {
+  display: inline-block;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+/* 16:9 */  
+/*.video-wrapper {position: relative; padding-bottom: 56.25%; padding-top: 25px;} */
+#video-wrapper {position: relative;} 
+#video-wrapper iframe {position: absolute; top: 0; left: 0; width: 100%; height: 100%;}
 
 #side-wrapper {
     display: flex;
@@ -207,18 +220,6 @@ html, body {
     font-weight: bold;
 }
 
-.video-wrapper div {
-  display: inline-block;
-  max-height: 100%;
-  max-width: 100%;
-}
-
-/* 16:9 */  
-/*.video-wrapper {position: relative; padding-bottom: 56.25%; padding-top: 25px;} */
-.video-wrapper {position: relative;} 
-.video-wrapper iframe {position: absolute; top: 0; left: 0; width: 100%; height: 100%;}
-
-
 /*#chat-tab {*/
 /*    color: white;*/
 /*    background-color: rgb(52, 58, 64);*/
@@ -274,6 +275,30 @@ input[type=text]:not(.form-control):focus, textarea:focus {
   border: 1px solid white;
 }
 
+.overlay {
+    position: relative;
+    display: flex !important;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.loader {
+    margin: auto;
+    position: relative;
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #E53A3A; /* Blue */
+    border-radius: 50%;
+    width: 75px;
+    height: 75px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
 /*-------------------------------------TEST CSS FOR DISPLAYING RESULTS-------------------------------------*/
 

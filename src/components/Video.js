@@ -9,6 +9,11 @@ const Video = ({socket, roomName, userName}) => {
     const DEFAULT_VIDEO_TIMESTAMP = process.env.REACT_APP_DEFAULT_VIDEO_TIMESTAMP;
     
     const [ videoPlayerDOM, setVideoPlayerDOM ] = useState(null);
+    const [ loadPlayerDOM, setLoadPlayerDOM ] = useState(
+        <div className="overlay">
+            <div className="loader"></div>
+        </div>
+    )
    
     let videoID = DEFAULT_VIDEO_ID
     let firstPlayOccurred = false;
@@ -34,6 +39,7 @@ const Video = ({socket, roomName, userName}) => {
         }
         videoID = initialVideoState["videoID"];
 
+        setLoadPlayerDOM(null);
         setVideoPlayerDOM(
             <YouTube
                 videoId = { initialVideoState["videoID"] }
@@ -151,7 +157,8 @@ const Video = ({socket, roomName, userName}) => {
     }
     
     return (
-        <div className='video-wrapper w-100 h-100' style={{backgroundColor: '#E53A3A'}}>
+        <div id='video-wrapper' className='w-100 h-100'>
+            { loadPlayerDOM }
             { videoPlayerDOM }
         </div>  
     );
