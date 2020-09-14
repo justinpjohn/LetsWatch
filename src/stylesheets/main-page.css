@@ -300,6 +300,14 @@ input[type=text]:not(.form-control):focus, textarea:focus {
   100% { transform: rotate(360deg); }
 }
 
+.circle {
+    background-color: white;
+    border-radius: 25px;
+    width: 25px;
+    color: black;
+    text-align: center;
+}
+
 /*-------------------------------------TEST CSS FOR DISPLAYING RESULTS-------------------------------------*/
 
 #search-container {

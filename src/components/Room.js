@@ -23,6 +23,7 @@ const Room = (props) => {
     const [ socketID, setSocketID ] = useState('');
     const [ roomName, setRoomName ] = useState(userData["roomName"]);
     const [ userName, setUserName ] = useState(userData["userName"]);
+    const [ unseenMessages, setUnseenMessages ] = useState(0);
     const { messages, addMessage } = useMessages();
     
     //this is here because i didn't think the Chat component should have access to socket
@@ -38,6 +39,17 @@ const Room = (props) => {
     const emitMessage = (msg) => {
         socket.emit('chat message', {roomName, userName, msg});
     }
+    
+    useEffect(() => {
+        const unseenDOM = document.getElementById('unseen');
+        console.log(unseenMessages)
+        
+        if (unseenMessages == 0) {
+            unseenDOM.style.display = 'none';
+        } else {
+            unseenDOM.style.display = 'inline-block';
+        }
+    }, [unseenMessages])
 
     useEffect(() => {
         socket.emit('room connection', {roomName, userName});
@@ -55,6 +67,12 @@ const Room = (props) => {
         });
         
         socket.on('chat message', ({authorSocketID, authorUserName, msg}) => {
+            console.log(authorSocketID + ' SPACE ' + socket.id);
+            if (authorSocketID !== socketID && !isChatTabFocused()) {
+                console.log('adding messages');
+                setUnseenMessages(unseenMessages+1);
+            }
+            
             addMessage({
                 authorSock: authorSocketID, 
                 authorUser: authorUserName, 
@@ -67,6 +85,11 @@ const Room = (props) => {
             socket.disconnect();
         }
     }, [socket]);
+    
+    const isChatTabFocused = () => {
+        const chatTabDOM = document.getElementById('chat-tab');
+        return (chatTabDOM.classList.contains('active'))
+    }
 
     return (
         <div id='main-container' className="container-fluid m-auto h-100" style={{color: 'white'}}>
@@ -88,10 +111,17 @@ const Room = (props) => {
                 
                 <div className='col-lg-3 col-12 mh-100' id='side-wrapper' style={{backgroundColor: 'black'}}>
                     <div className='row text-center text-uppercase'>
-                        <ul class="nav nav-tabs col-12 p-0" id="myTab" role="tablist">
-                            <li class="nav-item col-6 p-0">
+                        <ul class="nav nav-tabs col-12 p-0" role="tablist">
+                            <li class="nav-item col-6 p-0" onClick={() => {setUnseenMessages(0)}}>
                                 <a class="nav-link active" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
-                                  aria-selected="true">Chat</a>
+                                  aria-selected="true" style={{display: 'flex', justifyContent: 'center'}}>
+                                    <div id='unseen' className='circle'>
+                                        <span> {(unseenMessages > 9) ? '9+' : unseenMessages} </span>
+                                    </div>
+                                    <div id='chat-text' className='m-auto'>
+                                        <span> Chat </span>
+                                    </div>
+                              </a>
                             </li>
                             <li class="nav-item col-6 p-0">
                                 <a class="nav-link" id="search-tab" data-toggle="tab" href="#search" role="tab" aria-controls="search"
