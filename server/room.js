@@ -1,5 +1,26 @@
+
+/* roomName => {
+            socketID => {
+                {socketID, userName}
+            }
+        }
+*/
 const roomUsers = new Map();
+
+
+/* roomName => {
+            videoID: DEFAULT_VIDEO_ID, 
+            videoTimestamp: Date.now(),
+            playerState: DEFAULT_VIDEO_STATE
+        }
+*/
 const roomStates = new Map();
+
+
+/* socketID => {
+            roomName
+        }
+*/
 const roomSocketIsIn = new Map();
 
 
@@ -29,6 +50,7 @@ const addUser = ({ socketID, userName, roomName }) => {
 
 const removeUser = ({ socketID }) => {
     let roomName = null;
+    let userName = null;
     if (roomSocketIsIn.has(socketID)) {
         roomName = roomSocketIsIn.get(socketID);
         roomSocketIsIn.delete(socketID);
@@ -36,6 +58,8 @@ const removeUser = ({ socketID }) => {
     
     if (roomName && roomUsers.has(roomName)) {
         let room = roomUsers.get(roomName);
+        const user = room.get(socketID);
+        userName = user["userName"];
         room.delete(socketID);
         
         // if last person, delete entry in room map
@@ -44,6 +68,7 @@ const removeUser = ({ socketID }) => {
             roomStates.delete(roomName);
         }
     }
+    return { roomName, userName };
 }
 
 // not really random, just pick first person?
