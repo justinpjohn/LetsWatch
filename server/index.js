@@ -95,7 +95,7 @@ io.on('connection', (socket) => {
     
     socket.on('pause', ({roomName, userName, clientVideoState}) => {
         let serverVideoState = Object.assign({}, clientVideoState);
-        serverVideoState["videoTimestamp"] = Date.now();
+        serverVideoState["videoTimestamp"] = Date.now() - (clientVideoState["videoTimestamp"] * 1000);;
         updateRoomVideoState({roomName, videoState: serverVideoState});
         
         socket.to(roomName).emit('pause', {requestingUser: userName});

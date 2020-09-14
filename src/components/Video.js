@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import YouTube from 'react-youtube';
 
-
 const Video = ({socket, roomName, userName}) => {
     
     const DEFAULT_VIDEO_ID    = process.env.REACT_APP_DEFAULT_VIDEO_ID;
@@ -16,7 +15,7 @@ const Video = ({socket, roomName, userName}) => {
     )
    
     let videoID = DEFAULT_VIDEO_ID
-    let firstPlayOccurred = false;
+    let videoPS = DEFAULT_VIDEO_STATE;
     let receivingSync = false;
 
     socket.on('initial sync', ({serverVideoState}) => {
@@ -38,6 +37,8 @@ const Video = ({socket, roomName, userName}) => {
             };
         }
         videoID = initialVideoState["videoID"];
+        videoPS = initialVideoState["videoPS"];
+        console.log(initialVideoState);
 
         setLoadPlayerDOM(null);
         setVideoPlayerDOM(
@@ -57,13 +58,16 @@ const Video = ({socket, roomName, userName}) => {
                 onPlay  = { _onPlay }
                 onPause = { _onPause }
                 onReady = { _onReady } 
-            />    
+            /> 
         );
     });
     
     const _onReady = (e) => {
         // access to player in all event handlers via event.target
         const player = e.target;
+        if (videoPS === 'PAUSED') {
+            player.pauseVideo();
+        }
         
         socket.on('seek', ({requestingUser, serverVideoState}) => {
             receivingSync = true;
@@ -95,14 +99,6 @@ const Video = ({socket, roomName, userName}) => {
     }
 
     const _onPlay = (e) => {
-        // upon initialization, the video player will pause then play. 
-        // we do not want to emit anything when this happens - it throws off
-        // synchronization
-        if (firstPlayOccurred === false) {
-            firstPlayOccurred = true;
-            return;
-        };
-
         const videoState = getVideoState(e.target);
         
         if (receivingSync) {
@@ -122,13 +118,6 @@ const Video = ({socket, roomName, userName}) => {
     }
     
     const _onPause = (e) => {
-        // upon initialization, the video player will pause then play. 
-        // we do not want to emit anything when this happens - it throws off
-        // synchronization
-        if (firstPlayOccurred === false) {
-            return;
-        }
-        
         if (!receivingSync) {
             socket.emit('pause', {
                 roomName, 
