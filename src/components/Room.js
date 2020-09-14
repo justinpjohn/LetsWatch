@@ -23,7 +23,6 @@ const Room = (props) => {
     const [ socketID, setSocketID ] = useState('');
     const [ roomName, setRoomName ] = useState(userData["roomName"]);
     const [ userName, setUserName ] = useState(userData["userName"]);
-    const [ videoPlayer, setVideoPlayer ] = useState(null);
     const { messages, addMessage } = useMessages();
     
     //this is here because i didn't think the Chat component should have access to socket
@@ -64,7 +63,6 @@ const Room = (props) => {
         });
         
         return () => {
-            videoPlayer.destroy();
             socket.emit('disconnect', {roomName, userName});
             socket.disconnect();
         }
@@ -85,8 +83,6 @@ const Room = (props) => {
                         socket         = { socket } 
                         roomName       = { roomName } 
                         userName       = { userName } 
-                        videoPlayer    = { videoPlayer } 
-                        setVideoPlayer = { setVideoPlayer }
                     />
                 </div>
                 
