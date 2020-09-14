@@ -2,74 +2,111 @@ import React, {useState, useEffect} from 'react';
 import YouTube from 'react-youtube';
 
 
-const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
+const Video = ({socket, roomName, userName}) => {
     
-    const DEFAULT_VIDEO_ID        = process.env.REACT_APP_DEFAULT_VIDEO_ID;
+    const DEFAULT_VIDEO_ID    = process.env.REACT_APP_DEFAULT_VIDEO_ID;
+    const DEFAULT_VIDEO_STATE = process.env.REACT_APP_DEFAULT_VIDEO_STATE;
     const DEFAULT_VIDEO_TIMESTAMP = process.env.REACT_APP_DEFAULT_VIDEO_TIMESTAMP;
-    const DEFAULT_VIDEO_STATE     = process.env.REACT_APP_DEFAULT_VIDEO_STATE;
     
-    const [ initalSync, setInitialSync ] = useState(true);
-    const [ receivingSync, setReceivingSync ] = useState(true);
-    const [ clientVideoState, setClientVideoState ] = useState({ 
-        videoID: DEFAULT_VIDEO_ID,
-        videoTS: DEFAULT_VIDEO_TIMESTAMP,
-        videoPS: DEFAULT_VIDEO_STATE
+    const [ videoPlayerDOM, setVideoPlayerDOM ] = useState(null);
+    const [ loadPlayerDOM, setLoadPlayerDOM ] = useState(
+        <div className="overlay">
+            <div className="loader"></div>
+        </div>
+    )
+   
+    let videoID = DEFAULT_VIDEO_ID
+    let firstPlayOccurred = false;
+    let receivingSync = false;
+
+    socket.on('initial sync', ({serverVideoState}) => {
+        let initialVideoState = {
+            videoID: DEFAULT_VIDEO_ID,
+            videoTS: DEFAULT_VIDEO_TIMESTAMP,
+            videoPS: DEFAULT_VIDEO_STATE
+        }
+        
+        if (serverVideoState) {
+            const videoID = serverVideoState["videoID"];
+            const videoTimestamp = serverVideoState["videoTimestamp"];
+            const playerState = serverVideoState["playerState"];
+    
+            initialVideoState = {
+                videoID: videoID,
+                videoTS: videoTimestamp,
+                videoPS: playerState
+            };
+        }
+        videoID = initialVideoState["videoID"];
+
+        setLoadPlayerDOM(null);
+        setVideoPlayerDOM(
+            <YouTube
+                videoId = { initialVideoState["videoID"] }
+                opts={
+                    {
+                        height: '390',
+                        width: '640',
+                        playerVars: { // https://developers.google.com/youtube/player_parameters
+                            autoplay: 1,
+                            loop: 1,
+                            start: Number(Math.ceil(initialVideoState["videoTS"])),
+                        }
+                    }
+                }
+                onPlay  = { _onPlay }
+                onPause = { _onPause }
+                onReady = { _onReady } 
+            />    
+        );
     });
     
-    const _onReady = (event) => {
+    const _onReady = (e) => {
         // access to player in all event handlers via event.target
-        const _player = event.target;
-        setVideoPlayer(_player);
-        
-        socket.on('initial sync', ({serverVideoState}) => {
-            if (serverVideoState) {
-                const videoID = serverVideoState["videoID"];
-                const videoTimestamp = serverVideoState["videoTimestamp"];
-                const playerState = serverVideoState["playerState"];
-        
-                setClientVideoState({
-                    videoID: videoID,
-                    videoTS: videoTimestamp,
-                    videoPS: playerState
-                });
-            } else {
-                setInitialSync(false);
-            }
-        });
+        const player = e.target;
         
         socket.on('seek', ({requestingUser, serverVideoState}) => {
-            const videoTimestamp = serverVideoState["videoTimestamp"];
-            setReceivingSync(true);
-            _player.seekTo(videoTimestamp);
+            receivingSync = true;
+            player.seekTo(serverVideoState["videoTimestamp"]);
         });
         
         socket.on('pause', ({requestingUser}) => {
-            setReceivingSync(true);
-            _player.pauseVideo();
+            receivingSync = true;
+            player.pauseVideo();
         });
         
         socket.on('play', ({requestingUser}) => {
-            _player.playVideo();
+            player.playVideo();
         });
     
         socket.on('select', ({requestingUser, serverVideoState}) => {
-            setReceivingSync(true);
+            receivingSync = true;
+            videoID = serverVideoState["videoID"];
             
-            const videoID = serverVideoState["videoID"];
-            setClientVideoState({
-                videoID: videoID,
-                videoTS: DEFAULT_VIDEO_TIMESTAMP,
-                videoPS: DEFAULT_VIDEO_STATE
-            });
+            player.loadVideoById(
+                serverVideoState["videoID"], 
+                serverVideoState["videoPS"]
+            );
+            
+            if (serverVideoState["videoPS"] === 'PAUSED') {
+                player.pauseVideo();
+            }
         });
     }
 
-    const _onPlay = (event) => {
-        if (initalSync) return;
-        const videoState = getVideoState();
+    const _onPlay = (e) => {
+        // upon initialization, the video player will pause then play. 
+        // we do not want to emit anything when this happens - it throws off
+        // synchronization
+        if (firstPlayOccurred === false) {
+            firstPlayOccurred = true;
+            return;
+        };
 
+        const videoState = getVideoState(e.target);
+        
         if (receivingSync) {
-            setReceivingSync(false);
+            receivingSync = false;
         } else {
             socket.emit('seek', {
                 roomName, 
@@ -84,56 +121,45 @@ const Video = ({socket, roomName, userName, videoPlayer, setVideoPlayer}) => {
         });
     }
     
-    const _onPause = (event) => {
-        if (initalSync) return;
-
-        if (receivingSync) {
-            setReceivingSync(false);
-        } else {
+    const _onPause = (e) => {
+        // upon initialization, the video player will pause then play. 
+        // we do not want to emit anything when this happens - it throws off
+        // synchronization
+        if (firstPlayOccurred === false) {
+            return;
+        }
+        
+        if (!receivingSync) {
             socket.emit('pause', {
                 roomName, 
                 userName: userName,
-                clientVideoState: getVideoState()
+                clientVideoState: getVideoState(e.target)
             });
         }
     }
-    
-    useEffect(() => {
-        if (videoPlayer) {
-            videoPlayer.loadVideoById(clientVideoState["videoID"], clientVideoState["videoTS"]);
-            if (clientVideoState["videoPS"] === 'PAUSED') videoPlayer.pauseVideo();
-            setInitialSync(false);
-        }
-    }, [clientVideoState]);
 
-    const getVideoState = () => {
-        const isPlaying = (videoPlayer.getPlayerState() === 1);
-        return { 
-            videoID: clientVideoState["videoID"],
-            videoTimestamp : videoPlayer.getCurrentTime(),
+    const getVideoState = (player) => {
+        const isPlaying = (player.getPlayerState() === 1);
+        
+        const state = { 
+            videoID: videoID,
+            videoTimestamp : player.getCurrentTime(),
             playerState : (isPlaying ? 'PLAYING' : 'PAUSED')
         };
+        return state;
+    }
+    
+    const parseVideoID = (videoURL) => {
+        var queryParams = new global.URLSearchParams(videoURL);
+        const videoID = queryParams.get("v");
+        
+        return videoID
     }
     
     return (
-        <div className='video-wrapper w-100 h-100' style={{backgroundColor: '#E53A3A'}}>
-            <YouTube
-                videoId = { DEFAULT_VIDEO_ID }
-                opts={
-                    {
-                        height: '390',
-                        width: '640',
-                        playerVars: { // https://developers.google.com/youtube/player_parameters
-                            autoplay: 1,
-                            loop: 1,
-                            start: 0,
-                        }
-                    }
-                }
-                onPlay  = { _onPlay }
-                onPause = { _onPause }
-                onReady = { _onReady } 
-            />
+        <div id='video-wrapper' className='w-100 h-100'>
+            { loadPlayerDOM }
+            { videoPlayerDOM }
         </div>  
     );
 }
