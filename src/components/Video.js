@@ -50,7 +50,7 @@ const Video = ({socket, roomName, userName}) => {
                         playerVars: { // https://developers.google.com/youtube/player_parameters
                             autoplay: 1,
                             loop: 1,
-                            start: Number(Math.ceil(initialVideoState["videoTS"])),
+                            start: Number(Math.round(initialVideoState["videoTS"])),
                         }
                     }
                 }
@@ -157,7 +157,7 @@ const Video = ({socket, roomName, userName}) => {
     }
     
     return (
-        <div id='video-wrapper' className='w-100 h-100'>
+        <div className='col-lg-9 col-12 mh-100 p-3' id='video-wrapper' style={{backgroundColor: 'black'}}>
             { loadPlayerDOM }
             { videoPlayerDOM }
         </div>  
