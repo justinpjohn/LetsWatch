@@ -15,18 +15,12 @@ const Room = (props) => {
     
     const userData = props.location.state.userData;
 
-    const [ socketID, setSocketID ] = useState('');
     const [ roomName, setRoomName ] = useState(userData["roomName"]);
     const [ userName, setUserName ] = useState(userData["userName"]);
     
-    
     useEffect(() => {
         socket.emit('room connection', {roomName, userName});
-        
-        socket.on('socket connection', () => {
-            setSocketID(socket.id);
-        });
-        
+
         return () => {
             socket.emit('disconnect', {roomName, userName});
             socket.disconnect();
