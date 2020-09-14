@@ -41,7 +41,6 @@ const SidePanel = ({socket, roomName, userName}) => {
         setUnseenMessages(0);
     }
     
-    //this is here because i didn't think the Chat component should have access to socket
     const emitVideoId = (videoID) => {
         const videoState = {
             videoID,
