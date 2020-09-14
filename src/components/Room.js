@@ -13,7 +13,6 @@ const SERVER_PORT = '8080';
 const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
 const socket = io(SERVER_URL);
-
 let messageCount = 0;
 
 const Room = (props) => {
@@ -50,7 +49,7 @@ const Room = (props) => {
         if (unseenMessages == 0) {
             unseenDOM.style.display = 'none';
         } else {
-            unseenDOM.style.display = 'inline-block';
+            unseenDOM.style.display = 'flex';
         }
     }, [unseenMessages])
 
@@ -124,7 +123,7 @@ const Room = (props) => {
                                 <a class="nav-link active" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
                                   aria-selected="true" style={{display: 'flex', justifyContent: 'center'}}>
                                     <div id='unseen' className='circle'>
-                                        <span> {(unseenMessages > 9) ? '9+' : unseenMessages} </span>
+                                        <span className='m-auto'> {(unseenMessages > 9) ? '9+' : unseenMessages} </span>
                                     </div>
                                     <div id='chat-text' className='m-auto'>
                                         <span> Chat </span>
