@@ -11,7 +11,7 @@ router.get('/room', (req, res) => {
 router.get('/youtube/:query', (req, res) => {
     const query = req.params.query;
 
-    fetch(`https://www.googleapis.com/youtube/v3/search?&key=${YT_API_KEY}&part=snippet&q=${query}&maxResults=10&type=video`)
+    fetch(`https://www.googleapis.com/youtube/v3/search?&key=${YT_API_KEY}&part=snippet&q=${query}&maxResults=20&type=video`)
         .then((response) => {
           return response.json();
         })

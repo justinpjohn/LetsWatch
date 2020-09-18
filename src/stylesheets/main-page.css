@@ -478,13 +478,7 @@ input[type=text]:not(.form-control):focus, textarea:focus {
     /*border-color: white;*/
 }
 
-#room-form .form-group input[type=text] {
-    background-color: black;
-    border-color: black;
-    color: white;
-}
-
-#room-form .form-group input[type=text]:focused {
+#room-form input {
     background-color: black;
     border-color: black;
     color: white;
