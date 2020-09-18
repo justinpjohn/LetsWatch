@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Form from './Form';
+import RoomForm from './RoomForm';
 import Modal from './Modal';
 import useModal from '../hooks/useModal';
 
@@ -19,7 +19,7 @@ const Home = () => {
                 <button id='home-button' className='main-button' onClick={ toggle } style={{backgroundColor: '#E53A3A', borderColor: '#E53A3A', color: 'white'}}> GET STARTED </button>
             </div>
             
-            <Modal isVisible={ isVisible } hide={ toggle } content={{ header: 'Group Form', body: <Form /> }}/>
+            <Modal id='room-form' isVisible={ isVisible } hide={ toggle } content={{ header: 'Room Info', body: <RoomForm /> }}/>
         </div>
     );
 }
