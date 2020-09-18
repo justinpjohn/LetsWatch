@@ -1,13 +1,14 @@
 import React from 'react';
 
 const Modal = ({ 
+  id,
   isVisible, 
   hide,
   content,
   }) => isVisible ? 
     (
-        <div className="modal" style={{display: 'block'}}>
-          <div className="modal-dialog">
+        <div id={(id) ? id : ''} className="modal" style={{display: 'block'}}>
+          <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">{content.header}</h5>

@@ -346,10 +346,16 @@ input[type=text]:not(.form-control):focus, textarea:focus {
 
 .card {
     width: 100%;
-    /*height: 100px;*/
+    height: 124px;
+    max-height: 124px;
     /*height: 1%;*/
     background-color: #191919;
     overflow: hidden;
+}
+
+.card div {
+    height: 100%;
+    max-height: 100%;
 }
 
 .card:hover {
@@ -372,10 +378,123 @@ input[type=text]:not(.form-control):focus, textarea:focus {
     color: white;
 }
 
+.card-img {
+    object-fit: cover;
+}
+
 .card-footer {
     background-color: #252526;
 }
 
-/** {*/
-/*outline: 1px solid red;*/
-/*}*/
+/*-------------------------------------TEST CSS FOR DISPLAYING MODAL-------------------------------------*/
+
+#room-form .modal-dialog {
+    height: 100%;
+}
+
+#room-form .modal-content {
+    display: flex;
+    width: 100%;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    
+    background-color: rgba(17,17,17,1);
+    outline-color: red;
+    /*border-color: red;*/
+    color: white;
+    box-shadow: 0 0 30px red;
+}
+
+#room-form .modal-header {
+    /*display: none;*/
+    width: 100%;
+    text-align: center;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #6a0000;
+}
+
+#room-form .modal-header h5 {
+    width: 100%;
+    text-align: center;
+}
+
+#room-form .modal-body {
+    display: flex;
+    width: 90%;
+    margin: auto;
+    align-items: center;
+    padding-bottom: 0;
+    justify-content: center;
+}
+
+#room-form .modal-body div {
+    width: 100%;
+}
+
+#room-form .modal-footer {
+    width: 100%;
+    padding-top: 0;
+    border-top: none;
+    display: flex;
+}
+
+#room-form .modal-footer .btn-primary {
+    width: 50%;
+    background-color: rgb(229, 58, 58);
+    border-color: rgb(229, 58, 58);
+    outline-color: red;
+    /*background-color: white;*/
+    /*border-color: white;*/
+    /*color: black;*/
+}
+
+#room-form .btn input[type="button"]:focus {
+    background-color: black;
+    border-color: black;
+    color: white;
+}
+
+#room-form .modal-footer .btn-primary:focus {
+    background-color: rgb(229, 58, 58);
+    border-color: rgb(229, 58, 58);
+    /*background-color: white;*/
+    /*border-color: white;*/
+}
+
+#room-form .modal-footer .btn-secondary {
+    width: 50%;
+    background-color: rgba(17,17,17,1);
+    border-color: rgb(229, 58, 58);
+    /*background-color: white;*/
+    /*border-color: white;*/
+    /*color: black;*/
+}
+
+#room-form .modal-footer .btn-secondary:focus {
+    background-color: rgba(17,17,17,1);
+    border-color: rgb(229, 58, 58);
+    /*background-color: white;*/
+    /*border-color: white;*/
+}
+
+#room-form .form-group input[type=text] {
+    background-color: black;
+    border-color: black;
+    color: white;
+}
+
+#room-form .form-group input[type=text]:focused {
+    background-color: black;
+    border-color: black;
+    color: white;
+}
+ 
+#room-form .form-group input[type=text]:focus, textarea:focus {
+  box-shadow: 0 0 5px #6a0000;
+  border: 1px solid #6a0000;
+}
+
+#room-form .close {
+    color:white;
+}

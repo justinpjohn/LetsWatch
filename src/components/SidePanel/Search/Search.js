@@ -50,7 +50,7 @@ const Search = ({emitVideoId}) => {
     }, [searchResults]);
 
     return (
-        <div className='h-100 w-100 mw-100 mh-100 p-0 m-0'> 
+        <div className='h-100 w-100 mw-100 mh-100 p-0 m-0' style={{backgroundColor: "#181818", display: 'flex', flexDirection: 'column'}}> 
             <div className='row m-0 py-2 mh-100' id='search-container'>
                 <div className='col-12 px-3'>
                     <input className='w-100' type='text' placeholder="Search youtube..." value={currQuery} onChange={e => setCurrQuery(e.target.value)} onKeyPress={handleKeyPress}/>

@@ -6,7 +6,7 @@ const htmlEntities = new Html5Entities();
 const ResultCard = ({result, index, handleOnClick}) => {
     
     return (
-            <div className="card flex-shrink-0 mx-auto mb-2" key={index} alt={ htmlEntities.decode(result.id.videoId) } onClick={handleOnClick}>
+            <div className="card flex-shrink-0 mx-auto mb-1" key={index} alt={ htmlEntities.decode(result.id.videoId) } onClick={handleOnClick}>
                 <div className="d-flex flex-row no-gutters">
                     <div className="d-flex" style={{width: '40%', maxWidth: '40%'}}>
                         <img src={ htmlEntities.decode(result.snippet.thumbnails.high.url) } class="card-img" alt="..."/>
