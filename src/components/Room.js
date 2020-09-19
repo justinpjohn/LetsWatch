@@ -11,12 +11,10 @@ const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
 const socket = io(SERVER_URL);
 
-const Room = (props) => {
+const Room = ({username, roomname}) => {
     
-    const userData = props.location.state.userData;
-
-    const [ roomName, setRoomName ] = useState(userData["roomName"]);
-    const [ userName, setUserName ] = useState(userData["userName"]);
+    const [ roomName, setRoomName ] = useState((!roomname) ? 'HowDidYouGetHere' : roomname);
+    const [ userName, setUserName ] = useState((!username) ? 'HowDidYouGetHere' : username);
     
     useEffect(() => {
         socket.emit('room connection', {roomName, userName});
