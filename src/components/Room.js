@@ -14,7 +14,7 @@ const socket = io(SERVER_URL);
 const Room = ({username, roomname}) => {
     
     const [ roomName, setRoomName ] = useState((!roomname) ? 'HowDidYouGetHere' : roomname);
-    const [ userName, setUserName ] = useState((!username) ? 'HowDidYouGetHere' : username);
+    const [ userName, setUserName ] = useState((!username) ? 'WhoAreYou' : username);
     
     useEffect(() => {
         socket.emit('room connection', {roomName, userName});
