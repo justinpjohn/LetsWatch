@@ -7,7 +7,7 @@ import Room from './components/Room';
 
 import './stylesheets/main-page.css';
 
-const { generateRandomName } = require('./NameGenerator');
+const { generateRandomName } = require('./utils/NameGenerator');
 
 const App = () => (
     <Router>
