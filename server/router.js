@@ -4,10 +4,6 @@ const fetch = require('node-fetch');
 
 const YT_API_KEY = process.env.REACT_APP_YT_API_KEY;
 
-// router.get('/r', (req, res) => {
-//     res.redirect('/');
-// });
-
 router.get('/youtube/:query', (req, res) => {
     const query = req.params.query;
 
