@@ -26,7 +26,7 @@ const RoomForm = () => {
     }
     
     return redirect ? <Redirect to={{
-                        pathname: '/room',
+                        pathname: '/r/' + userData["roomName"],
                         state: { userData }
                     }} /> :
         (

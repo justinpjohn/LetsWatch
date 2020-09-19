@@ -7,12 +7,10 @@ import SidePanel from './SidePanel/SidePanel'
 
 const socket = io();
 
-const Room = (props) => {
+const Room = ({username, roomname}) => {
     
-    const userData = props.location.state.userData;
-
-    const [ roomName, setRoomName ] = useState(userData["roomName"]);
-    const [ userName, setUserName ] = useState(userData["userName"]);
+    const [ roomName, setRoomName ] = useState((!roomname) ? 'HowDidYouGetHere' : roomname);
+    const [ userName, setUserName ] = useState((!username) ? 'WhoAreYou' : username);
     
     useEffect(() => {
         socket.emit('room connection', {roomName, userName});
