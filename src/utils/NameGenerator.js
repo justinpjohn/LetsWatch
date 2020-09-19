@@ -77,7 +77,6 @@ const FRUIT = [
     "Tangerine"
 ]
 
-
 const RANDOM_NOUNS = [
     'Finger',
     'Air',
