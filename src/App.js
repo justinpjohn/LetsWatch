@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BrowserRouter as Router, Route, useParams, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, useParams, Redirect, Switch } from 'react-router-dom';
 
 import Home from './components/Home';
 import Room from './components/Room';
@@ -11,13 +11,15 @@ const { generateRandomName } = require('./utils/NameGenerator');
 
 const App = () => (
     <Router>
-        <Route exact path="/" component={ Home } />
-        <Route exact path="/r/">
-            {AssistedRoomRedirect()}
-        </Route>
-        <Route exact path="/r/:roomName">
-            <DirectToRoom/>
-        </Route>
+        <Switch>
+            <Route exact path="/r/">
+                {AssistedRoomRedirect()}
+            </Route>
+            <Route exact path="/r/:roomName">
+                <DirectToRoom/>
+            </Route>
+            <Route path="*" component={ Home } />
+        </Switch>
     </Router>
 );
 
