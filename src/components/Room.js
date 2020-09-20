@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import io from 'socket.io-client';
 
 import Video from './Video';
 import SidePanel from './SidePanel/SidePanel'
+
+import {UserContext} from '../UserContext'; 
 
 // const SERVER_URL = 'https://58aab3c90017465bbb8c7cbf0b87d6b3.vfs.cloud9.us-east-2.amazonaws.com';
 const SERVER_URL = 'https://9e057b5691a24d17a179648c6553f432.vfs.cloud9.us-east-1.amazonaws.com/';
@@ -12,9 +14,10 @@ const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 const socket = io(SERVER_URL);
 
 const Room = ({username, roomname}) => {
+    const {user} = useContext(UserContext);
     
-    const [ roomName, setRoomName ] = useState((!roomname) ? 'HowDidYouGetHere' : roomname);
-    const [ userName, setUserName ] = useState((!username) ? 'WhoAreYou' : username);
+    const [ roomName, setRoomName ] = useState(user["roomName"]);
+    const [ userName, setUserName ] = useState(user["userName"]);
     
     useEffect(() => {
         socket.emit('room connection', {roomName, userName});

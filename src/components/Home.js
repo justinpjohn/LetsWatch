@@ -7,7 +7,7 @@ import useModal from '../hooks/useModal';
 const Home = () => {
     
     const { isVisible, toggle } = useModal();
-
+    
     return (
         <div className='container d-flex flex-column justify-content-center h-100'>
             <div id='home-title' className='row justify-content-center mb-5' style={{fontSize: '5.5em'}}> 

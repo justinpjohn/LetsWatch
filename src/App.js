@@ -1,6 +1,8 @@
-import React from 'react';
+import React,{useState}  from 'react';
 
-import { BrowserRouter as Router, Route, useParams, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+
+import {UserContext} from './UserContext';
 
 import Home from './components/Home';
 import Room from './components/Room';
@@ -9,32 +11,28 @@ import './stylesheets/main-page.css';
 
 const { generateRandomName } = require('./utils/NameGenerator');
 
-const App = () => (
-    <Router>
-        <Route exact path="/" component={ Home } />
-        <Route exact path="/r/">
-            {AssistedRoomRedirect()}
-        </Route>
-        <Route exact path="/r/:roomName">
-            <DirectToRoom/>
-        </Route>
-    </Router>
-);
+const App = () => {
+    const [user, setUser] = useState({userName: generateRandomName(), roomName: generateRandomName()})
+
+    return (
+        <UserContext.Provider value={{user, setUser}}>
+            <Router>
+                <Switch>
+                    <Route exact path="/r/:roomName">
+                        <Room />
+                    </Route>
+                    <Route path="/r/*">
+                        {AssistedRoomRedirect(user)}
+                    </Route>
+                    <Route path="*" component={ Home } />
+                </Switch>
+            </Router>
+        </UserContext.Provider>
+)};
 
 //This function is defaulted if user tries to join a room via an empty room param
-const AssistedRoomRedirect = () => {
-    const roomName = generateRandomName();
-    return <Redirect to={{pathname: `/r/${roomName}`}} />
-}
-
-const DirectToRoom = () => {
-    let { roomName } = useParams();
-    let userName = generateRandomName();
-    if (!roomName) {
-        roomName = generateRandomName();
-    }
-    
-    return <Room roomname={roomName} username={userName} />
+const AssistedRoomRedirect = (user) => {
+    return <Redirect to={{pathname: `/r/${user["roomName"]}`}} />
 }
 
 export default App;
