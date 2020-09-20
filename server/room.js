@@ -24,13 +24,32 @@ const roomStates = new Map();
 const roomSocketIsIn = new Map();
 
 
-const updateRoomVideoState = ({roomName, videoState}) => {
-    roomStates.set(roomName, Object.assign({}, videoState));
+const updateRoomVideoState = ({roomName, clientVideoState}) => {
+    let roomVideoState = Object.assign({}, clientVideoState);
+    
+    //calculate estimated timestamp
+    //PLAYING: we store datetime offset by client video timestamp
+    //PAUSED: we store actual timestamp of video instead of datetime
+    if (clientVideoState["videoPS"] === 'PLAYING') {
+        roomVideoState["videoTS"] = (Date.now() - (clientVideoState["videoTS"] * 1000));
+    }
+    
+    roomStates.set(roomName, Object.assign({}, roomVideoState));
 }
 
 const getRoomVideoState = (roomName) => {
     if (roomStates.has(roomName)) {
-        return roomStates.get(roomName);
+        const storedRoomState = roomStates.get(roomName);
+        const roomVideoState = Object.assign({}, storedRoomState); //copy so we don't modify stored
+        
+        //calculate estimated timestamp
+        //PLAYING: we stored datetime so subtract by current datetime
+        //PAUSED: we stored actual timestamp of video instead of datetime, so just return that
+        if (storedRoomState["videoPS"] === 'PLAYING') {
+            roomVideoState["videoTS"] = (Date.now() - storedRoomState["videoTS"]) / 1000;
+        }
+        
+        return roomVideoState;
     }
     return undefined;
 }

@@ -29,14 +29,10 @@ const Video = ({socket}) => {
         }
         
         if (serverVideoState) {
-            const videoID = serverVideoState["videoID"];
-            const videoTimestamp = serverVideoState["videoTimestamp"];
-            const playerState = serverVideoState["playerState"];
-    
             initialVideoState = {
-                videoID: videoID,
-                videoTS: videoTimestamp,
-                videoPS: playerState
+                videoID: serverVideoState["videoID"],
+                videoTS: serverVideoState["videoTS"],
+                videoPS: serverVideoState["videoPS"]
             };
         }
         videoID = initialVideoState["videoID"];
@@ -74,7 +70,7 @@ const Video = ({socket}) => {
         
         socket.on('seek', ({requestingUser, serverVideoState}) => {
             receivingSync = true;
-            player.seekTo(serverVideoState["videoTimestamp"]);
+            player.seekTo(serverVideoState["videoTS"]);
         });
         
         socket.on('pause', ({requestingUser}) => {
@@ -132,8 +128,8 @@ const Video = ({socket}) => {
         
         const state = { 
             videoID: videoID,
-            videoTimestamp : player.getCurrentTime(),
-            playerState : (isPlaying ? 'PLAYING' : 'PAUSED')
+            videoTS : player.getCurrentTime(),
+            videoPS : (isPlaying ? 'PLAYING' : 'PAUSED')
         };
         return state;
     }

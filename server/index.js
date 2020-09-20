@@ -29,18 +29,12 @@ io.on('connection', (socket) => {
         if (!roomVideoState) {
             const newRoomVideoState = {
                 videoID: DEFAULT_VIDEO_ID, 
-                videoTimestamp: Date.now(),
-                playerState: DEFAULT_VIDEO_STATE
+                videoTS: Date.now(),
+                videoPS: DEFAULT_VIDEO_STATE
             };
             // set the initial state, since it doesn't exist
-            updateRoomVideoState({roomName: user.room, videoState: newRoomVideoState});
-        } else {
-            const storedRoomState = Object.assign({}, roomVideoState);
-            const estimatedTimestamp = (Date.now() - roomVideoState["videoTimestamp"]) / 1000;
-            storedRoomState["videoTimestamp"] = estimatedTimestamp;
-            roomVideoState = storedRoomState
+            updateRoomVideoState({roomName: user.room, clientVideoState: newRoomVideoState});
         }
-         
         socket.emit('initial sync', {serverVideoState: roomVideoState}); 
         
         socket.to(user.room).emit('chat message', {
@@ -61,7 +55,7 @@ io.on('connection', (socket) => {
     });
     
     socket.on('select', ({user, clientVideoState}) => {
-        storeClientVideoState({roomName: user.room, clientVideoState});
+        updateRoomVideoState({roomName: user.room, clientVideoState});
         
         io.to(user.room).emit('select', {
             requestingUser: user.name, 
@@ -70,7 +64,8 @@ io.on('connection', (socket) => {
     }); 
     
     socket.on('seek', ({user, clientVideoState}) => {
-        storeClientVideoState({roomName: user.room, clientVideoState});
+        console.log(clientVideoState);
+        updateRoomVideoState({roomName: user.room, clientVideoState});
 
         io.to(user.room).emit('seek', {
             requestingUser: user.name, 
@@ -79,12 +74,12 @@ io.on('connection', (socket) => {
     });
     
     socket.on('pause', ({user, clientVideoState}) => {
-        storeClientVideoState({roomName: user.room, clientVideoState});
+        updateRoomVideoState({roomName: user.room, clientVideoState});
         socket.to(user.room).emit('pause', {requestingUser: user.name});
     });
     
     socket.on('play', ({user, clientVideoState}) => {
-        storeClientVideoState({roomName: user.room, clientVideoState});
+        updateRoomVideoState({roomName: user.room, clientVideoState});
         socket.to(user.room).emit('play', {requestingUser: user.name});
     });
     
@@ -99,12 +94,6 @@ io.on('connection', (socket) => {
         });
     });
 });
-
-const storeClientVideoState = ({roomName, clientVideoState}) => {
-    let serverVideoState = Object.assign({}, clientVideoState);
-    serverVideoState["videoTimestamp"] = Date.now() - (clientVideoState["videoTimestamp"] * 1000);
-    updateRoomVideoState({roomName, videoState: serverVideoState});
-}
 
 server.listen(PORT, () => console.log(`Server has started on port ${PORT}`));
 
