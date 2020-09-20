@@ -14,8 +14,7 @@ let unseenMessageCount = 0;
 
 const SidePanel = ({socket}) => {
     const {user} = useContext(UserContext);
-    console.log('SidePanel: ' + JSON.stringify(user));
-    
+
     const [ unseenMessages, setUnseenMessages ] = useState(0);
     const { messages, addMessage } = useMessages();
     

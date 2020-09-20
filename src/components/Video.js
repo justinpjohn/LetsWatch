@@ -9,8 +9,7 @@ const DEFAULT_VIDEO_TIMESTAMP = process.env.REACT_APP_DEFAULT_VIDEO_TIMESTAMP;
 
 const Video = ({socket}) => {
     const {user} = useContext(UserContext);
-    console.log('Video: ' + JSON.stringify(user));
-    
+
     const [ videoPlayerDOM, setVideoPlayerDOM ] = useState(null);
     const [ loadPlayerDOM, setLoadPlayerDOM ] = useState(
         <div className="overlay">
@@ -42,6 +41,7 @@ const Video = ({socket}) => {
         }
         videoID = initialVideoState["videoID"];
         videoPS = initialVideoState["videoPS"];
+        console.log('received video state: ' + JSON.stringify(initialVideoState));
 
         setLoadPlayerDOM(null);
         setVideoPlayerDOM(

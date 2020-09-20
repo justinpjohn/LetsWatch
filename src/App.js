@@ -14,7 +14,7 @@ const { generateRandomName } = require('./utils/NameGenerator');
 const App = () => {
     const [user, setUser] = useState({name: generateRandomName(), room: generateRandomName()});
 
-    //This function is defaulted if user tries to join a room via an empty room param
+    //This function is defaulted to if user tries to join a room via an empty room param
     const AssistedRoomRedirect = () => {
         return <Redirect to={{pathname: `/r/${user.room}`}} />
     }

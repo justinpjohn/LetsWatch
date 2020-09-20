@@ -11,11 +11,10 @@ const SERVER_URL = 'https://9e057b5691a24d17a179648c6553f432.vfs.cloud9.us-east-
 const SERVER_PORT = '8080';
 const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
-const socket = io(SERVER_URL);
-
 const Room = () => {
-    const {user, setUser} = useContext(UserContext);
-    
+    const socket = io(SERVER_URL);
+    const {user} = useContext(UserContext);
+
     useEffect(() => {
         socket.emit('room connection', {user});
 
