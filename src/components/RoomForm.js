@@ -1,22 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Redirect } from 'react-router-dom'
+
+import {UserContext} from '../UserContext'; 
 
 
 const RoomForm = () => {
+    const {user, setUser} = useContext(UserContext);
     
     const MAX_USERNAME_LENGTH = 30;
     const MAX_ROOMNAME_LENGTH = 30;
     
-    const [ userData, setUserData ] = useState({userName: '', roomName: ''});
     const [ redirect, setRedirect ] = useState(false);
     
     const handleChange = (e) => {
         const value = e.target.value;
         
         if (e.target.id === 'username-input') {
-            setUserData({userName: value, roomName: userData.groupID});
+            setUser({...user, name: value});
         } else {
-            setUserData({userName: userData.userName, roomName: value});
+            setUser({...user, room: value});
         }
     }
     
@@ -26,8 +28,7 @@ const RoomForm = () => {
     }
     
     return redirect ? <Redirect to={{
-                        pathname: '/r/' + userData["roomName"],
-                        state: { userData }
+                        pathname: `/r/${user["room"]}`,
                     }} /> :
         (
             <div>

@@ -1,12 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import YouTube from 'react-youtube';
 
-const Video = ({socket, roomName, userName}) => {
-    
-    const DEFAULT_VIDEO_ID    = process.env.REACT_APP_DEFAULT_VIDEO_ID;
-    const DEFAULT_VIDEO_STATE = process.env.REACT_APP_DEFAULT_VIDEO_STATE;
-    const DEFAULT_VIDEO_TIMESTAMP = process.env.REACT_APP_DEFAULT_VIDEO_TIMESTAMP;
-    
+import {UserContext} from '../UserContext'; 
+
+const DEFAULT_VIDEO_ID    = process.env.REACT_APP_DEFAULT_VIDEO_ID;
+const DEFAULT_VIDEO_STATE = process.env.REACT_APP_DEFAULT_VIDEO_STATE;
+const DEFAULT_VIDEO_TIMESTAMP = process.env.REACT_APP_DEFAULT_VIDEO_TIMESTAMP;
+
+const Video = ({socket}) => {
+    const {user} = useContext(UserContext);
+
     const [ videoPlayerDOM, setVideoPlayerDOM ] = useState(null);
     const [ loadPlayerDOM, setLoadPlayerDOM ] = useState(
         <div className="overlay">
@@ -38,7 +41,7 @@ const Video = ({socket, roomName, userName}) => {
         }
         videoID = initialVideoState["videoID"];
         videoPS = initialVideoState["videoPS"];
-        console.log(initialVideoState);
+        console.log('received video state: ' + JSON.stringify(initialVideoState));
 
         setLoadPlayerDOM(null);
         setVideoPlayerDOM(
@@ -105,14 +108,12 @@ const Video = ({socket, roomName, userName}) => {
             receivingSync = false;
         } else {
             socket.emit('seek', {
-                roomName, 
-                userName: userName,
+                user,
                 clientVideoState: videoState
             });
         }
         socket.emit('play', {
-            roomName, 
-            userName: userName,
+            user,
             clientVideoState: videoState
         });
     }
@@ -120,8 +121,7 @@ const Video = ({socket, roomName, userName}) => {
     const _onPause = (e) => {
         if (!receivingSync) {
             socket.emit('pause', {
-                roomName, 
-                userName: userName,
+                user,
                 clientVideoState: getVideoState(e.target)
             });
         }

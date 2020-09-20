@@ -1,26 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import io from 'socket.io-client';
 
 import Video from './Video';
 import SidePanel from './SidePanel/SidePanel'
+
+import {UserContext} from '../UserContext'; 
 
 // const SERVER_URL = 'https://58aab3c90017465bbb8c7cbf0b87d6b3.vfs.cloud9.us-east-2.amazonaws.com';
 const SERVER_URL = 'https://9e057b5691a24d17a179648c6553f432.vfs.cloud9.us-east-1.amazonaws.com/';
 const SERVER_PORT = '8080';
 const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
-const socket = io(SERVER_URL);
+const Room = () => {
+    const socket = io(SERVER_URL);
+    const {user} = useContext(UserContext);
 
-const Room = ({username, roomname}) => {
-    
-    const [ roomName, setRoomName ] = useState((!roomname) ? 'HowDidYouGetHere' : roomname);
-    const [ userName, setUserName ] = useState((!username) ? 'WhoAreYou' : username);
-    
     useEffect(() => {
-        socket.emit('room connection', {roomName, userName});
+        socket.emit('room connection', {user});
 
         return () => {
-            socket.emit('disconnect', {roomName, userName});
+            socket.emit('disconnect', {user});
             socket.disconnect();
         }
     }, [socket]);
@@ -30,20 +29,16 @@ const Room = ({username, roomname}) => {
             <div id='main-row-nav' className='row'>
                 <nav className="navbar navbar-dark bg-dark py-0 w-100">
                     <a className="navbar-brand" href="/">Lets<span style={{color: '#E53A3A'}}>Watch</span></a>
-                    <span>{userName}</span>
+                    <span>{user.name}</span>
                 </nav>
             </div>
             
             <div id='main-row-body' className='row' id='body-wrapper'>
                 <Video  
-                    socket         = { socket } 
-                    roomName       = { roomName } 
-                    userName       = { userName } 
+                    socket = {socket} 
                 />
                 <SidePanel
-                    socket         = { socket } 
-                    roomName       = { roomName } 
-                    userName       = { userName }
+                    socket = {socket} 
                 />
             </div>
         </div> 

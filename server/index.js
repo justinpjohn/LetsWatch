@@ -9,12 +9,6 @@ const { updateRoomVideoState, getRoomVideoState, addUser, removeUser } = require
 const PORT = process.env.PORT || 8080;
 
 const app = express();
-// const app = express().use(express.static(__dirname + '/../build'));
-
-// const INDEX = '../';
-// app.get('/*', function (req, res) {
-//     res.sendFile(path.join(path.resolve(INDEX), 'build', 'index.html'));
-// }); 
 
 app.use(cors({credentials: true, origin: true}));
 app.use(router);
@@ -27,11 +21,11 @@ const DEFAULT_VIDEO_STATE = process.env.REACT_APP_DEFAULT_VIDEO_STATE || 'PLAYIN
 
 
 io.on('connection', (socket) => {
-
-    socket.on('room connection', ({roomName, userName}) => {
-        socket.join(roomName);
+    
+    socket.on('room connection', ({user}) => {
+        socket.join(user.room);
         
-        let roomVideoState = getRoomVideoState(roomName);
+        let roomVideoState = getRoomVideoState(user.room);
         if (!roomVideoState) {
             const newRoomVideoState = {
                 videoID: DEFAULT_VIDEO_ID, 
@@ -39,7 +33,7 @@ io.on('connection', (socket) => {
                 playerState: DEFAULT_VIDEO_STATE
             };
             // set the initial state, since it doesn't exist
-            updateRoomVideoState({roomName, videoState: newRoomVideoState});
+            updateRoomVideoState({roomName: user.room, videoState: newRoomVideoState});
         } else {
             const storedRoomState = Object.assign({}, roomVideoState);
             const estimatedTimestamp = (Date.now() - roomVideoState["videoTimestamp"]) / 1000;
@@ -49,54 +43,54 @@ io.on('connection', (socket) => {
          
         socket.emit('initial sync', {serverVideoState: roomVideoState}); 
         
-        socket.to(roomName).emit('chat message', {
+        socket.to(user.room).emit('chat message', {
             authorSocketID: 'admin', 
             authorUserName: '', 
-            msg: `${userName} has joined the party! Say hi!`
+            msg: `${user.name} has joined the party! Say hi!`
         });
         
-        addUser({ socketID: socket.id, userName, roomName });
+        addUser({ socketID: socket.id, userName: user.name, roomName: user.room });
     });
     
-    socket.on('chat message', ({roomName, userName, msg}) => {
-        io.to(roomName).emit('chat message', {
+    socket.on('chat message', ({user, msg}) => {
+        io.to(user.room).emit('chat message', {
             authorSocketID: socket.id, 
-            authorUserName: userName, 
+            authorUserName: user.name, 
             msg
         }); 
     });
     
-    socket.on('select', ({roomName, userName, clientVideoState}) => {
-        storeClientVideoState({roomName, userName, clientVideoState});
+    socket.on('select', ({user, clientVideoState}) => {
+        storeClientVideoState({roomName: user.room, clientVideoState});
         
-        io.to(roomName).emit('select', {
-            requestingUser: userName, 
+        io.to(user.room).emit('select', {
+            requestingUser: user.name, 
             serverVideoState: clientVideoState
         }); 
     }); 
     
-    socket.on('seek', ({roomName, userName, clientVideoState}) => {
-        storeClientVideoState({roomName, userName, clientVideoState});
+    socket.on('seek', ({user, clientVideoState}) => {
+        storeClientVideoState({roomName: user.room, clientVideoState});
 
-        io.to(roomName).emit('seek', {
-            requestingUser: userName, 
+        io.to(user.room).emit('seek', {
+            requestingUser: user.name, 
             serverVideoState: clientVideoState
         });
     });
     
-    socket.on('pause', ({roomName, userName, clientVideoState}) => {
-        storeClientVideoState({roomName, userName, clientVideoState});
-        socket.to(roomName).emit('pause', {requestingUser: userName});
+    socket.on('pause', ({user, clientVideoState}) => {
+        storeClientVideoState({roomName: user.room, clientVideoState});
+        socket.to(user.room).emit('pause', {requestingUser: user.name});
     });
     
-    socket.on('play', ({roomName, userName, clientVideoState}) => {
-        storeClientVideoState({roomName, userName, clientVideoState});
-        socket.to(roomName).emit('play', {requestingUser: userName});
+    socket.on('play', ({user, clientVideoState}) => {
+        storeClientVideoState({roomName: user.room, clientVideoState});
+        socket.to(user.room).emit('play', {requestingUser: user.name});
     });
     
-    socket.on('disconnect', ({roomName, userName}) => {
+    socket.on('disconnect', ({user}) => {
         // for some reason the roomName and userName is always undefined?
-        const response = removeUser({socketID: socket.id, roomName});
+        const response = removeUser({socketID: socket.id, roomName: undefined});
         
         io.to(response["roomName"]).emit('chat message', {
             authorSocketID: 'admin', 
@@ -106,7 +100,7 @@ io.on('connection', (socket) => {
     });
 });
 
-const storeClientVideoState = ({roomName, userName, clientVideoState}) => {
+const storeClientVideoState = ({roomName, clientVideoState}) => {
     let serverVideoState = Object.assign({}, clientVideoState);
     serverVideoState["videoTimestamp"] = Date.now() - (clientVideoState["videoTimestamp"] * 1000);
     updateRoomVideoState({roomName, videoState: serverVideoState});
