@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+
+import {UserContext} from '../../../UserContext';
 
 import Message from './Message';
 
-const Chat = ({roomName, userName, socketID, messages, emitMessage}) => {
+const Chat = ({socketID, messages, emitMessage}) => {
+    const {user} = useContext(UserContext);
     
     const MAX_CHAR_LIMIT = 500;
     const [ currMessage, setCurrMessage ] = useState('');
@@ -28,7 +31,7 @@ const Chat = ({roomName, userName, socketID, messages, emitMessage}) => {
     return (
         <div id='chat-container' className='d-flex flex-column h-100 w-100' style={{backgroundColor: '#252526', overflow: 'hidden'}}>
             <div id='chat-navbar' className='text-center py-2'>
-                <b>{roomName}</b>
+                <b>{user.room}</b>
             </div>
             
             <div id='chat-area' className='d-flex flex-column'>

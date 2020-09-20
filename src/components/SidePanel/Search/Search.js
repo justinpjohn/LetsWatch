@@ -42,7 +42,8 @@ const Search = ({emitVideoId}) => {
             })
             .catch((error) => {
                 console.log(error);
-            });
+            }
+        );
     }
       
     useEffect(() => {

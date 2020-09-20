@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import io from 'socket.io-client';
 
 import Video from './Video';
 import SidePanel from './SidePanel/SidePanel'
 
+import {UserContext} from '../UserContext'; 
 
-const socket = io();
+const Room = () => {
+    const socket = io();
+    const {user} = useContext(UserContext);
 
-const Room = ({username, roomname}) => {
-    
-    const [ roomName, setRoomName ] = useState((!roomname) ? 'HowDidYouGetHere' : roomname);
-    const [ userName, setUserName ] = useState((!username) ? 'WhoAreYou' : username);
-    
     useEffect(() => {
-        socket.emit('room connection', {roomName, userName});
+        socket.emit('room connection', {user});
 
         return () => {
-            socket.emit('disconnect', {roomName, userName});
+            socket.emit('disconnect', {user});
             socket.disconnect();
         }
     }, [socket]);
@@ -26,20 +24,16 @@ const Room = ({username, roomname}) => {
             <div id='main-row-nav' className='row'>
                 <nav className="navbar navbar-dark bg-dark py-0 w-100">
                     <a className="navbar-brand" href="/">Lets<span style={{color: '#E53A3A'}}>Watch</span></a>
-                    <span>{userName}</span>
+                    <span>{user.name}</span>
                 </nav>
             </div>
             
             <div id='main-row-body' className='row' id='body-wrapper'>
                 <Video  
-                    socket         = { socket } 
-                    roomName       = { roomName } 
-                    userName       = { userName } 
+                    socket = {socket} 
                 />
                 <SidePanel
-                    socket         = { socket } 
-                    roomName       = { roomName } 
-                    userName       = { userName }
+                    socket = {socket} 
                 />
             </div>
         </div> 
