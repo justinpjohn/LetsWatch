@@ -13,17 +13,14 @@ const SERVER_ENDPOINT = SERVER_URL.concat(':', SERVER_PORT);
 
 const socket = io(SERVER_URL);
 
-const Room = ({username, roomname}) => {
-    const {user} = useContext(UserContext);
-    
-    const [ roomName, setRoomName ] = useState(user["roomName"]);
-    const [ userName, setUserName ] = useState(user["userName"]);
+const Room = () => {
+    const {user, setUser} = useContext(UserContext);
     
     useEffect(() => {
-        socket.emit('room connection', {roomName, userName});
+        socket.emit('room connection', {user});
 
         return () => {
-            socket.emit('disconnect', {roomName, userName});
+            socket.emit('disconnect', {user});
             socket.disconnect();
         }
     }, [socket]);
@@ -33,20 +30,16 @@ const Room = ({username, roomname}) => {
             <div id='main-row-nav' className='row'>
                 <nav className="navbar navbar-dark bg-dark py-0 w-100">
                     <a className="navbar-brand" href="/">Lets<span style={{color: '#E53A3A'}}>Watch</span></a>
-                    <span>{userName}</span>
+                    <span>{user.name}</span>
                 </nav>
             </div>
             
             <div id='main-row-body' className='row' id='body-wrapper'>
                 <Video  
-                    socket         = { socket } 
-                    roomName       = { roomName } 
-                    userName       = { userName } 
+                    socket = {socket} 
                 />
                 <SidePanel
-                    socket         = { socket } 
-                    roomName       = { roomName } 
-                    userName       = { userName }
+                    socket = {socket} 
                 />
             </div>
         </div> 

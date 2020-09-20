@@ -1,4 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
+
+import {UserContext} from '../../UserContext'; 
 
 import Chat from './Chat/Chat';
 import Search from './Search/Search';
@@ -10,7 +12,9 @@ const DEFAULT_VIDEO_STATE     = process.env.REACT_APP_DEFAULT_VIDEO_STATE;
 
 let unseenMessageCount = 0;
 
-const SidePanel = ({socket, roomName, userName}) => {
+const SidePanel = ({socket}) => {
+    const {user} = useContext(UserContext);
+    console.log('SidePanel: ' + JSON.stringify(user));
     
     const [ unseenMessages, setUnseenMessages ] = useState(0);
     const { messages, addMessage } = useMessages();
@@ -47,11 +51,11 @@ const SidePanel = ({socket, roomName, userName}) => {
             videoTimestamp : DEFAULT_VIDEO_TIMESTAMP,
             playerState : DEFAULT_VIDEO_STATE
         } 
-        socket.emit('select', {roomName, userName, clientVideoState: videoState});
+        socket.emit('select', {user, clientVideoState: videoState});
     }
     
     const emitMessage = (msg) => {
-        socket.emit('chat message', {roomName, userName, msg});
+        socket.emit('chat message', {user, msg});
     }
     
     return (
@@ -81,11 +85,9 @@ const SidePanel = ({socket, roomName, userName}) => {
             <div className='row tab-content'>
                 <div class="tab-pane show active col-12 p-0" id="chat" role="tabpanel" aria-labelledby="chat-tab">
                     <Chat 
-                        roomName    = { roomName } 
-                        userName    = { userName } 
-                        socketID    = { socket.id } 
-                        messages    = { messages } 
-                        emitMessage = { emitMessage }
+                        socketID    = {socket.id} 
+                        messages    = {messages} 
+                        emitMessage = {emitMessage}
                     />
                 </div>
                 <div class="tab-pane col-12 p-0 mh-100" id="search" role="tabpanel" aria-labelledby="search-tab">

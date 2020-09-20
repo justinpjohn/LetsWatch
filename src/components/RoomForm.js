@@ -16,9 +16,9 @@ const RoomForm = () => {
         const value = e.target.value;
         
         if (e.target.id === 'username-input') {
-            setUser({...user, userName: value});
+            setUser({...user, name: value});
         } else {
-            setUser({...user, roomName: value});
+            setUser({...user, room: value});
         }
     }
     
@@ -28,7 +28,7 @@ const RoomForm = () => {
     }
     
     return redirect ? <Redirect to={{
-                        pathname: '/r/' + user["roomName"],
+                        pathname: `/r/${user["room"]}`,
                     }} /> :
         (
             <div>
