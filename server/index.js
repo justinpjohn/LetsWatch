@@ -66,7 +66,6 @@ io.on('connection', (socket) => {
         }); 
     });
     
-    
     socket.on('end', ({user}) => {
         const video = queue.shift();
         if (!video) return;
