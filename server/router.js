@@ -18,8 +18,4 @@ router.get('/youtube/:query', (req, res) => {
     });
 });
 
-router.get('*', (req, res) => {
-    res.sendFile(path.join(path.resolve(__dirname+'/..'), 'build', 'index.html'));
-});
-
 module.exports = router;

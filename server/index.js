@@ -7,7 +7,8 @@ const router = require('./router');
 const { updateRoomVideoState, getRoomVideoState, addUser, removeUser } = require('./room');
 const PORT = process.env.PORT || 8080;
 
-const app = express().use(express.static(__dirname + '/../build'));
+const app = express();
+// const app = express().use(express.static(__dirname + '/../build'));
 
 app.use(cors({credentials: true, origin: true}));
 app.use(router);
