@@ -50,8 +50,8 @@ const SidePanel = ({socket}) => {
     const emitVideoId = (videoID) => {
         const videoState = {
             videoID,
-            videoTimestamp : DEFAULT_VIDEO_TIMESTAMP,
-            playerState : DEFAULT_VIDEO_STATE
+            videoTS : DEFAULT_VIDEO_TIMESTAMP,
+            videoPS : DEFAULT_VIDEO_STATE
         } 
         socket.emit('select', {user, clientVideoState: videoState});
     }

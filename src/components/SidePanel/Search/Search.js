@@ -250,10 +250,15 @@ const Search = ({emitVideoId}) => {
    }
 ]);
     
-    const handleResultClick = (result) => {
-        console.log('clicked video: ' + JSON.stringify(result));
-        setQueue([result, ...queue]);
-        emitVideoId(result.id.videoId);
+    const handleVideoCardClick = (e, result) => {
+        const targetClassName = e.target.className; 
+        if (targetClassName === 'add-to-queue-btn') {
+            console.log('clicked video: ' + JSON.stringify(result));
+            setQueue([...queue, result]);
+        } else {
+            //otherwise its a video selection
+            emitVideoId(result.id.videoId);   
+        }
     }
     
     const handleKeyPress = (e) => {
@@ -299,7 +304,7 @@ const Search = ({emitVideoId}) => {
                     <input className='w-100' type='text' placeholder="Search youtube..." value={currQuery} onChange={e => setCurrQuery(e.target.value)} onKeyPress={handleKeyPress}/>
                 </div>
             </div>
-            <SearchResults results={searchResults} handleResultClick={handleResultClick}/>
+            <SearchResults results={searchResults} handleVideoCardClick={handleVideoCardClick}/>
         </div>
     );
 }

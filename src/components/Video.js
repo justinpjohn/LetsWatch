@@ -2,6 +2,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import YouTube from 'react-youtube';
 
 import {UserContext} from '../UserContext'; 
+import {QueueContext} from '../QueueContext';
 
 const DEFAULT_VIDEO_ID    = process.env.REACT_APP_DEFAULT_VIDEO_ID;
 const DEFAULT_VIDEO_STATE = process.env.REACT_APP_DEFAULT_VIDEO_STATE;
@@ -9,6 +10,7 @@ const DEFAULT_VIDEO_TIMESTAMP = process.env.REACT_APP_DEFAULT_VIDEO_TIMESTAMP;
 
 const Video = ({socket}) => {
     const {user} = useContext(UserContext);
+    const {queue, setQueue} = useContext(QueueContext);
 
     const [ videoPlayerDOM, setVideoPlayerDOM ] = useState(null);
     const [ loadPlayerDOM, setLoadPlayerDOM ] = useState(
@@ -54,9 +56,10 @@ const Video = ({socket}) => {
                         }
                     }
                 }
+                onReady = { _onReady } 
                 onPlay  = { _onPlay }
                 onPause = { _onPause }
-                onReady = { _onReady } 
+                onEnd   = { _onEnd }  
             /> 
         );
     });
@@ -83,6 +86,7 @@ const Video = ({socket}) => {
         });
     
         socket.on('select', ({requestingUser, serverVideoState}) => {
+            console.log('received: ' + JSON.stringify(serverVideoState));
             receivingSync = true;
             videoID = serverVideoState["videoID"];
             
@@ -120,6 +124,20 @@ const Video = ({socket}) => {
                 user,
                 clientVideoState: getVideoState(e.target)
             });
+        }
+    }
+    
+    const _onEnd = (e) => {
+        console.log('ENDED');
+        if (queue.length) {
+            let video = queue.shift();
+            console.log('NOW: ' + JSON.stringify(video.id.videoId));
+            const videoState = {
+                videoID: video.id.videoId,
+                videoTS : DEFAULT_VIDEO_TIMESTAMP,
+                videoPS : DEFAULT_VIDEO_STATE
+            } 
+            socket.emit('select', {user, clientVideoState: videoState});
         }
     }
 

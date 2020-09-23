@@ -386,6 +386,35 @@ input[type=text]:not(.form-control):focus, textarea:focus {
     background-color: #252526;
 }
 
+.add-to-queue-btn {
+    /*padding: 10px;*/
+    position: absolute;
+    top: 0;
+    left: 0;
+    /*color: white;*/
+    /*background-color: blue;*/
+    border: none;
+    /*display:inline-block;*/
+    width: 40px;
+    height: 40px;
+    
+    background:
+    linear-gradient(#ffffff,#ffffff),
+    linear-gradient(#ffffff,#ffffff),
+    #871212;
+    background-position: center;
+    background-size: 50% 2px,2px 50%; /*thickness = 2px, length = 50% (25px)*/
+    background-repeat :no-repeat;
+}
+
+.add-to-queue-btn:hover {
+    cursor: pointer;
+    outline: none;
+    border-color: white;
+    box-shadow: 0 0 10px white;
+    background-color: #E53A3A;
+}
+
 /*-------------------------------------TEST CSS FOR DISPLAYING MODAL-------------------------------------*/
 
 #room-form .modal-dialog {

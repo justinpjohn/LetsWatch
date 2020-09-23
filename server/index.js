@@ -55,8 +55,10 @@ io.on('connection', (socket) => {
     });
     
     socket.on('select', ({user, clientVideoState}) => {
+        console.log(JSON.stringify(clientVideoState));
         updateRoomVideoState({roomName: user.room, clientVideoState});
         
+        console.log('emitting video state: ' + user.room);
         io.to(user.room).emit('select', {
             requestingUser: user.name, 
             serverVideoState: clientVideoState
