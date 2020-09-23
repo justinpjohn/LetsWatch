@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 
-import {UserContext} from '../../../UserContext';
+import {UserContext} from '../../../contexts/UserContext';
+import {SocketContext} from '../../../contexts/SocketContext';
 
 import Message from './Message';
 
-const Chat = ({socketID, messages, emitMessage}) => {
+const Chat = ({messages, emitMessage}) => {
     const {user} = useContext(UserContext);
+    const {socket} = useContext(SocketContext);
     
     const MAX_CHAR_LIMIT = 500;
     const [ currMessage, setCurrMessage ] = useState('');
@@ -36,7 +38,7 @@ const Chat = ({socketID, messages, emitMessage}) => {
             
             <div id='chat-area' className='d-flex flex-column'>
                 {messages.map((content, index) => {
-                    return <Message messageInfo={ {currUserSockID: socketID, message: {content, index}} }/>
+                    return <Message messageInfo={ {currUserSockID: socket.id, message: {content, index}} }/>
                 })}
             </div>
             <div id='chat-input-container' className='d-flex flex-column'>

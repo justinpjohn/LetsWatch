@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 
 import ResultCard from '../Search/ResultCard';
 
+import {SocketContext} from '../../../contexts/SocketContext'; 
 
-const Queue = ({socket}) => {
+const Queue = () => {
     const [queue, setQueue] = useState([]);
-    
+    const {socket} = useContext(SocketContext);
     
     useEffect(() => {
         // console.log('queue: ' + JSON.stringify(queue))

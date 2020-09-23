@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 
-import {UserContext} from '../../UserContext'; 
+import {UserContext} from '../../contexts/UserContext';
+import {SocketContext} from '../../contexts/SocketContext'; 
 
 import Chat from './Chat/Chat';
 import Search from './Search/Search';
@@ -13,8 +14,10 @@ const DEFAULT_VIDEO_STATE     = process.env.REACT_APP_DEFAULT_VIDEO_STATE;
 
 let unseenMessageCount = 0;
 
-const SidePanel = ({socket}) => {
+const SidePanel = () => {
     const {user} = useContext(UserContext);
+    const {socket} = useContext(SocketContext);
+    
     const [ unseenMessages, setUnseenMessages ] = useState(0);
     const { messages, addMessage } = useMessages();
     
@@ -91,8 +94,7 @@ const SidePanel = ({socket}) => {
             </div>
             <div className='row tab-content'>
                 <div class="tab-pane show active col-12 p-0" id="chat" role="tabpanel" aria-labelledby="chat-tab">
-                    <Chat 
-                        socketID    = {socket.id} 
+                    <Chat  
                         messages    = {messages} 
                         emitMessage = {emitMessage}
                     />
@@ -101,7 +103,7 @@ const SidePanel = ({socket}) => {
                     <Search emitVideoId={emitVideoId} emitQueueUpdate={emitQueueUpdate}/>
                 </div>
                 <div class="tab-pane col-12 p-0 mh-100" id="queue" role="tabpanel" aria-labelledby="queue-tab">
-                    <Queue socket={socket} emitVideoId={emitVideoId}/>
+                    <Queue emitVideoId={emitVideoId}/>
                 </div>
             </div>
         </div>
