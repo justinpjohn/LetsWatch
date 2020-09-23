@@ -14,7 +14,6 @@ const Room = () => {
     const {user} = useContext(UserContext);
     const [queue, setQueue] = useState([]);
 
-
     useEffect(() => {
         socket.emit('room connection', {user});
 
