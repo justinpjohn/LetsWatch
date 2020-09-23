@@ -3,7 +3,7 @@ import { Html5Entities } from 'html-entities';
 
 const htmlEntities = new Html5Entities();
 
-const ResultCard = ({result, index, handleVideoCardClick, queue}) => {
+const VideoCard = ({result, index, handleVideoCardClick, queue}) => {
     
     return (
         <div className="card flex-shrink-0 mx-auto mb-1" key={index} data-index={index} alt={ htmlEntities.decode(result.id.videoId) } onClick={(e) => handleVideoCardClick(e, result)}>
@@ -23,4 +23,4 @@ const ResultCard = ({result, index, handleVideoCardClick, queue}) => {
     );
 }
 
-export default ResultCard;
+export default VideoCard;

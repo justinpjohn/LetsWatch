@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-import ResultCard from './ResultCard';
+import VideoCard from '../VideoCard';
 
 const SearchResults = ({results, handleVideoCardClick}) => {
     
@@ -9,7 +9,7 @@ const SearchResults = ({results, handleVideoCardClick}) => {
         {results ? 
             results.map((result, index) => {
                 return (
-                    <ResultCard 
+                    <VideoCard 
                         result={result} 
                         index={index} 
                         handleVideoCardClick={handleVideoCardClick} 

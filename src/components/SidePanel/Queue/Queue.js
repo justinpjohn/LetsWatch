@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
 
-import ResultCard from '../Search/ResultCard';
+import VideoCard from '../VideoCard';
 
 import {SocketContext} from '../../../contexts/SocketContext'; 
 
@@ -31,7 +31,7 @@ const Queue = ({emitVideoId, emitQueueRemove}) => {
                 {queue.length  ? 
                     queue.map((result, index) => {
                         return (
-                            <ResultCard 
+                            <VideoCard 
                                 result={result} 
                                 index={index} 
                                 handleVideoCardClick={handleVideoCardClick}
