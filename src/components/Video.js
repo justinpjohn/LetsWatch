@@ -40,7 +40,7 @@ const Video = () => {
             }
             videoID = initialVideoState["videoID"];
             videoPS = initialVideoState["videoPS"];
-            console.log('received video state: ' + JSON.stringify(initialVideoState));
+            // console.log('received video state: ' + JSON.stringify(initialVideoState));
     
             setLoadPlayerDOM(null);
             setVideoPlayerDOM(
@@ -87,7 +87,7 @@ const Video = () => {
             });
         
             socket.on('select', ({requestingUser, serverVideoState}) => {
-                console.log('received: ' + JSON.stringify(serverVideoState));
+                // console.log('received: ' + JSON.stringify(serverVideoState));
                 receivingSync = true;
                 videoID = serverVideoState["videoID"];
                 

@@ -12,7 +12,6 @@ const SERVER_URL = 'https://9e057b5691a24d17a179648c6553f432.vfs.cloud9.us-east-
 const Room = () => {
     const {user} = useContext(UserContext);
     const socket = io(SERVER_URL);
-    console.log(socket);
 
     useEffect(() => {
         socket.emit('room connection', {user});

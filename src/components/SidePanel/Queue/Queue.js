@@ -11,7 +11,7 @@ const Queue = ({emitVideoId, emitQueueRemove}) => {
     useEffect(() => {
         // console.log('queue: ' + JSON.stringify(queue))
         socket.on('queue update', ({requestingUser, serverQueueState}) => {
-            console.log('update q: ' + JSON.stringify(serverQueueState));
+            // console.log('update q: ' + JSON.stringify(serverQueueState));
             setQueue(serverQueueState);
         });
     },[]);
