@@ -132,12 +132,13 @@ const Video = ({socket}) => {
         if (queue.length) {
             let video = queue.shift();
             console.log('NOW: ' + JSON.stringify(video.id.videoId));
-            const videoState = {
+            const _videoState = {
                 videoID: video.id.videoId,
-                videoTS : DEFAULT_VIDEO_TIMESTAMP,
-                videoPS : DEFAULT_VIDEO_STATE
-            } 
-            socket.emit('select', {user, clientVideoState: videoState});
+                videoTS: DEFAULT_VIDEO_TIMESTAMP,
+                videoPS: DEFAULT_VIDEO_STATE
+            }
+            socket.emit('select', {user, clientVideoState: _videoState});
+            setQueue(queue);
         }
     }
 
