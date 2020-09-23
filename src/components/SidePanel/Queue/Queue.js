@@ -1,15 +1,19 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import ResultCard from '../Search/ResultCard';
 
-import {QueueContext} from '../../../QueueContext';
 
-const Queue = () => {
-    const {queue, setQueue} = useContext(QueueContext);
+const Queue = ({socket}) => {
+    const [queue, setQueue] = useState([]);
+    
     
     useEffect(() => {
         // console.log('queue: ' + JSON.stringify(queue))
-    },[queue]);
+        socket.on('queue update', ({requestingUser, serverQueueState}) => {
+            console.log('update q: ' + JSON.stringify(serverQueueState));
+            setQueue(serverQueueState);
+        });
+    },[]);
     
     return (
             <div className='d-flex flex-column h-100 w-100'>

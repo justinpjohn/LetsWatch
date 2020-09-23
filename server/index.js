@@ -20,6 +20,9 @@ const DEFAULT_VIDEO_ID    = process.env.REACT_APP_DEFAULT_VIDEO_ID || 'qsdzdUYl5
 const DEFAULT_VIDEO_STATE = process.env.REACT_APP_DEFAULT_VIDEO_STATE || 'PLAYING';
 
 
+let queue = [];
+
+
 io.on('connection', (socket) => {
     
     socket.on('room connection', ({user}) => {
@@ -54,11 +57,41 @@ io.on('connection', (socket) => {
         }); 
     });
     
+    socket.on('queue append', ({user, video}) => {
+        queue = [...queue, video];
+        
+        io.to(user.room).emit('queue update', {
+            requestingUser: user.name, 
+            serverQueueState: queue
+        }); 
+    });
+    
+    
+    socket.on('end', ({user}) => {
+        const video = queue.shift();
+        if (!video) return;
+        console.log(video);
+        
+        const newRoomVideoState = {
+            videoID: video.id.videoId, 
+            videoTS: Date.now(),
+            videoPS: DEFAULT_VIDEO_STATE
+        };
+        updateRoomVideoState({roomName: user.room, clientVideoState: newRoomVideoState});
+        
+        io.to(user.room).emit('queue update', {
+            requestingUser: user.name, 
+            serverQueueState: queue
+        }); 
+        io.to(user.room).emit('select', {
+            requestingUser: user.name, 
+            serverVideoState: newRoomVideoState
+        }); 
+    });
+    
     socket.on('select', ({user, clientVideoState}) => {
-        console.log(JSON.stringify(clientVideoState));
         updateRoomVideoState({roomName: user.room, clientVideoState});
         
-        console.log('emitting video state: ' + user.room);
         io.to(user.room).emit('select', {
             requestingUser: user.name, 
             serverVideoState: clientVideoState
@@ -66,7 +99,6 @@ io.on('connection', (socket) => {
     }); 
     
     socket.on('seek', ({user, clientVideoState}) => {
-        console.log(clientVideoState);
         updateRoomVideoState({roomName: user.room, clientVideoState});
 
         io.to(user.room).emit('seek', {

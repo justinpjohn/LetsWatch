@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 
 import {UserContext} from '../../UserContext'; 
-import {QueueContext} from '../../QueueContext';
 
 import Chat from './Chat/Chat';
 import Search from './Search/Search';
@@ -16,8 +15,6 @@ let unseenMessageCount = 0;
 
 const SidePanel = ({socket}) => {
     const {user} = useContext(UserContext);
-    const {queue, setQueue} = useContext(QueueContext);
-
     const [ unseenMessages, setUnseenMessages ] = useState(0);
     const { messages, addMessage } = useMessages();
     
@@ -54,6 +51,10 @@ const SidePanel = ({socket}) => {
             videoPS : DEFAULT_VIDEO_STATE
         } 
         socket.emit('select', {user, clientVideoState: videoState});
+    }
+    
+    const emitQueueUpdate = (result) => {
+        socket.emit('queue append', {user, video: result});
     }
     
     const emitMessage = (msg) => {
@@ -97,10 +98,10 @@ const SidePanel = ({socket}) => {
                     />
                 </div>
                 <div class="tab-pane col-12 p-0 mh-100" id="search" role="tabpanel" aria-labelledby="search-tab">
-                    <Search emitVideoId={emitVideoId}/>
+                    <Search emitVideoId={emitVideoId} emitQueueUpdate={emitQueueUpdate}/>
                 </div>
                 <div class="tab-pane col-12 p-0 mh-100" id="queue" role="tabpanel" aria-labelledby="queue-tab">
-                    <Queue emitVideoId={emitVideoId}/>
+                    <Queue socket={socket} emitVideoId={emitVideoId}/>
                 </div>
             </div>
         </div>

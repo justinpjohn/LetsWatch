@@ -2,12 +2,10 @@ import React, {useState, useEffect, useContext} from 'react';
 import fetch from 'node-fetch';
 
 import SearchResults from './SearchResults';
-import {QueueContext} from '../../../QueueContext';
 
 const SERVER_URL = 'https://letswatch9897.herokuapp.com';
 
-const Search = ({emitVideoId}) => {
-    const {queue, setQueue} = useContext(QueueContext);
+const Search = ({emitVideoId, emitQueueUpdate}) => {
     const [ currQuery, setCurrQuery ] = useState('');
     const [ searchResults, setSearchResults ] = useState([
    {
@@ -253,8 +251,8 @@ const Search = ({emitVideoId}) => {
     const handleVideoCardClick = (e, result) => {
         const targetClassName = e.target.className; 
         if (targetClassName === 'add-to-queue-btn') {
-            console.log('clicked video: ' + JSON.stringify(result));
-            setQueue([...queue, result]);
+            // console.log('clicked video: ' + JSON.stringify(result));
+            emitQueueUpdate(result);
         } else {
             //otherwise its a video selection
             emitVideoId(result.id.videoId);   
