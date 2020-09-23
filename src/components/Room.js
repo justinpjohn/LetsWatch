@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-
+import io from 'socket.io-client';
 
 import Video from './Video';
 import SidePanel from './SidePanel/SidePanel'
@@ -7,9 +7,12 @@ import SidePanel from './SidePanel/SidePanel'
 import {UserContext} from '../contexts/UserContext'; 
 import {SocketContext} from '../contexts/SocketContext';
 
+const SERVER_URL = 'https://9e057b5691a24d17a179648c6553f432.vfs.cloud9.us-east-1.amazonaws.com/';
+
 const Room = () => {
     const {user} = useContext(UserContext);
-    const {socket} = useContext(SocketContext);
+    const socket = io(SERVER_URL);
+    console.log(socket);
 
     useEffect(() => {
         socket.emit('room connection', {user});
@@ -30,8 +33,10 @@ const Room = () => {
             </div>
             
             <div id='main-row-body' className='row' id='body-wrapper'>
-                <Video/>
-                <SidePanel/>
+                <SocketContext.Provider value={socket}>
+                    <Video/>
+                    <SidePanel/>
+                </SocketContext.Provider>
             </div>
         </div> 
     );

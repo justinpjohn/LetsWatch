@@ -24,6 +24,7 @@ let queue = [];
 
 
 io.on('connection', (socket) => {
+    console.log('socket join ');
     
     socket.on('room connection', ({user}) => {
         socket.join(user.room);
@@ -64,6 +65,19 @@ io.on('connection', (socket) => {
             requestingUser: user.name, 
             serverQueueState: queue
         }); 
+    });
+    
+    socket.on('queue remove', ({user, index}) => {
+        try {
+            console.log(index);
+            queue.splice(index, 1);
+            io.to(user.room).emit('queue update', {
+                requestingUser: user.name, 
+                serverQueueState: queue
+            }); 
+        } catch(e) {
+            console.log(e);
+        }
     });
     
     socket.on('end', ({user}) => {

@@ -5,7 +5,7 @@ import SearchResults from './SearchResults';
 
 const SERVER_URL = 'https://letswatch9897.herokuapp.com';
 
-const Search = ({emitVideoId, emitQueueUpdate}) => {
+const Search = ({emitVideoId, emitQueueAppend}) => {
     const [ currQuery, setCurrQuery ] = useState('');
     const [ searchResults, setSearchResults ] = useState([
    {
@@ -252,7 +252,7 @@ const Search = ({emitVideoId, emitQueueUpdate}) => {
         const targetClassName = e.target.className; 
         if (targetClassName === 'add-to-queue-btn') {
             // console.log('clicked video: ' + JSON.stringify(result));
-            emitQueueUpdate(result);
+            emitQueueAppend(result);
         } else {
             //otherwise its a video selection
             emitVideoId(result.id.videoId);   

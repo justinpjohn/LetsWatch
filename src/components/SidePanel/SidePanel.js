@@ -16,7 +16,7 @@ let unseenMessageCount = 0;
 
 const SidePanel = () => {
     const {user} = useContext(UserContext);
-    const {socket} = useContext(SocketContext);
+    const socket = useContext(SocketContext);
     
     const [ unseenMessages, setUnseenMessages ] = useState(0);
     const { messages, addMessage } = useMessages();
@@ -56,8 +56,12 @@ const SidePanel = () => {
         socket.emit('select', {user, clientVideoState: videoState});
     }
     
-    const emitQueueUpdate = (result) => {
+    const emitQueueAppend = (result) => {
         socket.emit('queue append', {user, video: result});
+    }
+    
+    const emitQueueRemove = (index) => {
+        socket.emit('queue remove', {user, index});
     }
     
     const emitMessage = (msg) => {
@@ -100,10 +104,10 @@ const SidePanel = () => {
                     />
                 </div>
                 <div class="tab-pane col-12 p-0 mh-100" id="search" role="tabpanel" aria-labelledby="search-tab">
-                    <Search emitVideoId={emitVideoId} emitQueueUpdate={emitQueueUpdate}/>
+                    <Search emitVideoId={emitVideoId} emitQueueAppend={emitQueueAppend}/>
                 </div>
                 <div class="tab-pane col-12 p-0 mh-100" id="queue" role="tabpanel" aria-labelledby="queue-tab">
-                    <Queue emitVideoId={emitVideoId}/>
+                    <Queue emitVideoId={emitVideoId} emitQueueRemove={emitQueueRemove}/>
                 </div>
             </div>
         </div>

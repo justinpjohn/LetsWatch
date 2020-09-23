@@ -7,7 +7,7 @@ import Message from './Message';
 
 const Chat = ({messages, emitMessage}) => {
     const {user} = useContext(UserContext);
-    const {socket} = useContext(SocketContext);
+    const socket = useContext(SocketContext);
     
     const MAX_CHAR_LIMIT = 500;
     const [ currMessage, setCurrMessage ] = useState('');

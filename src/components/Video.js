@@ -10,11 +10,11 @@ const DEFAULT_VIDEO_TIMESTAMP = process.env.REACT_APP_DEFAULT_VIDEO_TIMESTAMP;
 
 const Video = () => {
     const {user} = useContext(UserContext);
-    const {socket} = useContext(SocketContext);
+    const socket = useContext(SocketContext);
     
     const [ videoPlayerDOM, setVideoPlayerDOM ] = useState(null);
     const [ loadPlayerDOM, setLoadPlayerDOM ] = useState(
-        <div className="overlay">null
+        <div className="overlay">
             <div className="loader"></div>
         </div>
     )

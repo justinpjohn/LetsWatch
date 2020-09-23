@@ -4,9 +4,9 @@ import ResultCard from '../Search/ResultCard';
 
 import {SocketContext} from '../../../contexts/SocketContext'; 
 
-const Queue = () => {
+const Queue = ({emitVideoId, emitQueueRemove}) => {
     const [queue, setQueue] = useState([]);
-    const {socket} = useContext(SocketContext);
+    const socket = useContext(SocketContext);
     
     useEffect(() => {
         // console.log('queue: ' + JSON.stringify(queue))
@@ -16,6 +16,16 @@ const Queue = () => {
         });
     },[]);
     
+    const handleVideoCardClick = (e, result) => {
+        const targetIndexKey = e.currentTarget.dataset.index;
+        const targetClassName = e.target.className;
+        emitQueueRemove(targetIndexKey);
+        
+        if (targetClassName !== 'add-to-queue-btn') {
+            emitVideoId(result.id.videoId);   
+        }
+    }
+    
     return (
             <div className='d-flex flex-column h-100 w-100'>
                 {queue.length  ? 
@@ -24,7 +34,7 @@ const Queue = () => {
                             <ResultCard 
                                 result={result} 
                                 index={index} 
-                                handleVideoCardClick={() => console.log('hello')}
+                                handleVideoCardClick={handleVideoCardClick}
                                 queue={true}
                             />
                         );
