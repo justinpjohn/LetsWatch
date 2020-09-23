@@ -1,9 +1,11 @@
 import React, {useState, useEffect, useContext} from 'react';
 
 import {UserContext} from '../../UserContext'; 
+import {QueueContext} from '../../QueueContext';
 
 import Chat from './Chat/Chat';
 import Search from './Search/Search';
+import Queue from './Queue/Queue';
 
 import useMessages from '../../hooks/useMessages';
 
@@ -14,6 +16,8 @@ let unseenMessageCount = 0;
 
 const SidePanel = ({socket}) => {
     const {user} = useContext(UserContext);
+    const {queue, setQueue} = useContext(QueueContext);
+    console.log({queue, setQueue});
 
     const [ unseenMessages, setUnseenMessages ] = useState(0);
     const { messages, addMessage } = useMessages();
@@ -61,7 +65,7 @@ const SidePanel = ({socket}) => {
         <div className='col-lg-3 col-12 mh-100' id='side-wrapper' style={{backgroundColor: 'black'}}>
             <div className='row text-center text-uppercase'>
                 <ul class="nav nav-tabs col-12 p-0" role="tablist">
-                    <li class="nav-item col-6 p-0" onClick={resetUnseenMessages}>
+                    <li class="nav-item col-4 p-0" onClick={resetUnseenMessages}>
                         <a class="nav-link active h-100" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
                           aria-selected="true" style={{display: 'flex', justifyContent: 'center'}}>
                             { (unseenMessages === 0) ? 
@@ -75,9 +79,13 @@ const SidePanel = ({socket}) => {
                             }
                       </a>
                     </li>
-                    <li class="nav-item col-6 p-0">
+                    <li class="nav-item col-4 p-0">
                         <a class="nav-link" id="search-tab" data-toggle="tab" href="#search" role="tab" aria-controls="search"
                           aria-selected="false">Search</a>
+                    </li>
+                    <li class="nav-item col-4 p-0">
+                        <a class="nav-link" id="queue-tab" data-toggle="tab" href="#queue" role="tab" aria-controls="queue"
+                          aria-selected="false">Queue</a>
                     </li>
                 </ul>
             </div>
@@ -91,6 +99,9 @@ const SidePanel = ({socket}) => {
                 </div>
                 <div class="tab-pane col-12 p-0 mh-100" id="search" role="tabpanel" aria-labelledby="search-tab">
                     <Search emitVideoId={emitVideoId}/>
+                </div>
+                <div class="tab-pane col-12 p-0 mh-100" id="queue" role="tabpanel" aria-labelledby="queue-tab">
+                    <Queue emitVideoId={emitVideoId}/>
                 </div>
             </div>
         </div>
