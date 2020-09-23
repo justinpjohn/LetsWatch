@@ -139,6 +139,8 @@ const Video = ({socket}) => {
             }
             socket.emit('select', {user, clientVideoState: _videoState});
             setQueue(queue);
+        } else {
+            console.log('queue is empty');
         }
     }
 
