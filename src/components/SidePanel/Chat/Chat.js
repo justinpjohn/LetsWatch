@@ -38,7 +38,7 @@ const Chat = ({messages, emitMessage}) => {
             
             <div id='chat-area' className='d-flex flex-column'>
                 {messages.map((content, index) => {
-                    return <Message messageInfo={ {currUserSockID: socket.id, message: {content, index}} }/>
+                    return <Message key={index} messageInfo={ {currUserSockID: socket.id, message: {content, index}} }/>
                 })}
             </div>
             <div id='chat-input-container' className='d-flex flex-column'>
@@ -53,7 +53,7 @@ const Chat = ({messages, emitMessage}) => {
                             onKeyPress = { handleKeyPress } 
                             onChange   = { e => setCurrMessage(e.target.value) } 
                             style      = { {width: '95%'} }
-                            maxlength  = { MAX_CHAR_LIMIT }
+                            maxLength  = { MAX_CHAR_LIMIT }
                         />
                     </div>
                     <div className='mr-2 mb-2'>

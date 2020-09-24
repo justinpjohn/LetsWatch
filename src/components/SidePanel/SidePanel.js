@@ -71,9 +71,9 @@ const SidePanel = () => {
     return (
         <div className='col-lg-3 col-12 mh-100' id='side-wrapper' style={{backgroundColor: 'black'}}>
             <div className='row text-center text-uppercase'>
-                <ul class="nav nav-tabs col-12 p-0" role="tablist">
-                    <li class="nav-item col-4 p-0" onClick={resetUnseenMessages}>
-                        <a class="nav-link active h-100" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
+                <ul className="nav nav-tabs col-12 p-0" role="tablist">
+                    <li className="nav-item col-4 p-0" onClick={resetUnseenMessages}>
+                        <a className="nav-link active h-100" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
                           aria-selected="true" style={{display: 'flex', justifyContent: 'center'}}>
                             { (unseenMessages === 0) ? 
                                 <div id='chat-text' className='m-auto'>
@@ -86,27 +86,27 @@ const SidePanel = () => {
                             }
                       </a>
                     </li>
-                    <li class="nav-item col-4 p-0">
-                        <a class="nav-link" id="search-tab" data-toggle="tab" href="#search" role="tab" aria-controls="search"
+                    <li className="nav-item col-4 p-0">
+                        <a className="nav-link" id="search-tab" data-toggle="tab" href="#search" role="tab" aria-controls="search"
                           aria-selected="false">Search</a>
                     </li>
-                    <li class="nav-item col-4 p-0">
-                        <a class="nav-link" id="queue-tab" data-toggle="tab" href="#queue" role="tab" aria-controls="queue"
+                    <li className="nav-item col-4 p-0">
+                        <a className="nav-link" id="queue-tab" data-toggle="tab" href="#queue" role="tab" aria-controls="queue"
                           aria-selected="false">Queue</a>
                     </li>
                 </ul>
             </div>
             <div className='row tab-content'>
-                <div class="tab-pane show active col-12 p-0" id="chat" role="tabpanel" aria-labelledby="chat-tab">
+                <div className="tab-pane show active col-12 p-0" id="chat" role="tabpanel" aria-labelledby="chat-tab">
                     <Chat  
                         messages    = {messages} 
                         emitMessage = {emitMessage}
                     />
                 </div>
-                <div class="tab-pane col-12 p-0 mh-100" id="search" role="tabpanel" aria-labelledby="search-tab">
+                <div className="tab-pane col-12 p-0 mh-100" id="search" role="tabpanel" aria-labelledby="search-tab">
                     <Search emitVideoId={emitVideoId} emitQueueAppend={emitQueueAppend}/>
                 </div>
-                <div class="tab-pane col-12 p-0 mh-100" id="queue" role="tabpanel" aria-labelledby="queue-tab">
+                <div className="tab-pane col-12 p-0 mh-100" id="queue" role="tabpanel" aria-labelledby="queue-tab">
                     <Queue emitVideoId={emitVideoId} emitQueueRemove={emitQueueRemove}/>
                 </div>
             </div>
