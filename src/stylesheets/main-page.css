@@ -137,10 +137,10 @@ html, body {
 #chat-navbar {
     background-color: #202020;
     border-bottom: solid 1px #E53A3A; 
-    margin-bottom: 5px;
 }
 
 #chat-area {
+    padding-top: 5px;
     background-color: #181818;
 }
 
