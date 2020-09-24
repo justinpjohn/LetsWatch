@@ -1,13 +1,3 @@
-
-/* roomName => {
-            socketID => {
-                {socketID, userName}
-            }
-        }
-*/
-const roomUsers = new Map();
-
-
 /* roomName => {
             state => {
                 videoID: DEFAULT_VIDEO_ID, 
