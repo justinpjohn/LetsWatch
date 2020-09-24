@@ -4,7 +4,8 @@ const http = require('http');
 const cors = require('cors');
 
 const router = require('./router');
-const { updateRoomVideoState, getRoomVideoState, addUser, removeUser } = require('./room');
+const { setupInitialRoomState, updateRoomVideoState, getRoomVideoState, addUser, removeUser,
+        appendToRoomQueue, removeFromRoomQueue, getRoomQueue, getNextVideoInQueue} = require('./room');
 const PORT = process.env.PORT || 8080;
 
 const app = express();
@@ -20,9 +21,6 @@ const DEFAULT_VIDEO_ID    = process.env.REACT_APP_DEFAULT_VIDEO_ID || 'qsdzdUYl5
 const DEFAULT_VIDEO_STATE = process.env.REACT_APP_DEFAULT_VIDEO_STATE || 'PLAYING';
 
 
-let queue = [];
-
-
 io.on('connection', (socket) => {
     console.log('socket join ');
     
@@ -31,15 +29,22 @@ io.on('connection', (socket) => {
         
         let roomVideoState = getRoomVideoState(user.room);
         if (!roomVideoState) {
-            const newRoomVideoState = {
+            const initialVideoState = {
                 videoID: DEFAULT_VIDEO_ID, 
                 videoTS: Date.now(),
                 videoPS: DEFAULT_VIDEO_STATE
             };
             // set the initial state, since it doesn't exist
-            updateRoomVideoState({roomName: user.room, clientVideoState: newRoomVideoState});
+            setupInitialRoomState({roomName: user.room, initialVideoState});
         }
-        socket.emit('initial sync', {serverVideoState: roomVideoState}); 
+        socket.emit('initial sync', {serverVideoState: roomVideoState});
+        
+        const roomQueue = getRoomQueue(user.room);
+        console.log(roomQueue);
+        socket.emit('queue update', {
+            requestingUser: user.name, 
+            serverQueueState: roomQueue
+        }); 
         
         socket.to(user.room).emit('chat message', {
             authorSocketID: 'admin', 
@@ -59,7 +64,7 @@ io.on('connection', (socket) => {
     });
     
     socket.on('queue append', ({user, video}) => {
-        queue = [...queue, video];
+        let queue = appendToRoomQueue({roomName: user.room, video});
         
         io.to(user.room).emit('queue update', {
             requestingUser: user.name, 
@@ -68,22 +73,17 @@ io.on('connection', (socket) => {
     });
     
     socket.on('queue remove', ({user, index}) => {
-        try {
-            console.log(index);
-            queue.splice(index, 1);
-            io.to(user.room).emit('queue update', {
-                requestingUser: user.name, 
-                serverQueueState: queue
-            }); 
-        } catch(e) {
-            console.log(e);
-        }
+        let queue = removeFromRoomQueue({roomName: user.room, index});
+        
+        io.to(user.room).emit('queue update', {
+            requestingUser: user.name, 
+            serverQueueState: queue
+        }); 
     });
     
     socket.on('end', ({user}) => {
-        const video = queue.shift();
+        const {video, queue} = getNextVideoInQueue(user.room);
         if (!video) return;
-        console.log(video);
         
         const newRoomVideoState = {
             videoID: video.id.videoId, 
