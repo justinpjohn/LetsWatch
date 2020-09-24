@@ -130,7 +130,10 @@ const Video = () => {
         
         const _onEnd = (e) => {
             console.log('ENDED');
-            socket.emit('end', {user});
+            socket.emit('end', {
+                    user,
+                    clientVideoState: getVideoState(e.target)
+                });
         }
     }, [socket]);
 

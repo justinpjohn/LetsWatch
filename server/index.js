@@ -79,9 +79,15 @@ io.on('connection', (socket) => {
         }); 
     });
     
-    socket.on('end', ({user}) => {
+    socket.on('end', ({user, clientVideoState}) => {
+        // Design Problem: all user's are sending a video 'end' event. We wan't
+        // to make sure that we only respond to this first one by checking if the 
+        // video has already changed.
+        const videoState = getRoomVideoState(user.room);
+        if (clientVideoState.videoID !== videoState.videoID) return;
+        
         const {video, queue} = getNextVideoInQueue(user.room);
-        if (!video) return;
+        if (!video) return; // if !video, queue was empty. 
         
         const newRoomVideoState = {
             videoID: video.id.videoId, 
