@@ -147,17 +147,5 @@ const getRoomQueue = (roomName) => {
     return [];
 }
 
-// not really random, just pick first person?
-const getRandomUserInRoom = (roomName) => {
-    if (!(roomUsers.has(roomName))) {
-        return undefined;
-    }
-
-    let keys = roomUsers.get(roomName).keys();
-    let next = keys.next().value;
-    
-    return roomUsers.get(roomName).get(next);
-}
-
 module.exports = { setupInitialRoomState, updateRoomVideoState, getRoomVideoState, addUser, removeUser, 
                    appendToRoomQueue, removeFromRoomQueue, getRoomQueue, getNextVideoInQueue };
