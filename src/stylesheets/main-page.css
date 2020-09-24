@@ -231,7 +231,8 @@ html, body {
 .nav-tabs .nav-link {
     color: white;
     background-color: #871212;
-    border: none;
+    border :none;
+    border-right: solid 0.05px black;
 }
 
 /*.nav-tabs .nav-link:not(.active):hover {*/
@@ -243,39 +244,34 @@ html, body {
 
 .nav-tabs .nav-link:hover {
     background-color: white !important;
-    border: medium none;
+    border: none;
     color: black !important;
 }
 
 .nav-tabs .nav-link.active {
     color: white;
     background-color: #E53A3A;
-    outline: none;
-    border:none;
+    border :none;
+    border-right: solid 0.05px black;
 }
-
-/*.nav-tabs > li > a:hover{*/
-    
-/*}*/
-
 
 /* https://css-tricks.com/snippets/css/glowing-blue-input-highlights/ */
 input[type=text]:not(.form-control), textarea {
-  -webkit-transition: all  0.30s ease-in-out;
-  -moz-transition: all 0.30s ease-in-out;
-  -ms-transition: all 0.30s ease-in-out;
-  -o-transition: all 0.30s ease-in-out;
-  outline: none;
-  padding: 3px 0px 3px 3px;
-  /*margin: 5px 1px 3px 0px;*/
-  border: 1px solid white;
+    -webkit-transition: all  0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    outline: none;
+    padding: 3px 0px 3px 3px;
+    /*margin: 5px 1px 3px 0px;*/
+    border: 1px solid white;
 }
  
 input[type=text]:not(.form-control):focus, textarea:focus {
-  box-shadow: 0 0 5px white;
-  padding: 3px 0px 3px 3px;
-  /*margin: 5px 1px 3px 0px;*/
-  border: 1px solid white;
+    box-shadow: 0 0 5px white;
+    padding: 3px 0px 3px 3px;
+    /*margin: 5px 1px 3px 0px;*/
+    border: 1px solid white;
 }
 
 .overlay {
