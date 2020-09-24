@@ -22,8 +22,7 @@ const DEFAULT_VIDEO_STATE = process.env.REACT_APP_DEFAULT_VIDEO_STATE || 'PLAYIN
 
 
 io.on('connection', (socket) => {
-    console.log('socket join ');
-    
+
     socket.on('room connection', ({user}) => {
         socket.join(user.room);
         
@@ -39,11 +38,10 @@ io.on('connection', (socket) => {
         }
         socket.emit('initial sync', {serverVideoState: roomVideoState});
         
-        const roomQueue = getRoomQueue(user.room);
-        console.log(roomQueue);
+        const currentRoomQueue = getRoomQueue(user.room);
         socket.emit('queue update', {
             requestingUser: user.name, 
-            serverQueueState: roomQueue
+            serverQueueState: currentRoomQueue
         }); 
         
         socket.to(user.room).emit('chat message', {

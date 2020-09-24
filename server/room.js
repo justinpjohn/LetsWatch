@@ -130,7 +130,6 @@ const removeFromRoomQueue = ({roomName, index}) => {
     let queue = [];
     if (roomStates.has(roomName)) {
         try {
-            console.log(index);
             queue = roomStates.get(roomName).videoQueue;
             queue.splice(index, 1);
             roomStates.get(roomName).videoQueue = queue;
