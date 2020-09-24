@@ -21,7 +21,7 @@ const Queue = ({emitVideoId, emitQueueRemove}) => {
         const targetClassName = e.target.className;
         emitQueueRemove(targetIndexKey);
         
-        if (targetClassName !== 'add-to-queue-btn') {
+        if (targetClassName !== 'remove-from-queue-btn') {
             emitVideoId(result.id.videoId);   
         }
     }

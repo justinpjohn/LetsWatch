@@ -415,6 +415,29 @@ input[type=text]:not(.form-control):focus, textarea:focus {
     background-color: #E53A3A;
 }
 
+.remove-from-queue-btn {
+  position: absolute;
+  border: none;
+  width: 40px;
+  height: 40px;
+  
+  color: #ffffff;
+  background-color: #871212;
+    
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-size: 1.3em;
+  /*font-weight: bold;*/
+  text-align: center;
+}
+
+.remove-from-queue-btn:hover {
+    cursor: pointer;
+    outline: none;
+    border-color: white;
+    box-shadow: 0 0 10px white;
+    background-color: #E53A3A;
+}
+
 /*-------------------------------------TEST CSS FOR DISPLAYING MODAL-------------------------------------*/
 
 #room-form .modal-dialog {
