@@ -5,7 +5,8 @@ const cors = require('cors');
 
 const router = require('./router');
 const { setupInitialRoomState, updateRoomVideoState, getRoomVideoState, addUser, removeUser,
-        appendToRoomQueue, removeFromRoomQueue, getRoomQueue, getNextVideoInQueue} = require('./room');
+        batchAppendToRoomQueue, appendToRoomQueue, removeFromRoomQueue, 
+        getRoomQueue, getNextVideoInQueue} = require('./room');
 const PORT = process.env.PORT || 8080;
 
 const app = express();
@@ -63,6 +64,16 @@ io.on('connection', (socket) => {
     
     socket.on('queue append', ({user, video}) => {
         let queue = appendToRoomQueue({roomName: user.room, video});
+        console.log(video);
+        
+        io.to(user.room).emit('queue update', {
+            requestingUser: user.name, 
+            serverQueueState: queue
+        }); 
+    });
+    
+    socket.on('batch append', ({user, videos}) => {
+        let queue = batchAppendToRoomQueue({roomName: user.room, videos});
         
         io.to(user.room).emit('queue update', {
             requestingUser: user.name, 
@@ -84,13 +95,13 @@ io.on('connection', (socket) => {
         // to make sure that we only respond to this first one by checking if the 
         // video has already changed.
         const videoState = getRoomVideoState(user.room);
-        if (clientVideoState.videoID !== videoState.videoID) return;
+        if (videoState && clientVideoState.videoID !== videoState.videoID) return;
         
         const {video, queue} = getNextVideoInQueue(user.room);
         if (!video) return; // if !video, queue was empty. 
         
         const newRoomVideoState = {
-            videoID: video.id.videoId, 
+            videoID: video.videoId, 
             videoTS: Date.now(),
             videoPS: DEFAULT_VIDEO_STATE
         };
@@ -99,10 +110,13 @@ io.on('connection', (socket) => {
         io.to(user.room).emit('queue update', {
             requestingUser: user.name, 
             serverQueueState: queue
-        }); 
+        });
+        
+        const serverVideoState = Object.assign({}, newRoomVideoState);
+        serverVideoState.videoTS = 0;
         io.to(user.room).emit('select', {
             requestingUser: user.name, 
-            serverVideoState: newRoomVideoState
+            serverVideoState
         }); 
     });
     

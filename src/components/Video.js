@@ -87,7 +87,7 @@ const Video = () => {
             });
         
             socket.on('select', ({requestingUser, serverVideoState}) => {
-                // console.log('received: ' + JSON.stringify(serverVideoState));
+                console.log('received: ' + JSON.stringify(serverVideoState));
                 receivingSync = true;
                 videoID = serverVideoState["videoID"];
                 
@@ -146,13 +146,6 @@ const Video = () => {
             videoPS : (isPlaying ? 'PLAYING' : 'PAUSED')
         };
         return state;
-    }
-    
-    const parseVideoID = (videoURL) => {
-        var queryParams = new global.URLSearchParams(videoURL);
-        const videoID = queryParams.get("v");
-        
-        return videoID
     }
     
     return (

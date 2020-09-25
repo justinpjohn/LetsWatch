@@ -106,6 +106,16 @@ const removeUser = ({ socketID }) => {
     return { roomName, userName };
 }
 
+const batchAppendToRoomQueue = ({roomName, videos}) => {
+    let queue = [];
+    if (roomStates.has(roomName)) {
+        queue = roomStates.get(roomName).videoQueue;
+        queue = queue.concat(videos);
+        roomStates.get(roomName).videoQueue = queue;
+    }
+    return queue;
+}
+
 const appendToRoomQueue = ({roomName, video}) => {
     let queue = [];
     if (roomStates.has(roomName)) {
@@ -148,4 +158,5 @@ const getRoomQueue = (roomName) => {
 }
 
 module.exports = { setupInitialRoomState, updateRoomVideoState, getRoomVideoState, addUser, removeUser, 
-                   appendToRoomQueue, removeFromRoomQueue, getRoomQueue, getNextVideoInQueue };
+                   batchAppendToRoomQueue, appendToRoomQueue, removeFromRoomQueue, 
+                   getRoomQueue, getNextVideoInQueue };

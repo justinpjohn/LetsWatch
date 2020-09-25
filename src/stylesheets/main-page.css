@@ -313,6 +313,27 @@ input[type=text]:not(.form-control):focus, textarea:focus {
     box-shadow: 0 0 10px red;
 }
 
+
+#queue-input-container {
+    width: 100%;
+    /*background-color: #1E1E1E;*/
+    background-color: #252526;
+    border-bottom: 1px solid red;;
+}
+
+#queue-input-container input{
+    border: none;
+    outline: none;
+ /*   padding-left: 10px;*/
+	/*padding-right: 10px;*/
+ /*   margin-left: 10px;*/
+	/*margin-right: 10px;*/
+ /*   width: 100%;*/
+    /*height: 100%;*/
+    color: white;
+    background-color: #252526;
+}
+
 /*-------------------------------------TEST CSS FOR DISPLAYING RESULTS-------------------------------------*/
 
 #search-container {
