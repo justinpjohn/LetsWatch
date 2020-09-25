@@ -15,7 +15,7 @@ const Search = ({emitVideoId, emitQueueAppend}) => {
             emitQueueAppend(result);
         } else {
             //otherwise its a video selection
-            emitVideoId(result.id.videoId);   
+            emitVideoId(result.videoId);   
         }
     }
     
