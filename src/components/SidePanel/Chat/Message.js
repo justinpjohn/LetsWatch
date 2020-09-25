@@ -6,12 +6,12 @@ const Message = ({messageInfo}) => {
     const currentUserSocketID = messageInfo.currUserSockID;
 
     let justify = 'start';
-    let className = 'msg-container';
+    let className = 'msg-container msg-receive';
     if (currentUserSocketID === messageObject.content.authorSock) {
         justify = 'end';
-        className = 'msg-container-send';
+        className = 'msg-container msg-send';
     } else if (messageObject.content.authorSock === 'admin') {
-        className = 'msg-container-admin';
+        className = 'msg-container msg-admin';
     }
 
     return (

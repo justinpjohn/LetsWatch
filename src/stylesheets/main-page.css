@@ -180,41 +180,40 @@ html, body {
 }
 
 .msg-container {
+    position: relative;
+    
 	margin-top: auto;
 	margin-bottom: auto;
 	margin-left: 10px;
-	/*border-radius: 8px 20px 20px 8px;*/
+	padding: 10px 7px;
+
 	border-radius: 8px;
-	background-color: #74B5C4;
-	padding: 7px;
-	padding-left: 10px;
-	padding-right: 10px;
-	position: relative;
+	/*background-color: #74B5C4;*/
 }
 
-.msg-container-send {
-	margin-top: auto;
-	margin-bottom: auto;
-	margin-right: 10px;
-	/*border-radius: 20px 8px 8px 20px;*/
-	border-radius: 8px;
-	background-color: #69C47D;
-	padding: 7px;
-	padding-left: 10px;
-	padding-right: 10px;
-	position: relative;
+
+.msg-receive {
+	background-color: #877878;
+	/*background-color: #7a7f83;*/
 }
 
-.msg-container-admin {
-	margin-top: auto;
-	margin-bottom: auto;
-	margin-left: 10px;
-	border-radius: 25px;
-	background-color: #E53A3A;
-	padding: 7px;
-	padding-left: 10px;
-	padding-right: 10px;
-	position: relative;
+.msg-send {
+    margin-right: 10px;
+	background-color: #b93737;
+}
+
+.msg-admin {
+    font-style: italic;
+    
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 7px 10px;
+    width: 100% !important;
+    max-width: 100% !important;
+    
+    border-radius: 0px;
+    color: darkgrey;
+	background-color: #252526;
 }
 
 .msg-header {
