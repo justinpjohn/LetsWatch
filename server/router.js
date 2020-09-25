@@ -55,9 +55,9 @@ router.get('/youtube/playlist/:id', (req, res) => {
     });
 });
 
-// router.get('*', (req, res) => {
-//     res.sendFile(path.join(path.resolve(__dirname+'/..'), 'build', 'index.html'));
-// });
+router.get('*', (req, res) => {
+    res.sendFile(path.join(path.resolve(__dirname+'/..'), 'build', 'index.html'));
+});
 
 const sanitizeYoutubeJSON = (json, isVideoRequest) => {
     if (!json.items) {
