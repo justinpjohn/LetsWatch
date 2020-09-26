@@ -23,7 +23,7 @@ const URLDrop = () => {
     const handleSubmitClick = (e) => {
         // check if query is not empty or only contains spaces
         if (url.length !== 0 && (/\S/).test(url)) {
-            const {type, id} = retrieveYoutubeID(url);
+            const {type, id} = parseYoutubeIDFromURL(url);
             
             if (type === 'playlist') {
                 retrieveYoutubePlaylist(id);
@@ -71,15 +71,15 @@ const URLDrop = () => {
     
     //playlist: list=PLAYLIST_ID
     //video: v=VIDEO_ID
-    const retrieveYoutubeID = (fullURL) => {
-        const paramString = fullURL.substring(fullURL.lastIndexOf('?'));
+    const parseYoutubeIDFromURL = (url) => {
+        const paramString = url.substring(url.lastIndexOf('?'));
         var queryParams = new global.URLSearchParams(paramString);
         
         let id = ''
         let type = '';
         let vParam = queryParams.get("v");
         let listParam = queryParams.get("list");
-        console.log('v: ' + vParam + ' l: ' + listParam);
+        // console.log('v: ' + vParam + ' l: ' + listParam);
         
         if (listParam) {
             type = 'playlist';

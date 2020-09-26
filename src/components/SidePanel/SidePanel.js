@@ -73,7 +73,7 @@ const SidePanel = () => {
             <div className='row text-center text-uppercase'>
                 <ul className="nav nav-tabs col-12 p-0" role="tablist">
                     <li className="nav-item col-4 p-0" onClick={resetUnseenMessages}>
-                        <a className="nav-link active h-100" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
+                        <a className="nav-link active" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
                           aria-selected="true" style={{display: 'flex', justifyContent: 'center'}}>
                             { (unseenMessages === 0) ? 
                                 <div id='chat-text' className='m-auto'>

@@ -69,9 +69,16 @@ html, body {
     position: absolute;
 }
 
+#chat-navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 100%;
+}
+
 #chat-area {
-    height: 90%; 
-    max-height: 90%;
+    flex-grow: 1;
     overflow-y: scroll;
 }
 
@@ -96,6 +103,9 @@ html, body {
     flex-direction: column;
 }
 
+#main-row-nav {
+    height: 40px;
+}
 #main-row-nav .bg-dark {
     background-color: #202020 !important; 
 }
@@ -144,34 +154,6 @@ html, body {
     background-color: #181818;
 }
 
-.row .tab-content {
-    flex-grow: 1;
-    overflow: hidden;
-}
-
-@media (max-width: 600px) {
-    #home-button {
-        width: 50%;
-    }
-    
-    #main-row-nav {
-        display: none;
-    }
-    
-    /*#body-wrapper {*/
-    /*    height: 95%;*/
-    /*}*/
-    
-    #video-wrapper {
-        height: 45%;
-    }
-    
-    #side-wrapper {
-        height: 55%;
-    }
-}
-
-
 #chat-input input {
     border: none;
     color: white;
@@ -179,48 +161,51 @@ html, body {
     background-color: #252526;
 }
 
-.msg-container {
-	margin-top: auto;
-	margin-bottom: auto;
-	margin-left: 10px;
-	/*border-radius: 8px 20px 20px 8px;*/
-	border-radius: 8px;
-	background-color: #74B5C4;
-	padding: 7px;
-	padding-left: 10px;
-	padding-right: 10px;
-	position: relative;
-}
-
-.msg-container-send {
-	margin-top: auto;
-	margin-bottom: auto;
-	margin-right: 10px;
-	/*border-radius: 20px 8px 8px 20px;*/
-	border-radius: 8px;
-	background-color: #69C47D;
-	padding: 7px;
-	padding-left: 10px;
-	padding-right: 10px;
-	position: relative;
-}
-
-.msg-container-admin {
-	margin-top: auto;
-	margin-bottom: auto;
-	margin-left: 10px;
-	border-radius: 25px;
-	background-color: #E53A3A;
-	padding: 7px;
-	padding-left: 10px;
-	padding-right: 10px;
-	position: relative;
+.row .tab-content {
+    flex-grow: 1;
+    overflow: hidden;
 }
 
 .msg-header {
     color: black !important;
     font-size: 12px;
     font-weight: bold;
+}
+
+.msg-container {
+    position: relative;
+    
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-left: 10px;
+	padding: 10px 7px;
+
+	border-radius: 8px;
+	/*background-color: #74B5C4;*/
+}
+
+.msg-receive {
+	background-color: #877878;
+	/*background-color: #7a7f83;*/
+}
+
+.msg-send {
+    margin-right: 10px;
+	background-color: #b93737;
+}
+
+.msg-admin {
+    font-style: italic;
+    
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 7px 10px;
+    width: 100% !important;
+    max-width: 100% !important;
+    
+    border-radius: 0px;
+    color: darkgrey;
+	background-color: #252526;
 }
 
 /*#chat-tab {*/
@@ -560,4 +545,89 @@ input[type=text]:not(.form-control):focus, textarea:focus {
 
 #room-form .close {
     color:white;
+}
+
+@media (max-width: 992px) {
+    #video-wrapper {
+        height: 45%;
+    }
+    
+    #side-wrapper {
+        height: 55%;
+    }
+}
+
+@media (max-width: 600px) {
+    #home-button {
+        width: 50%;
+    }
+    
+    #main-row-nav {
+        display: none;
+    }
+
+    #video-wrapper {
+        height: 40%;
+        min-height: 40%;
+    }
+    
+    #side-wrapper {
+        height: 60%;
+    }
+    
+    .msg {
+        margin-bottom: 0px !important;
+        font-size: 0.9rem !important;
+        max-width: 100%;
+    }
+    
+    .msg-header {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: auto;
+        color: black !important;
+        font-weight: bold;
+        font-size: 0.9rem !important;
+    }
+    
+    .msg-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        
+        position: relative;
+        width: 100% !important;
+        max-width: 100% !important;
+        
+    	padding: 0px;
+    	margin: 5px 10px !important;
+
+    	background: none !important;
+    }
+    
+    .msg-container span {
+         word-break: break-all;
+    }
+
+    .msg-receive .msg-header{
+        /*margin-right: 10px;*/
+    	color: #877878 !important;
+    }
+    
+    .msg-send .msg-header{
+        /*margin-right: 10px;*/
+    	color: #b93737 !important;
+    }
+    
+    .msg-admin {
+        font-style: italic;
+        
+        width: 100% !important;
+        max-width: 100% !important;
+        
+        border-radius: 0px;
+        color: darkgrey;
+    	background-color: #252526;
+    }
 }

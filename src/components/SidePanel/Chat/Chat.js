@@ -41,12 +41,8 @@ const Chat = ({messages, emitMessage}) => {
                     return <Message key={index} messageInfo={ {currUserSockID: socket.id, message: {content, index}} }/>
                 })}
             </div>
-            <div id='chat-input-container' className='d-flex flex-column'>
-                <div style={{backgroundColor: '#181818'}}> 
-                    <hr className='mb-0'/>
-                </div>
-                
-                <div className='d-flex align-items-center mt-2'>
+            <div id='chat-input-container' className='d-flex flex-column p-1'>
+                <div className='d-flex align-items-center'>
                     <div id='chat-input' className='flex-grow-1 ml-2'>
                         <input type="text" placeholder="Say something..." 
                             value      = { currMessage } 
@@ -56,7 +52,7 @@ const Chat = ({messages, emitMessage}) => {
                             maxLength  = { MAX_CHAR_LIMIT }
                         />
                     </div>
-                    <div className='mr-2 mb-2'>
+                    <div className='m-auto'>
                         <button id='chat-send' className='btn btn-primary' style={{backgroundColor: '#E53A3A', borderColor: '#E53A3A'}} onClick={handleMessageSubmit}>Send</button>
                     </div>
                 </div>
