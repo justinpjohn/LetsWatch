@@ -154,16 +154,16 @@ html, body {
     background-color: #181818;
 }
 
-.row .tab-content {
-    flex-grow: 1;
-    overflow: hidden;
-}
-
 #chat-input input {
     border: none;
     color: white;
     outline: none;
     background-color: #252526;
+}
+
+.row .tab-content {
+    flex-grow: 1;
+    overflow: hidden;
 }
 
 .msg-header {
