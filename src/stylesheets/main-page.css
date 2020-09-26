@@ -69,9 +69,16 @@ html, body {
     position: absolute;
 }
 
+#chat-navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 100%;
+}
+
 #chat-area {
-    height: 90%; 
-    max-height: 90%;
+    flex-grow: 1;
     overflow-y: scroll;
 }
 
