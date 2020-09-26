@@ -15,7 +15,7 @@ const Message = ({messageInfo}) => {
     }
 
     return (
-        <div className={`d-flex justify-content-${justify} mb-3`}>
+        <div className={`msg d-flex justify-content-${justify} mb-3`}>
             <div className={`${className}`}  style={{maxWidth: '90%'}}>
                 <div className={`d-flex justify-content-${justify} msg-header`}>{messageObject.content.authorUser}</div>
                 <span id={`msg-${messageObject.index}`} style={{display: 'block', wordWrap: 'break-word'}}>{messageObject.content.text}</span>
