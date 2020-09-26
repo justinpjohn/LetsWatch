@@ -96,6 +96,9 @@ html, body {
     flex-direction: column;
 }
 
+#main-row-nav {
+    height: 40px;
+}
 #main-row-nav .bg-dark {
     background-color: #202020 !important; 
 }
@@ -149,6 +152,16 @@ html, body {
     overflow: hidden;
 }
 
+@media (max-width: 992px) {
+    #video-wrapper {
+        height: 45%;
+    }
+    
+    #side-wrapper {
+        height: 55%;
+    }
+}
+
 @media (max-width: 600px) {
     #home-button {
         width: 50%;
@@ -163,11 +176,12 @@ html, body {
     /*}*/
     
     #video-wrapper {
-        height: 45%;
+        height: 40%;
+        min-height: 40%;
     }
     
     #side-wrapper {
-        height: 55%;
+        height: 60%;
     }
 }
 
