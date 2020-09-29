@@ -1,7 +1,6 @@
 {
-  "name": "my-app",
+  "name": "lets-watch",
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
@@ -15,9 +14,13 @@
     "react-youtube": "^7.9.0",
     "socket.io-client": "^2.3.0"
   },
+  "proxy": "http://localhost:8080",
   "scripts": {
-    "start": "PORT=8081 react-scripts start",
-    "build": "react-scripts build && npm --prefix ./server install",
+    "start": "concurrently \"npm run start:client\" \"npm run start:server\"",
+    "start:client": "react-scripts start",
+    "start:server": "cd server && npm run start",
+    "build": "react-scripts build",
+    "postinstall": "npm install --prefix ./server",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
