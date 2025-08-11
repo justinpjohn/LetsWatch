@@ -2,7 +2,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 # Lets Watch
 
-A project I used to learn a bit about React and Node/Express. LetsWatch is a synchronized Youtube viewing platform 
+A project I used to learn a bit about React and Node/Express. LetsWatch is a synchronized Youtube viewing platform
 that allows users to create and join rooms where they can watch Youtube videos together in realtime!
 
 ### [Try it here!](https://letswatch9897.herokuapp.com/)

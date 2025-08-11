@@ -1,39 +1,46 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.4.0",
-    "@testing-library/user-event": "^7.2.1",
-    "html-entities": "^1.3.1",
-    "node-fetch": "^2.6.0",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.4.3",
-    "react-youtube": "^7.9.0",
-    "socket.io-client": "^2.3.0"
-  },
-  "scripts": {
-    "start": "PORT=8081 react-scripts start",
-    "build": "react-scripts build && npm --prefix ./server install",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+	"name": "lets-watch",
+	"version": "0.1.0",
+	"private": true,
+	"proxy": "http://localhost:8080",
+	"dependencies": {
+		"@testing-library/jest-dom": "^4.2.4",
+		"@testing-library/react": "^9.4.0",
+		"@testing-library/user-event": "^7.2.1",
+		"concurrently": "^9.2.0",
+		"html-entities": "^1.3.1",
+		"node-fetch": "^2.6.0",
+		"react": "^16.12.0",
+		"react-dom": "^16.12.0",
+		"react-router-dom": "^5.1.2",
+		"react-scripts": "^5.0.1",
+		"react-youtube": "^7.9.0",
+		"socket.io": "^4.8.1",
+		"socket.io-client": "^4.8.1"
+	},
+	"scripts": {
+		"dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
+		"dev:client": "react-scripts start",
+		"dev:server": "cd server && npm run dev",
+		"build": "react-scripts build",
+		"postinstall": "npm install --prefix ./server"
+	},
+	"eslintConfig": {
+		"extends": "react-app"
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"prettier": "^3.6.2"
+	}
 }
