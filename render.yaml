@@ -1,0 +1,15 @@
+services:
+    - type: web
+      name: letswatch
+      env: node
+      envVars:
+          - key: NODE_VERSION
+            value: '20'
+          - key: NODE_ENV
+            value: production
+      buildCommand: |
+          npm install --no-audit --no-fund \
+          && npm run build \
+          && npm --prefix server install --no-audit --no-fund
+      startCommand: node server/index.js
+      autoDeploy: true

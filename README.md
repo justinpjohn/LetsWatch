@@ -1,21 +1,18 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# LetsWatch
 
-# Lets Watch
-
-A project I used to learn a bit about React and Node/Express. LetsWatch is a synchronized Youtube viewing platform 
+A project I used to learn a bit about React and Node/Express. LetsWatch is a synchronized Youtube viewing platform
 that allows users to create and join rooms where they can watch Youtube videos together in realtime!
 
-### [Try it here!](https://letswatch9897.herokuapp.com/)
+### [Try it here!](https://letswatch-w6xt.onrender.com/)
 
 ## Demo
 
-![](./README_assets/LetsWatchGif.gif)
+![LetsWatch Demo](./README_assets/letswatch.gif)
 
-## Installation
+## Running Locally
 
 ```bash
-git clone https://github.com/justinj9897/LetsWatch
+git clone https://github.com/justinpjohn/LetsWatch.git
 cd LetsWatch
-npm install && npm --prefix ./server install
-npm start && npm --prefix ./server start
+npm run dev
 ```
