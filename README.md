@@ -7,7 +7,7 @@ that allows users to create and join rooms where they can watch Youtube videos t
 
 ## Demo
 
-<video src="https://<your-username>.github.io/LetsWatch/letswatch2025_demo.mp4" width="800" controls></video>
+<video src="https://justinpjohn.github.io/LetsWatch/letswatch2025_demo.mp4" width="800" controls></video>
 
 ## Running Locally
 
