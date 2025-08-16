@@ -7,12 +7,12 @@ that allows users to create and join rooms where they can watch Youtube videos t
 
 ## Demo
 
-<video src="https://justinpjohn.github.io/LetsWatch/letswatch2025_demo.mp4" width="800" controls></video>
+![LetsWatch Demo](./README_assets/letswatch.gif)
 
 ## Running Locally
 
 ```bash
-git clone https://github.com/justinj9897/LetsWatch
+git clone https://github.com/justinpjohn/LetsWatch.git
 cd LetsWatch
 npm run dev
 ```
